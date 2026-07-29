@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warren Nguyen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ──────────────────────────────────────────────
+   TOKENS
+────────────────────────────────────────────── */
+:root {
+  --ink:    #08090d;
+  --paper:  #0c0e16;
+  --mid:    #13162200;
+  --dim:    #1b1f30;
+  --rule:   #252a40;
+  --muted:  #5a617a;
+  --ghost:  #3a4060;
+
+  /* Spectrum: teal → cyan → indigo → violet */
+  --t0: #0ff4c6;   /* teal-mint */
+  --t1: #22d4e8;   /* cyan */
+  --t2: #5b8dee;   /* sky-blue */
+  --t3: #7c6ff7;   /* indigo */
+  --t4: #a07cf8;   /* violet */
+  --t5: #c77dff;   /* soft-purple */
+
+  --grad-a: linear-gradient(135deg, var(--t1) 0%, var(--t3) 55%, var(--t4) 100%);
+  --grad-b: linear-gradient(135deg, var(--t0) 0%, var(--t2) 100%);
+  --grad-c: linear-gradient(135deg, var(--t3) 0%, var(--t5) 100%);
+
+  --text:  #dde3f5;
+  --soft:  #8890ab;
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 16px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* mesh background */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 10% 20%, rgba(91,141,238,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 500px at 85% 70%, rgba(160,124,248,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(34,212,232,0.03) 0%, transparent 70%);
+}
+
+/* fine dot grid */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, rgba(90,97,122,0.35) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ──────────────────────────────────────────────
+   NAV
+────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 3rem; height: 60px;
+  background: rgba(12,14,22,0.82);
+  backdrop-filter: blur(24px) saturate(1.6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nav-logo {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 1rem;
+  letter-spacing: -0.03em;
+  background: var(--grad-a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: 'Inter', sans-serif; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--t1); }
+
+.nav-cta {
+  background: var(--grad-a); color: #000 !important;
+  padding: 0.45rem 1.1rem; font-weight: 600 !important;
+  font-size: 0.75rem !important; letter-spacing: 0.02em !important;
+  font-family: 'Inter', sans-serif !important;
+  -webkit-text-fill-color: #000 !important;
+  transition: opacity 0.2s !important;
+}
+.nav-cta:hover { opacity: 0.85; color: #000 !important; }
+
+/* ──────────────────────────────────────────────
+   HERO
+────────────────────────────────────────────── */
+.hero {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  align-items: center;
+  gap: 4rem;
+  padding: 7rem 3rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.hero-left { padding: 2rem 0 2.5rem; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; font-family: 'Inter', sans-serif;
+  color: var(--t1); margin-bottom: 1.6rem;
+  opacity: 0; animation: up 0.7s 0.1s ease forwards;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block; width: 24px; height: 1px;
+  background: var(--t1);
+}
+
+.hero h1 {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: clamp(3.2rem, 6vw, 5.5rem);
+  font-weight: 900; line-height: 1.0;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.4rem;
+  opacity: 0; animation: up 0.7s 0.18s ease forwards;
+  background: linear-gradient(110deg, var(--text) 30%, var(--t2) 45%, var(--t4) 55%, var(--text) 70%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: up 0.7s 0.18s ease forwards, shimmer 7s linear infinite 1s;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -50% 0; }
+}
+
+.hero-subtitle {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--soft);
+  margin-bottom: 1.8rem;
+  opacity: 0; animation: up 0.7s 0.26s ease forwards;
+  min-height: 1.4em;
+}
+.typewriter-cursor {
+  display: inline-block; width: 2px; margin-left: 2px;
+  background: var(--t2); animation: blink 0.9s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.hero-bio {
+  max-width: 480px;
+  color: var(--soft); font-size: 1rem; line-height: 1.75; font-family: 'Inter', sans-serif; font-weight: 300;
+  margin-bottom: 2.4rem;
+  opacity: 0; animation: up 0.7s 0.34s ease forwards;
+}
+
+.hero-actions {
+  display: flex; gap: 0.8rem; flex-wrap: wrap;
+  opacity: 0; animation: up 0.7s 0.42s ease forwards;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.7rem 1.4rem;
+  font-family: 'Inter', sans-serif; font-weight: 500;
+  font-size: 0.78rem; letter-spacing: 0.05em; text-transform: none;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: transform 0.15s ease-out, box-shadow 0.22s, filter 0.22s, border-color 0.22s, color 0.22s;
+  white-space: nowrap;
+}
+.btn-fill {
+  background: var(--grad-a); color: #000; font-weight: 500;
+}
+.btn-fill:hover { box-shadow: 0 8px 28px rgba(91,141,238,0.35); filter: brightness(1.08); }
+.btn-ghost {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--rule);
+}
+.btn-ghost:hover { border-color: var(--t3); color: var(--t3); }
+
+/* hero right — contact card */
+.hero-card {
+  background: var(--dim);
+  border: 1px solid var(--rule);
+  padding: 2rem;
+  opacity: 0; animation: up 0.7s 0.5s ease forwards;
+}
+
+.hero-card-label {
+  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;
+  color: var(--muted); margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem; border-bottom: 1px solid var(--rule);
+}
+
+.contact-row {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.7rem 0; border-bottom: 1px solid rgba(37,42,64,0.5);
+  text-decoration: none; transition: all 0.2s;
+  color: var(--text);
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row:hover { color: var(--t1); padding-left: 0.4rem; }
+
+.contact-icon {
+  width: 32px; height: 32px; display: flex; align-items: center;
+  justify-content: center; font-size: 0.9rem;
+  background: var(--ink); border: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.contact-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 500; }
+.contact-value { font-size: 0.85rem; color: inherit; font-family: 'Inter', sans-serif; }
+
+.divider-h { width: 100%; height: 1px; background: var(--rule); margin: 1.2rem 0; }
+
+.edu-block { margin-top: 1rem; }
+.edu-row { margin-bottom: 0.8rem; }
+.edu-degree { font-size: 0.9rem; color: var(--text); font-family: 'Inter', sans-serif; font-weight: 600; }
+.edu-school { font-size: 0.82rem; color: var(--soft); font-family: 'Inter', sans-serif; }
+.edu-meta { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; font-family: 'Inter', sans-serif; }
+
+/* ──────────────────────────────────────────────
+   SKILLS STRIP
+────────────────────────────────────────────── */
+.skills-section {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 6rem 3rem;
+  max-width: 1200px; margin: 0 auto;
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+.skills-header {
+  display: flex; align-items: baseline; gap: 2rem;
+  margin-bottom: 2rem;
+}
+.skills-label {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 1.6rem; letter-spacing: -0.03em;
+}
+.skills-sublabel {
+  font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 500;
+}
+
+.skills-groups { display: flex; flex-direction: column; gap: 1.2rem; }
+.skill-group { display: flex; align-items: baseline; gap: 1.5rem; }
+.skill-group-name {
+  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); width: 110px; flex-shrink: 0; padding-top: 2px; font-family: 'Inter', sans-serif; font-weight: 500;
+}
+.skill-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+.pill {
+  font-size: 0.78rem; padding: 0.3rem 0.85rem; font-family: 'Inter', sans-serif;
+  border: 1px solid var(--rule); color: var(--soft);
+  letter-spacing: 0.04em; transition: all 0.18s; cursor: default;
+}
+.pill:hover { border-color: var(--t3); color: var(--t3); background: rgba(124,111,247,0.06); }
+.pill.hi { border-color: rgba(34,212,232,0.3); color: var(--t1); background: rgba(34,212,232,0.05); }
+
+/* ──────────────────────────────────────────────
+   PROJECTS
+────────────────────────────────────────────── */
+.projects-section {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: 6rem 3rem;
+}
+
+.section-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1rem;
+}
+.section-title {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: -0.04em;
+}
+.section-meta { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 500; }
+
+/* PROJECT CARD — full-bleed showcase */
+.project-card {
+  position: relative;
+  border: 1px solid var(--rule);
+  background: var(--dim);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  min-height: calc(100vh - 12rem);
+  display: flex;
+}
+.project-card:hover {
+  border-color: rgba(124,111,247,0.4);
+  box-shadow: 0 0 60px rgba(91,141,238,0.07);
+}
+
+/* cursor-following glow */
+.project-card::after {
+  content: '';
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle 320px at var(--mx,50%) var(--my,50%), rgba(124,111,247,0.10), transparent 70%);
+  opacity: 0; transition: opacity 0.35s; pointer-events: none; z-index: 1;
+}
+.project-card:hover::after { opacity: 1; }
+
+/* color stripe per project */
+.project-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  transition: width 0.3s;
+}
+.project-card:hover::before { width: 4px; }
+.pc-a::before { background: var(--grad-b); }
+.pc-b::before { background: var(--grad-a); }
+.pc-c::before { background: var(--grad-c); }
+
+.project-inner {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 0;
+  width: 100%;
+}
+
+.project-main { padding: 3rem 3rem 3rem 3.5rem; display: flex; flex-direction: column; justify-content: center; }
+
+.project-kicker {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.project-num { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+.project-type {
+  font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.2rem 0.6rem; border: 1px solid var(--rule); color: var(--muted); font-family: 'Inter', sans-serif; font-weight: 500;
+}
+
+.project-title {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: clamp(1.4rem, 2.5vw, 2rem);
+  letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.project-tagline {
+  font-family: 'Instrument Serif', serif; font-style: italic;
+  font-size: 1.05rem; color: var(--soft);
+  margin-bottom: 1.4rem;
+}
+.project-desc {
+  color: var(--soft); font-size: 0.92rem; line-height: 1.8; font-family: 'Inter', sans-serif; font-weight: 300;
+  margin-bottom: 1.6rem;
+}
+
+/* technical detail bullets */
+.project-details {
+  display: flex; flex-direction: column; gap: 0.45rem;
+  margin-bottom: 1.6rem;
+}
+.detail-row {
+  display: flex; gap: 0.8rem; align-items: flex-start;
+  font-size: 0.88rem; line-height: 1.65;
+}
+.detail-key {
+  color: var(--muted); min-width: 90px; flex-shrink: 0;
+  font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding-top: 2px; font-family: 'Inter', sans-serif; font-weight: 500;
+}
+.detail-val { color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.88rem; }
+
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.6rem; }
+.ptag {
+  font-size: 0.72rem; padding: 0.25rem 0.65rem;
+  letter-spacing: 0.02em; font-family: 'Inter', sans-serif; font-weight: 500;
+}
+.ptag-a { background: rgba(15,244,198,0.07); border: 1px solid rgba(15,244,198,0.2); color: var(--t0); }
+.ptag-b { background: rgba(91,141,238,0.07); border: 1px solid rgba(91,141,238,0.2); color: var(--t2); }
+.ptag-c { background: rgba(124,111,247,0.07); border: 1px solid rgba(124,111,247,0.2); color: var(--t3); }
+.ptag-d { background: rgba(160,124,248,0.07); border: 1px solid rgba(160,124,248,0.2); color: var(--t4); }
+.ptag-e { background: rgba(199,125,255,0.07); border: 1px solid rgba(199,125,255,0.2); color: var(--t5); }
+
+.project-links { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.plink {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.8rem; letter-spacing: 0.04em; text-transform: none;
+  text-decoration: none; color: var(--soft); font-family: 'Inter', sans-serif; font-weight: 500;
+  border-bottom: 1px solid var(--rule); padding-bottom: 2px;
+  transition: all 0.18s;
+}
+.plink:hover { color: var(--t3); border-color: var(--t3); }
+.plink-fill {
+  background: var(--grad-a); color: #000 !important;
+  border: none; padding: 0.5rem 1rem;
+  -webkit-text-fill-color: #000;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.plink-fill:hover { opacity: 0.85; transform: translateY(-1px); border: none; }
+
+/* right panel — visual/stats */
+.project-panel {
+  background: rgba(8,9,13,0.6);
+  border-left: 1px solid var(--rule);
+  padding: 3rem 2.4rem;
+  display: flex; flex-direction: column; gap: 1.4rem;
+  justify-content: center;
+}
+
+.panel-section-label {
+  font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.7rem; font-family: 'Inter', sans-serif; font-weight: 600;
+}
+
+/* architecture diagram ascii-art style */
+.arch-diagram {
+  font-size: 0.65rem; line-height: 1.6; color: var(--ghost);
+  white-space: pre; font-family: 'JetBrains Mono', monospace;
+  padding: 1rem; background: var(--ink);
+  border: 1px solid var(--rule);
+  overflow-x: auto;
+}
+.arch-diagram .hi  { color: var(--t1); }
+.arch-diagram .hi2 { color: var(--t3); }
+.arch-diagram .hi3 { color: var(--t4); }
+.arch-diagram .dim { color: var(--rule); }
+
+/* stat blocks */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.stat-block {
+  background: var(--ink); border: 1px solid var(--rule);
+  padding: 0.9rem; display: flex; flex-direction: column; gap: 0.2rem;
+}
+.stat-val {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 1.3rem; letter-spacing: -0.03em;
+  background: var(--grad-a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.4; font-family: 'Inter', sans-serif; font-weight: 500; }
+
+/* pipeline steps */
+.pipeline { display: flex; flex-direction: column; gap: 0; }
+.pipe-step {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(37,42,64,0.5);
+}
+.pipe-step:last-child { border-bottom: none; }
+.pipe-icon {
+  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; flex-shrink: 0; margin-top: 1px;
+  background: var(--ink); border: 1px solid var(--rule);
+}
+.pipe-text { font-size: 0.83rem; color: var(--soft); line-height: 1.55; font-family: 'Inter', sans-serif; }
+.pipe-text strong { color: var(--text); font-weight: 400; }
+
+/* ──────────────────────────────────────────────
+   EXPERIENCE
+────────────────────────────────────────────── */
+.exp-section {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--rule);
+  max-width: 1200px; margin: 0 auto;
+  padding: 6rem 3rem;
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+/* ──────────────────────────────────────────────
+   CONTACT SECTION
+────────────────────────────────────────────── */
+
+/* ──────────────────────────────────────────────
+   FOOTER
+────────────────────────────────────────────── */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--rule);
+  padding: 2rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1200px; margin: 0 auto;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-name {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 0.9rem; letter-spacing: -0.02em;
+  background: var(--grad-a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.footer-copy { font-size: 0.8rem; color: var(--muted); font-family: 'Inter', sans-serif; }
+
+/* ──────────────────────────────────────────────
+   SCROLL REVEAL
+────────────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.on { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+
+/* ──────────────────────────────────────────────
+   PAGE WATERMARKS
+────────────────────────────────────────────── */
+.page-watermark {
+  position: absolute; top: 50%; right: -2rem;
+  transform: translateY(-50%);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 22vw; line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--rule);
+  pointer-events: none; z-index: 0;
+  user-select: none;
+  white-space: nowrap;
+}
+@media (max-width: 960px) { .page-watermark { display: none; } }
+@keyframes up { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+
+/* ──────────────────────────────────────────────
+   RESPONSIVE
+────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; padding-top: 5rem; gap: 2rem; min-height: auto; }
+  .skills-section, .exp-section { min-height: auto; }
+  .hero-card { max-width: 480px; }
+  .project-inner { grid-template-columns: 1fr; }
+  .project-card { min-height: auto; }
+  .project-panel { border-left: none; border-top: 1px solid var(--rule); }
+}
+@media (max-width: 680px) {
+  nav { padding: 0 1.5rem; }
+  .hero, .skills-section, .projects-section, .exp-section, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links .hide-sm { display: none; }
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--rule); }
+::-webkit-scrollbar-thumb:hover { background: var(--t3); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Warren Nguyen</a>
+  <ul class="nav-links">
+    <li class="hide-sm"><a href="#about">About</a></li>
+    <li class="hide-sm"><a href="#projects">Projects</a></li>
+    <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════ INTRO ═══════════════ -->
+<div class="hero" id="home">
+  <div class="page-watermark">01</div>
+  <div class="hero-left">
+    <p class="hero-eyebrow">Open to full-time roles · May 2026</p>
+    <h1>Warren<br>Nguyen</h1>
+    <p class="hero-subtitle" id="typewriter"></p>
+    <p class="hero-bio">
+      Dual-degree CS graduate (B.S. + M.S., GPA 3.8, Magna Cum Laude) from GWU.
+      I build graph neural networks that explain their own predictions, NLP systems
+      that measure what language models won't admit, and full-stack apps that ship.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-fill">View Projects</a>
+      <a href="https://github.com/Warnerd03" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+      <a href="https://linkedin.com/in/warren-xuan-nguyen" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="hero-card-label">Education</div>
+    <div class="edu-block" style="margin-top: 0;">
+      <div class="edu-row">
+        <div class="edu-degree">M.S. Computer Science</div>
+        <div class="edu-school">The George Washington University</div>
+        <div class="edu-meta">May 2026 · GPA 3.8 · Magna Cum Laude</div>
+      </div>
+      <div class="edu-row" style="margin-bottom: 0;">
+        <div class="edu-degree">B.S. Computer Science</div>
+        <div class="edu-school">The George Washington University</div>
+        <div class="edu-meta">May 2025 · GPA 3.8 · Magna Cum Laude</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<section class="skills-section" id="about">
+  <div class="page-watermark">02</div>
+  <div class="skills-header reveal">
+    <span class="section-title">About Me</span>
+  </div>
+  <p class="hero-bio reveal" style="max-width: 720px; margin-bottom: 2.5rem;">
+    I'm a graph-learning and NLP enthusiast who likes projects that explain themselves —
+    recommendation systems that show their reasoning, language models that reveal their
+    biases, and computer vision pipelines that turn handwriting into clean text. Outside
+    of research, I build full-stack and mobile apps end to end, from data pipeline to UI.
+  </p>
+  <div class="skills-header reveal">
+    <span class="skills-label">Skills</span>
+    <span class="skills-sublabel">Languages · Frameworks · Tools</span>
+  </div>
+  <div class="skills-groups reveal reveal-d1">
+    <div class="skill-group">
+      <span class="skill-group-name">Languages</span>
+      <div class="skill-pills">
+        <span class="pill hi">Python</span>
+        <span class="pill">Java</span>
+        <span class="pill">Kotlin</span>
+        <span class="pill">SQL</span>
+        <span class="pill">C</span>
+        <span class="pill">C#</span>
+        <span class="pill">HTML/CSS</span>
+        <span class="pill">GDScript</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <span class="skill-group-name">ML / AI</span>
+      <div class="skill-pills">
+        <span class="pill hi">PyTorch</span>
+        <span class="pill hi">PyTorch Geometric</span>
+        <span class="pill hi">HuggingFace</span>
+        <span class="pill hi">PEFT / LoRA</span>
+        <span class="pill">TensorFlow</span>
+        <span class="pill">scikit-learn</span>
+        <span class="pill">OpenCV</span>
+        <span class="pill">NumPy</span>
+        <span class="pill">pandas</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <span class="skill-group-name">Platforms</span>
+      <div class="skill-pills">
+        <span class="pill">Android SDK</span>
+        <span class="pill">Firebase</span>
+        <span class="pill">AWS</span>
+        <span class="pill">Linux</span>
+        <span class="pill">Git</span>
+        <span class="pill">Android Studio</span>
+        <span class="pill">Unity</span>
+        <span class="pill">Godot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PROJECTS ═══════════════ -->
+<section class="projects-section" id="projects">
+  <div class="page-watermark">03</div>
+  <div class="section-header reveal">
+    <span class="section-title">Projects</span>
+    <span class="section-meta">3 featured works</span>
+  </div>
+
+  <!-- ── PROJECT 1: GNN Recommender ── -->
+  <article class="project-card pc-a reveal">
+    <div class="project-inner">
+      <div class="project-main">
+        <div class="project-kicker">
+          <span class="project-num">01</span>
+          <span class="project-type">ML · Android · Graph Learning</span>
+        </div>
+        <h2 class="project-title">GNN Game<br>Recommender</h2>
+        <p class="project-tagline">Steam knowledge graph meets explainable AI</p>
+        <p class="project-desc">
+          An Android app where users search, browse, and maintain a personal game wishlist — and receive personalized recommendations driven by an ensemble graph neural network trained on Steam interaction data. The system doesn't just recommend; it explains <em>why</em> through subgraph attribution and human-readable relation paths.
+        </p>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-key">Models</span>
+            <span class="detail-val">GraphSAGE + LightGCN ensemble, heterogeneous graph, BPR loss with L2 regularisation</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Data</span>
+            <span class="detail-val">Steam-200k interactions + Steam metadata (genres, devs, publishers, platforms) via HuggingFace</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Explainability</span>
+            <span class="detail-val">GNNExplainer subgraph attribution + rule-based relational path extraction (human-readable)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Eval</span>
+            <span class="detail-val">ROC-AUC, Average Precision, Hits@10 (full-ranking against all games)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Backend</span>
+            <span class="detail-val">IGDB API for game metadata · Firebase Realtime DB for user/wishlist persistence</span>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="ptag ptag-b">PyTorch Geometric</span>
+          <span class="ptag ptag-c">GraphSAGE</span>
+          <span class="ptag ptag-c">LightGCN</span>
+          <span class="ptag ptag-d">GNNExplainer</span>
+          <span class="ptag ptag-a">Kotlin</span>
+          <span class="ptag ptag-a">Android Studio</span>
+          <span class="ptag ptag-e">Firebase</span>
+          <span class="ptag ptag-b">Python</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Warnerd03" target="_blank" class="plink">⎇ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-panel">
+        <div>
+          <div class="panel-section-label">Architecture</div>
+          <div class="arch-diagram"><span class="dim">┌──────────────────────────┐
+│</span> <span class="hi">Steam-200k</span> + <span class="hi">Metadata</span>    <span class="dim">│
+├──────────────────────────┤</span>
+<span class="dim">│</span>   <span class="hi2">Heterogeneous Graph</span>       <span class="dim">│</span>
+<span class="dim">│</span>   user ──plays──► game    <span class="dim">│</span>
+<span class="dim">│</span>   game ──has──► genre     <span class="dim">│</span>
+<span class="dim">│</span>   game ──by──► developer  <span class="dim">│</span>
+<span class="dim">├──────────┬───────────────┤</span>
+<span class="dim">│</span><span class="hi2">GraphSAGE</span><span class="dim">│</span><span class="hi3">LightGCN</span>       <span class="dim">│</span>
+<span class="dim">│</span> inductive<span class="dim">│</span>layer-mean emb <span class="dim">│</span>
+<span class="dim">├──────────┴───────────────┤</span>
+<span class="dim">│</span>      <span class="hi">Ensemble</span> (avg)       <span class="dim">│</span>
+<span class="dim">│</span>   dot-product scoring     <span class="dim">│</span>
+<span class="dim">├──────────────────────────┤</span>
+<span class="dim">│</span>  <span class="hi2">GNNExplainer</span> + paths     <span class="dim">│</span>
+<span class="dim">└──────────────────────────┘</span></div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <span class="stat-val">200K+</span>
+            <span class="stat-label">Steam Interactions</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">Hits@10</span>
+            <span class="stat-label">Full-Ranking Eval</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">2</span>
+            <span class="stat-label">GNN Models Ensembled</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">IGDB</span>
+            <span class="stat-label">Live Game Data API</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── PROJECT 2: Formality Bias ── -->
+  <article class="project-card pc-b reveal">
+    <div class="project-inner">
+      <div class="project-main">
+        <div class="project-kicker">
+          <span class="project-num">02</span>
+          <span class="project-type">NLP Research · LLM Analysis · Fine-Tuning</span>
+        </div>
+        <h2 class="project-title">Formality Bias<br>in LLMs</h2>
+        <p class="project-tagline">Quantifying what language models won't say casually</p>
+        <p class="project-desc">
+          A research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. Compared 25 LLMs against three human conversational baselines using two complementary metrics. The finding: formality is model-agnostic — it's driven by conversational topic, not model architecture. Then we fixed it with LoRA.
+        </p>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-key">Metrics</span>
+            <span class="detail-val">Formality Rate (FR) — lexicon-based hits/1000 tokens; RoBERTa binary classifier score (bert_formal_p)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Corpus</span>
+            <span class="detail-val">LMSYS-Chat-1M (25 models, real users) vs. BlendedSkillTalk, Reddit TIFU, ELI5</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Classifier</span>
+            <span class="detail-val">s-nlp/roberta-base-formality-ranker fine-tuned on Pavlick formality scores (GYAFC corpus)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Finding</span>
+            <span class="detail-val">Formality bias is model-agnostic — driven primarily by conversational topic, not model family</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Mitigation</span>
+            <span class="detail-val">LoRA fine-tuning on Qwen2.5-3B-Instruct on low-formality data; evaluated with paired statistical tests</span>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="ptag ptag-c">RoBERTa</span>
+          <span class="ptag ptag-d">LoRA / PEFT</span>
+          <span class="ptag ptag-d">Qwen2.5-3B</span>
+          <span class="ptag ptag-b">HuggingFace</span>
+          <span class="ptag ptag-c">LMSYS-Chat-1M</span>
+          <span class="ptag ptag-e">NLP Research</span>
+          <span class="ptag ptag-b">Python</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Warnerd03" target="_blank" class="plink">⎇ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-panel">
+        <div>
+          <div class="panel-section-label">Research Pipeline</div>
+          <div class="pipeline">
+            <div class="pipe-step">
+              <div class="pipe-icon">1</div>
+              <div class="pipe-text"><strong>Lexicon construction</strong> — 2-tier formal word list with informal substitutes</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">2</div>
+              <div class="pipe-text"><strong>Data loading</strong> — LMSYS-Chat-1M + 3 human baselines</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">3</div>
+              <div class="pipe-text"><strong>FR metric</strong> — lexicon hits per 1K tokens (interpretable baseline)</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">4</div>
+              <div class="pipe-text"><strong>RoBERTa classifier</strong> — fine-tuned binary formality scorer</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">5</div>
+              <div class="pipe-text"><strong>Bias source analysis</strong> — conversation type × model family breakdown</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">6</div>
+              <div class="pipe-text"><strong>LoRA mitigation</strong> + paired statistical validation</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <span class="stat-val">25</span>
+            <span class="stat-label">LLMs Analysed</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">3</span>
+            <span class="stat-label">Human Baselines</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">2</span>
+            <span class="stat-label">Formality Metrics</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">LoRA</span>
+            <span class="stat-label">Bias Mitigation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── PROJECT 3: OCR ── -->
+  <article class="project-card pc-c reveal">
+    <div class="project-inner">
+      <div class="project-main">
+        <div class="project-kicker">
+          <span class="project-num">03</span>
+          <span class="project-type">Computer Vision · Deep Learning · OCR</span>
+        </div>
+        <h2 class="project-title">Handwritten<br>OCR System</h2>
+        <p class="project-tagline">From raw ink to corrected text, end-to-end</p>
+        <p class="project-desc">
+          A full handwriting-to-text pipeline: an OpenCV segmentation stage extracts individual characters from full-word images, routes them through a ViT + CNN ensemble classifier, and post-processes the reconstructed output with SymSpell for spelling correction. Both models were trained and fine-tuned on a 400K-image handwritten character dataset published on Kaggle.
+        </p>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-key">Segmentation</span>
+            <span class="detail-val">OpenCV: Gaussian blur → adaptive thresholding → contour detection + dilation → bounding-box sort</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Models</span>
+            <span class="detail-val">ViT-B-16 (partial layer freeze, OneCycleLR) + 5-block CNN (CosineDecayRestarts, label smoothing 0.1)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Training tricks</span>
+            <span class="detail-val">Class weighting (balanced), early stopping, custom classification heads, OneCycle + Cosine LR schedules</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Post-processing</span>
+            <span class="detail-val">SymSpell dictionary-based spell correction on reconstructed word output</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Dataset</span>
+            <span class="detail-val">400K-image handwritten character set (Kaggle: warrenxnguyen/handwritten-letters)</span>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="ptag ptag-d">ViT-B-16</span>
+          <span class="ptag ptag-c">PyTorch</span>
+          <span class="ptag ptag-b">TensorFlow</span>
+          <span class="ptag ptag-a">OpenCV</span>
+          <span class="ptag ptag-e">CNN</span>
+          <span class="ptag ptag-a">SymSpell</span>
+          <span class="ptag ptag-b">Kaggle</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Warnerd03" target="_blank" class="plink">⎇ GitHub</a>
+          <a href="https://www.kaggle.com/datasets/warrenxnguyen/handwritten-letters" target="_blank" class="plink">📦 Dataset</a>
+        </div>
+      </div>
+
+      <div class="project-panel">
+        <div>
+          <div class="panel-section-label">Processing Pipeline</div>
+          <div class="arch-diagram"><span class="dim">  Word Image Input
+       │
+       ▼</span>
+<span class="hi">┌─ OpenCV Segmentation ──────┐</span>
+<span class="hi">│</span> Gaussian blur              <span class="hi">│</span>
+<span class="hi">│</span> Adaptive threshold         <span class="hi">│</span>
+<span class="hi">│</span> Contour detect + dilate    <span class="hi">│</span>
+<span class="hi">│</span> Bounding box → sort chars  <span class="hi">│</span>
+<span class="hi">└────────────┬───────────────┘</span>
+<span class="dim">             │ char images
+      ┌──────┴──────┐</span>
+<span class="hi2">   ViT-B-16</span>    <span class="hi3">CNN (5-block)</span>
+<span class="dim">   PyTorch      TensorFlow
+      └──────┬──────┘</span>
+<span class="dim">          Ensemble
+             │</span>
+<span class="hi">  SymSpell post-process</span>
+<span class="dim">             │
+       Text Output</span></div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <span class="stat-val">400K</span>
+            <span class="stat-label">Training Images</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">ViT+CNN</span>
+            <span class="stat-label">Ensemble Classifier</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">E2E</span>
+            <span class="stat-label">Full Pipeline</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">Kaggle</span>
+            <span class="stat-label">Dataset Published</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section class="exp-section" id="contact">
+  <div class="page-watermark">04</div>
+  <div class="section-header reveal">
+    <span class="section-title">Get in Touch</span>
+  </div>
+  <p class="hero-bio reveal" style="max-width: 640px; margin-bottom: 2.5rem;">
+    I'm actively looking for full-time opportunities in machine learning and software
+    engineering. Feel free to reach out — I'd love to talk about my work or potential roles.
+  </p>
+  <div class="hero-card reveal reveal-d1" style="max-width: 480px; animation: none; opacity: 1;">
+    <div class="hero-card-label">Contact</div>
+    <a href="mailto:thinker03@gwu.edu" class="contact-row">
+      <div class="contact-icon">✉</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">thinker03@gwu.edu</div>
+      </div>
+    </a>
+    <a href="tel:7034620121" class="contact-row">
+      <div class="contact-icon">✆</div>
+      <div>
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">(703) 462-0121</div>
+      </div>
+    </a>
+    <a href="https://github.com/Warnerd03" target="_blank" class="contact-row">
+      <div class="contact-icon">⎇</div>
+      <div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">github.com/Warnerd03</div>
+      </div>
+    </a>
+    <a href="https://linkedin.com/in/warren-xuan-nguyen" target="_blank" class="contact-row">
+      <div class="contact-icon">in</div>
+      <div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">warren-xuan-nguyen</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-name">Warren Nguyen</span>
+  <span class="footer-copy">thinker03@gwu.edu · McLean, VA · <span id="yr"></span></span>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// typewriter effect
+const phrases = ["ML & Software Engineer", "Graph Neural Networks", "NLP Research", "Computer Vision"];
+const tw = document.getElementById('typewriter');
+let twIdx = 0, twChar = 0, twDeleting = false;
+function typeStep() {
+  const phrase = phrases[twIdx];
+  if (!twDeleting) {
+    twChar++;
+    tw.innerHTML = phrase.slice(0, twChar) + '<span class="typewriter-cursor">&nbsp;</span>';
+    if (twChar === phrase.length) { twDeleting = true; setTimeout(typeStep, 2200); return; }
+    setTimeout(typeStep, 55);
+  } else {
+    twChar--;
+    tw.innerHTML = phrase.slice(0, twChar) + '<span class="typewriter-cursor">&nbsp;</span>';
+    if (twChar === 0) { twDeleting = false; twIdx = (twIdx + 1) % phrases.length; setTimeout(typeStep, 300); return; }
+    setTimeout(typeStep, 28);
+  }
+}
+typeStep();
+
+// magnetic buttons
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width/2) * 0.25;
+    const y = (e.clientY - r.top - r.height/2) * 0.25;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+// cursor-following glow on project cards
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    card.style.setProperty('--my', `${e.clientY - r.top}px`);
+  });
+});
+</script>
+</body>
+</html>
