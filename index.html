@@ -27,32 +27,6 @@
     <p class="hero-eyebrow">Open to full-time roles · May 2026</p>
     <h1>Warren<br>Nguyen</h1>
     <p class="hero-subtitle" id="typewriter"></p>
-    <p class="hero-bio">
-      Dual-degree CS graduate (B.S. + M.S., GPA 3.8, Magna Cum Laude) from GWU.
-      I build graph neural networks that explain their own predictions, NLP systems
-      that measure what language models won't admit, and full-stack apps that ship.
-    </p>
-    <div class="hero-actions">
-      <a href="#projects" class="btn btn-fill">View Projects</a>
-      <a href="https://github.com/Warnerd03" target="_blank" class="btn btn-ghost">GitHub ↗</a>
-      <a href="https://linkedin.com/in/warren-xuan-nguyen" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
-    </div>
-  </div>
-
-  <div class="hero-card">
-    <div class="hero-card-label">Education</div>
-    <div class="edu-block" style="margin-top: 0;">
-      <div class="edu-row">
-        <div class="edu-degree">M.S. Computer Science</div>
-        <div class="edu-school">The George Washington University</div>
-        <div class="edu-meta">May 2026 · GPA 3.8 · Magna Cum Laude</div>
-      </div>
-      <div class="edu-row" style="margin-bottom: 0;">
-        <div class="edu-degree">B.S. Computer Science</div>
-        <div class="edu-school">The George Washington University</div>
-        <div class="edu-meta">May 2025 · GPA 3.8 · Magna Cum Laude</div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -62,12 +36,32 @@
   <div class="skills-header reveal">
     <span class="section-title">About Me</span>
   </div>
-  <p class="hero-bio reveal" style="max-width: 720px; margin-bottom: 2.5rem;">
-    I'm a graph-learning and NLP enthusiast who likes projects that explain themselves —
-    recommendation systems that show their reasoning, language models that reveal their
-    biases, and computer vision pipelines that turn handwriting into clean text. Outside
-    of research, I build full-stack and mobile apps end to end, from data pipeline to UI.
-  </p>
+  <div class="about-top" style="display: grid; grid-template-columns: 1fr minmax(260px, 300px); gap: 1.5rem; align-items: start; width: 100%; box-sizing: border-box; margin-bottom: 2.5rem;">
+    <p class="hero-bio reveal" style="margin-bottom: 0; max-width: none; width: 100%;">
+      I am a Software Engineer with a focus on Machine Learning, Neural Networks, Natural Language Understanding, Computer Vision, and Data Science. 
+      I have a strong foundation in full-stack development, experienced in building end-to-end systems, from data pipelines to user interfaces. 
+      I most enjoy working on problems that will interact directly with people, finding solutions in collaboration with other engineers, 
+      planning ahead and organizing to account for future issues, and building systems that take into account the user experience. 
+      I'm looking for ML/AI roles where I can contribute to building intelligent systems that have a meaningful impact on users and society.
+    </p>
+
+    <div class="hero-card" style="margin-top: 0;">
+      <div class="hero-card-label">Education</div>
+      <div class="edu-block" style="margin-top: 0;">
+        <div class="edu-row">
+          <div class="edu-degree">M.S. Computer Science</div>
+          <div class="edu-school">The George Washington University</div>
+          <div class="edu-meta">May 2026 · GPA 3.8 · Magna Cum Laude</div>
+        </div>
+        <div class="edu-row" style="margin-bottom: 0;">
+          <div class="edu-degree">B.S. Computer Science</div>
+          <div class="edu-school">The George Washington University</div>
+          <div class="edu-meta">May 2025 · GPA 3.8 · Magna Cum Laude</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="skills-header reveal">
     <span class="skills-label">Skills</span>
     <span class="skills-sublabel">Languages · Frameworks · Tools</span>
@@ -98,6 +92,14 @@
         <span class="pill">OpenCV</span>
         <span class="pill">NumPy</span>
         <span class="pill">pandas</span>
+        <span class="pill">Matplotlib</span>
+        <span class="pill">GraphSAGE</span>
+        <span class="pill">LightGCN</span>
+        <span class="pill">GNNExplainer</span>
+        <span class="pill">RoBERTa</span>
+        <span class="pill">ViT-B-16</span>
+        <span class="pill">NetworkX</span>
+        <span class="pill">SymSpell</span>
       </div>
     </div>
     <div class="skill-group">
@@ -111,6 +113,8 @@
         <span class="pill">Android Studio</span>
         <span class="pill">Unity</span>
         <span class="pill">Godot</span>
+        <span class="pill">Excel</span>
+        <span class="pill">Kaggle</span>
       </div>
     </div>
   </div>
@@ -121,7 +125,6 @@
   <div class="page-watermark">03</div>
   <div class="section-header reveal">
     <span class="section-title">Projects</span>
-    <span class="section-meta">3 featured works</span>
   </div>
 
   <!-- ── PROJECT 1: GNN Recommender ── -->
@@ -130,12 +133,14 @@
       <div class="project-main">
         <div class="project-kicker">
           <span class="project-num">01</span>
-          <span class="project-type">ML · Graph Learning · Explainable AI</span>
+          <span class="project-type">Machine Learning · Graph Neural Networks · User-Friendly Explainable AI · </span>
         </div>
-        <h2 class="project-title">GNN Game<br>Recommender</h2>
-        <p class="project-tagline">Steam knowledge graph meets explainable AI</p>
+        <h2 class="project-title">GNN Explainable Game<br>Recommendation System</h2>
+        <p class="project-tagline">Explainable Relational User Recommendations</p>
         <p class="project-desc">
-          A heterogeneous knowledge graph recommender trained on real Steam interaction data, combining GraphSAGE and LightGCN in an ensemble to predict which games a user is likely to play next. The system doesn't just recommend; it explains <em>why</em> through subgraph attribution and human-readable relation paths.
+          Constructed a heterogeneous knowledge graph recommender from Steam game meta data and interaction data.
+          Trained GraphSAGE and LightGCN in an ensemble on the knowledge graph to predict which games a user is likely to play next.
+          Generated human-readable justifications for the recommendations with rule-based relational path extraction to find direct paths to the recommendations and GNNExplainer subgraph attributions to rank weights of the most important relations/edges.
         </p>
         <div class="project-details">
           <div class="detail-row">
@@ -222,10 +227,12 @@
           <span class="project-num">02</span>
           <span class="project-type">NLP Research · LLM Analysis · Fine-Tuning</span>
         </div>
-        <h2 class="project-title">Formality Bias<br>in LLMs</h2>
-        <p class="project-tagline">Quantifying what language models won't say casually</p>
+        <h2 class="project-title">Formality Bias in LLMs</h2>
+        <p class="project-tagline">Identifying and addressing formality bias in large language model outputs</p>
         <p class="project-desc">
-          A research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. Compared 25 LLMs against three human conversational baselines using two complementary metrics. The finding: formality is model-agnostic — it's driven by conversational topic, not model architecture. Then we fixed it with LoRA.
+          A research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. 
+          Constructed two metrics to measure formality in LLM outputs: a lexicon-based Formality Rate (FR) that measures the formality of text through the rate of formal words in the corpus and a RoBERTa-based binary classifier.
+          Compared 25 LLMs against three human conversational baselines using two complementary metrics. The finding: formality is model-agnostic — it's driven by conversational topic, not model architecture. Then we fixed it with LoRA.
         </p>
         <div class="project-details">
           <div class="detail-row">
@@ -418,16 +425,16 @@
     <span class="section-title">Get in Touch</span>
   </div>
   <p class="hero-bio reveal" style="max-width: 640px; margin-bottom: 2.5rem;">
-    I'm actively looking for full-time opportunities in machine learning and software
-    engineering. Feel free to reach out — I'd love to talk about my work or potential roles.
+    I'm actively looking for full-time opportunities in artificial intelligence and software
+    engineering. Feel free to reach out through these channels. I'd love to talk about my work or potential roles.
   </p>
   <div class="hero-card reveal reveal-d1" style="max-width: 480px; animation: none; opacity: 1;">
     <div class="hero-card-label">Contact</div>
-    <a href="mailto:thinker03@gwu.edu" class="contact-row">
+    <a href="mailto:warren@nguyenfamily.net" class="contact-row">
       <div class="contact-icon">✉</div>
       <div>
         <div class="contact-label">Email</div>
-        <div class="contact-value">thinker03@gwu.edu</div>
+        <div class="contact-value">warren@nguyenfamily.net</div>
       </div>
     </a>
     <a href="tel:7034620121" class="contact-row">
@@ -435,13 +442,6 @@
       <div>
         <div class="contact-label">Phone</div>
         <div class="contact-value">(703) 462-0121</div>
-      </div>
-    </a>
-    <a href="https://github.com/Warnerd03" target="_blank" class="contact-row">
-      <div class="contact-icon">⎇</div>
-      <div>
-        <div class="contact-label">GitHub</div>
-        <div class="contact-value">github.com/Warnerd03</div>
       </div>
     </a>
     <a href="https://linkedin.com/in/warren-xuan-nguyen" target="_blank" class="contact-row">
@@ -457,7 +457,7 @@
 <!-- FOOTER -->
 <footer>
   <span class="footer-name">Warren Nguyen</span>
-  <span class="footer-copy">thinker03@gwu.edu · McLean, VA · <span id="yr"></span></span>
+  <span class="footer-copy">warren@nguyenfamily.net · McLean, VA · <span id="yr"></span></span>
 </footer>
 
 <script>
