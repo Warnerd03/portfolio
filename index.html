@@ -22,17 +22,25 @@
 
 <!-- ═══════════════ INTRO ═══════════════ -->
 <div class="hero" id="home">
-  <div class="page-watermark">01</div>
   <div class="hero-left">
     <p class="hero-eyebrow">Open to full-time roles · May 2026</p>
     <h1>Warren<br>Nguyen</h1>
-    <p class="hero-subtitle" id="typewriter"></p>
+  </div>
+  <div class="hero-right">
+    <div class="headshot-frame">
+      <span class="headshot-placeholder-text">Headshot</span>
+    </div>
+    <div class="descriptor-scatter">
+      <span class="descriptor-tag dt-1" data-text="ML &amp; Software Engineer"></span>
+      <span class="descriptor-tag dt-2" data-text="Graph Neural Networks"></span>
+      <span class="descriptor-tag dt-3" data-text="NLP Research"></span>
+      <span class="descriptor-tag dt-4" data-text="Computer Vision"></span>
+    </div>
   </div>
 </div>
 
 <!-- ═══════════════ ABOUT ═══════════════ -->
 <section class="skills-section" id="about">
-  <div class="page-watermark">02</div>
   <div class="skills-header reveal">
     <span class="section-title">About Me</span>
   </div>
@@ -122,7 +130,6 @@
 
 <!-- ═══════════════ PROJECTS ═══════════════ -->
 <section class="projects-section" id="projects">
-  <div class="page-watermark">03</div>
   <div class="section-header reveal">
     <span class="section-title">Projects</span>
   </div>
@@ -140,7 +147,7 @@
         <p class="project-desc">
           Constructed a heterogeneous knowledge graph recommender from Steam game meta data and interaction data.
           Trained GraphSAGE and LightGCN in an ensemble on the knowledge graph to predict which games a user is likely to play next.
-          Generated human-readable justifications for the recommendations with rule-based relational path extraction to find direct paths to the recommendations and GNNExplainer subgraph attributions to rank weights of the most important relations/edges.
+          Generated human-readable justifications for the recommendations with rule-based relational path extraction to find direct paths from the user's games to the recommendations and GNNExplainer subgraph attributions to rank weights of the most important relations/edges.
         </p>
         <div class="project-details">
           <div class="detail-row">
@@ -177,22 +184,53 @@
       <div class="project-panel">
         <div>
           <div class="panel-section-label">Architecture</div>
-          <div class="arch-diagram"><span class="dim">┌──────────────────────────┐
-│</span> <span class="hi">Steam-200k</span> + <span class="hi">Metadata</span>    <span class="dim">│
-├──────────────────────────┤</span>
-<span class="dim">│</span>   <span class="hi2">Heterogeneous Graph</span>       <span class="dim">│</span>
-<span class="dim">│</span>   user ──plays──► game    <span class="dim">│</span>
-<span class="dim">│</span>   game ──has──► genre     <span class="dim">│</span>
-<span class="dim">│</span>   game ──by──► developer  <span class="dim">│</span>
-<span class="dim">├──────────┬───────────────┤</span>
-<span class="dim">│</span><span class="hi2">GraphSAGE</span><span class="dim">│</span><span class="hi3">LightGCN</span>       <span class="dim">│</span>
-<span class="dim">│</span> inductive<span class="dim">│</span>layer-mean emb <span class="dim">│</span>
-<span class="dim">├──────────┴───────────────┤</span>
-<span class="dim">│</span>      <span class="hi">Ensemble</span> (avg)       <span class="dim">│</span>
-<span class="dim">│</span>   dot-product scoring     <span class="dim">│</span>
-<span class="dim">├──────────────────────────┤</span>
-<span class="dim">│</span>  <span class="hi2">GNNExplainer</span> + paths     <span class="dim">│</span>
-<span class="dim">└──────────────────────────┘</span></div>
+          <div class="arch-svg-wrap">
+            <svg viewBox="0 0 280 306" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram: Steam data and metadata build a heterogeneous graph, modeled by a GraphSAGE and LightGCN ensemble, then explained via GNNExplainer and relational paths">
+              <defs>
+                <marker id="arrow-gnn" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
+                </marker>
+              </defs>
+
+              <rect x="10" y="6" width="260" height="32" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="26" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Steam-200k + Metadata</text>
+
+              <line x1="140" y1="38" x2="140" y2="52" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="54" width="260" height="66" rx="4" fill="var(--ink)" stroke="var(--rule)" stroke-width="1"/>
+              <text x="140" y="72" text-anchor="middle" class="arch-node-title" fill="var(--t3)">Heterogeneous Graph</text>
+              <text x="140" y="88" text-anchor="middle" class="arch-node-sub">user ── plays ──► game</text>
+              <text x="140" y="101" text-anchor="middle" class="arch-node-sub">game ── has ──► genre</text>
+              <text x="140" y="114" text-anchor="middle" class="arch-node-sub">game ── by ──► developer</text>
+
+              <line x1="140" y1="120" x2="140" y2="130" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="130" x2="214" y2="130" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="130" x2="72" y2="138" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="214" y1="130" x2="214" y2="138" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="140" width="124" height="46" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="160" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
+              <text x="72" y="175" text-anchor="middle" class="arch-node-sub">inductive</text>
+
+              <rect x="146" y="140" width="124" height="46" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="160" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
+              <text x="208" y="175" text-anchor="middle" class="arch-node-sub">layer-mean emb</text>
+
+              <line x1="72" y1="186" x2="72" y2="196" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="186" x2="208" y2="196" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="196" x2="208" y2="196" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="196" x2="140" y2="204" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="206" width="260" height="40" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="224" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble (avg)</text>
+              <text x="140" y="238" text-anchor="middle" class="arch-node-sub">dot-product scoring</text>
+
+              <line x1="140" y1="246" x2="140" y2="260" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="262" width="260" height="40" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="140" y="286" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer + Paths</text>
+            </svg>
+          </div>
         </div>
         <div class="stat-grid">
           <div class="stat-block">
@@ -214,25 +252,25 @@
         </div>
       </div>
 
-<div class="gnn-demo">
+<div class="project-demo">
         <div class="panel-section-label">Live Results</div>
 
-        <div class="gnn-demo-media">
-          <div class="gnn-media-box">
-            <div class="gnn-section-title">Training Progress</div>
+        <div class="demo-media">
+          <div class="demo-media-box">
+            <div class="demo-section-title">Training Progress</div>
             <img src="assets/gnn/training_curves.png" alt="GraphSAGE and LightGCN training loss, validation AUC, and validation Hits@10 over training epochs">
-            <div class="gnn-media-caption">Training/validation loss, AUC, and Hits@10 for both models across training epochs</div>
+            <div class="demo-media-caption">Validation loss, AUC, and Hits@10 graphs for both models across training their relative training epochs</div>
           </div>
-          <div class="gnn-media-box">
-            <div class="gnn-section-title">Explanation Subgraph</div>
+          <div class="demo-media-box">
+            <div class="demo-section-title">Sample User Explanation Subgraph</div>
             <img src="assets/gnn/explanation_subgraph.png" alt="GNNExplainer subgraph attribution visualization showing the knowledge graph paths behind a recommendation">
-            <div class="gnn-media-caption">GNNExplainer subgraph attribution for the top-3 recommendations to a sample user</div>
+            <div class="demo-media-caption">GNNExplainer subgraph visualization for sample user, demonstrating the paths from the user's games to their recommendations</div>
           </div>
         </div>
 
-        <div class="gnn-demo-grid">
-          <div class="gnn-chart-box">
-            <div class="gnn-section-title">Test-Set Performance</div>
+        <div class="demo-grid">
+          <div class="demo-chart-box">
+            <div class="demo-section-title">Model and Ensemble Performance for Each Metric</div>
             <svg viewBox="0 0 360 175" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
               <line x1="20" y1="150" x2="340" y2="150" stroke="var(--rule)" stroke-width="1"/>
               <rect x="40.0" y="29.4" width="16" height="120.6" fill="var(--t1)" rx="2"/>
@@ -248,7 +286,7 @@
               <rect x="278.0" y="104.9" width="16" height="45.1" fill="var(--t0)" rx="2"/>
               <text x="265.0" y="168" text-anchor="middle" class="gnn-bar-label">Hits@10</text>
             </svg>
-            <table class="gnn-metrics-table">
+            <table class="demo-metrics-table">
               <thead>
                 <tr><th></th><th>GraphSAGE</th><th>LightGCN</th><th>Ensemble</th></tr>
               </thead>
@@ -258,17 +296,17 @@
                 <tr><td>Hits@10</td><td>0.35</td><td>0.28</td><td>0.35</td></tr>
               </tbody>
             </table>
-            <div class="gnn-chart-legend">
+            <div class="demo-chart-legend">
               <span><i style="background: var(--t1);"></i>GraphSAGE</span>
               <span><i style="background: var(--t3);"></i>LightGCN</span>
               <span><i style="background: var(--t0);"></i>Ensemble</span>
             </div>
           </div>
-          <div class="gnn-example-box">
-            <div class="gnn-section-title">Example Recommendation</div>
+          <div class="demo-example-box">
+            <div class="demo-section-title">Sample User Top 3 Recommendations and Explained Paths</div>
             <div class="gnn-example-user">User <span class="hi-mono">#151603712</span></div>
             <div class="gnn-example-rec">Top pick: <span class="hi-mono">Unturned</span> <span class="gnn-example-score">(score 233.05)</span></div>
-            <div class="gnn-example-why">Why, via rule-based path extraction:</div>
+            <div class="gnn-example-why">Rule-based path extraction:</div>
             <ul class="gnn-example-paths">
               <li>
                 <span class="path-chip">Left 4 Dead 2</span>
@@ -295,8 +333,8 @@
           </div>
         </div>
 
-        <div class="gnn-demo-footer">
-          <a href="https://github.com/Warnerd03/YOUR-REPO-NAME/blob/main/AML_Game_Recommendation_Project.ipynb" target="_blank" class="gnn-view-btn">View Full Notebook on GitHub</a>
+        <div class="demo-footer">
+          <a href="https://github.com/Warnerd03/YOUR-REPO-NAME/blob/main/AML_Game_Recommendation_Project.ipynb" target="_blank" class="demo-view-btn">View Full Notebook on GitHub</a>
         </div>
       </div>
     </div>
@@ -399,6 +437,36 @@
           </div>
         </div>
       </div>
+
+      <div class="project-demo">
+        <div class="panel-section-label">Live Results</div>
+
+        <div class="demo-media">
+          <div class="demo-media-box demo-placeholder">
+            <div class="demo-section-title">Formality Rate by Model</div>
+            <div class="demo-placeholder-body">Visuals coming soon</div>
+          </div>
+          <div class="demo-media-box demo-placeholder">
+            <div class="demo-section-title">Before / After LoRA Mitigation</div>
+            <div class="demo-placeholder-body">Visuals coming soon</div>
+          </div>
+        </div>
+
+        <div class="demo-grid">
+          <div class="demo-chart-box demo-placeholder">
+            <div class="demo-section-title">Formality Metrics</div>
+            <div class="demo-placeholder-body">Chart coming soon</div>
+          </div>
+          <div class="demo-example-box demo-placeholder">
+            <div class="demo-section-title">Example Output</div>
+            <div class="demo-placeholder-body">Example coming soon</div>
+          </div>
+        </div>
+
+        <div class="demo-footer">
+          <span class="demo-view-btn demo-view-btn-disabled">Live Results Coming Soon</span>
+        </div>
+      </div>
     </div>
   </article>
 
@@ -455,25 +523,58 @@
       <div class="project-panel">
         <div>
           <div class="panel-section-label">Processing Pipeline</div>
-          <div class="arch-diagram"><span class="dim">  Word Image Input
-       │
-       ▼</span>
-<span class="hi">┌─ OpenCV Segmentation ──────┐</span>
-<span class="hi">│</span> Gaussian blur              <span class="hi">│</span>
-<span class="hi">│</span> Adaptive threshold         <span class="hi">│</span>
-<span class="hi">│</span> Contour detect + dilate    <span class="hi">│</span>
-<span class="hi">│</span> Bounding box → sort chars  <span class="hi">│</span>
-<span class="hi">└────────────┬───────────────┘</span>
-<span class="dim">             │ char images
-      ┌──────┴──────┐</span>
-<span class="hi2">   ViT-B-16</span>    <span class="hi3">CNN (5-block)</span>
-<span class="dim">   PyTorch      TensorFlow
-      └──────┬──────┘</span>
-<span class="dim">          Ensemble
-             │</span>
-<span class="hi">  SymSpell post-process</span>
-<span class="dim">             │
-       Text Output</span></div>
+          <div class="arch-svg-wrap">
+            <svg viewBox="0 0 280 358" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Processing pipeline diagram: word image input goes through OpenCV segmentation, then a ViT and CNN ensemble, then SymSpell post-processing, to produce text output">
+              <defs>
+                <marker id="arrow-ocr" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
+                </marker>
+              </defs>
+
+              <rect x="10" y="6" width="260" height="30" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="25" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Word Image Input</text>
+
+              <line x1="140" y1="36" x2="140" y2="50" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="50" width="260" height="90" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+              <text x="140" y="68" text-anchor="middle" class="arch-node-title" fill="var(--t1)">OpenCV Segmentation</text>
+              <text x="140" y="83" text-anchor="middle" class="arch-node-sub">Gaussian blur</text>
+              <text x="140" y="96" text-anchor="middle" class="arch-node-sub">Adaptive threshold</text>
+              <text x="140" y="109" text-anchor="middle" class="arch-node-sub">Contour detect + dilate</text>
+              <text x="140" y="122" text-anchor="middle" class="arch-node-sub">Bounding box → sort chars</text>
+
+              <line x1="140" y1="140" x2="140" y2="150" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="150" x2="214" y2="150" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="150" x2="72" y2="158" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <line x1="214" y1="150" x2="214" y2="158" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="160" width="124" height="46" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="180" text-anchor="middle" class="arch-node-title" fill="var(--t3)">ViT-B-16</text>
+              <text x="72" y="195" text-anchor="middle" class="arch-node-sub">PyTorch</text>
+
+              <rect x="146" y="160" width="124" height="46" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="180" text-anchor="middle" class="arch-node-title" fill="var(--t4)">CNN (5-block)</text>
+              <text x="208" y="195" text-anchor="middle" class="arch-node-sub">TensorFlow</text>
+
+              <line x1="72" y1="206" x2="72" y2="216" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="206" x2="208" y2="216" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="216" x2="208" y2="216" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="216" x2="140" y2="224" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="226" width="260" height="34" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="248" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble</text>
+
+              <line x1="140" y1="260" x2="140" y2="274" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="276" width="260" height="34" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+              <text x="140" y="298" text-anchor="middle" class="arch-node-title" fill="var(--t1)">SymSpell Post-process</text>
+
+              <line x1="140" y1="310" x2="140" y2="322" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="322" width="260" height="30" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="341" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Text Output</text>
+            </svg>
+          </div>
         </div>
         <div class="stat-grid">
           <div class="stat-block">
@@ -494,13 +595,42 @@
           </div>
         </div>
       </div>
+
+      <div class="project-demo">
+        <div class="panel-section-label">Live Results</div>
+
+        <div class="demo-media">
+          <div class="demo-media-box demo-placeholder">
+            <div class="demo-section-title">Segmentation Output</div>
+            <div class="demo-placeholder-body">Visuals coming soon</div>
+          </div>
+          <div class="demo-media-box demo-placeholder">
+            <div class="demo-section-title">Reconstructed Word Output</div>
+            <div class="demo-placeholder-body">Visuals coming soon</div>
+          </div>
+        </div>
+
+        <div class="demo-grid">
+          <div class="demo-chart-box demo-placeholder">
+            <div class="demo-section-title">Classifier Accuracy</div>
+            <div class="demo-placeholder-body">Chart coming soon</div>
+          </div>
+          <div class="demo-example-box demo-placeholder">
+            <div class="demo-section-title">Example Output</div>
+            <div class="demo-placeholder-body">Example coming soon</div>
+          </div>
+        </div>
+
+        <div class="demo-footer">
+          <span class="demo-view-btn demo-view-btn-disabled">Live Results Coming Soon</span>
+        </div>
+      </div>
     </div>
   </article>
 </section>
 
 <!-- ═══════════════ CONTACT ═══════════════ -->
 <section class="exp-section" id="contact">
-  <div class="page-watermark">04</div>
   <div class="section-header reveal">
     <span class="section-title">Get in Touch</span>
   </div>
@@ -549,25 +679,27 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// typewriter effect
-const phrases = ["ML & Software Engineer", "Graph Neural Networks", "NLP Research", "Computer Vision"];
-const tw = document.getElementById('typewriter');
-let twIdx = 0, twChar = 0, twDeleting = false;
-function typeStep() {
-  const phrase = phrases[twIdx];
-  if (!twDeleting) {
-    twChar++;
-    tw.innerHTML = phrase.slice(0, twChar) + '<span class="typewriter-cursor">&nbsp;</span>';
-    if (twChar === phrase.length) { twDeleting = true; setTimeout(typeStep, 2200); return; }
-    setTimeout(typeStep, 55);
-  } else {
-    twChar--;
-    tw.innerHTML = phrase.slice(0, twChar) + '<span class="typewriter-cursor">&nbsp;</span>';
-    if (twChar === 0) { twDeleting = false; twIdx = (twIdx + 1) % phrases.length; setTimeout(typeStep, 300); return; }
-    setTimeout(typeStep, 28);
-  }
+// descriptor scatter — type each tag once, in sequence, then leave it in place
+const descriptorTags = document.querySelectorAll('.descriptor-tag');
+function typeScatterTag(el, startDelay) {
+  const text = el.dataset.text;
+  let i = 0;
+  setTimeout(() => {
+    el.classList.add('visible');
+    const iv = setInterval(() => {
+      i++;
+      el.innerHTML = text.slice(0, i) + '<span class="typewriter-cursor">&nbsp;</span>';
+      if (i === text.length) {
+        clearInterval(iv);
+        setTimeout(() => {
+          const cursor = el.querySelector('.typewriter-cursor');
+          if (cursor) cursor.remove();
+        }, 500);
+      }
+    }, 42);
+  }, startDelay);
 }
-typeStep();
+descriptorTags.forEach((el, idx) => typeScatterTag(el, 500 + idx * 480));
 
 // magnetic buttons
 document.querySelectorAll('.btn').forEach(btn => {
