@@ -525,6 +525,8 @@ nav {
 .arch-svg { width: 100%; height: auto; display: block; }
 .arch-node-title { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; }
 .arch-node-sub { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; fill: var(--muted); letter-spacing: 0.02em; }
+.arch-node-desc { font-family: 'Inter', sans-serif; font-size: 7.3px; fill: var(--soft); }
+.arch-stage-label { font-family: 'JetBrains Mono', monospace; font-size: 7px; font-weight: 500; fill: var(--t0); letter-spacing: 0.08em; text-transform: uppercase; }
 
 /* stat blocks */
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }

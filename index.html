@@ -155,29 +155,29 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">GraphSAGE</span>
-                <p class="tech-item-desc">This model learns inductive aggregation functions by aggregating information from a node's neighbors in a way that generalizes to unseen neighborhoods.</p>
+                <p class="tech-item-desc">Builds a user's embedding by pooling from the games they've played, and a game's embedding by pooling from its genre, developer, and publisher neighbors — a 3-layer encoder with ReLU and dropout. A learnable per-relation scale lets the model decide, on its own, that "shares a developer" should count differently than "shares a genre." Each game node also folds in 5 numeric features (price, review volume/ratio, estimated owners, release year) directly into its embedding.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">LightGCN</span>
-                <p class="tech-item-desc">Custom 3-layer implementation (128-dim) using only symmetric-normalized propagation with learnable per-edge-type weights — no weight matrices, no nonlinearities. Final embeddings are the mean across all layers, isolating pure collaborative-filtering signal from graph connectivity alone.</p>
+                <p class="tech-item-desc">A deliberately stripped-down counterpart: no weight matrices, no activation functions — just 3 rounds of pure graph propagation with a learnable scalar per edge type, and the final embedding averaged across all 3 layers. Removing GraphSAGE's extra machinery isolates how much signal comes from graph connectivity alone versus content features, and doubles as a strong collaborative-filtering baseline.</p>
               </div>
             </div>
-            <p class="tech-block-note">Both decode via dot-product scoring and train on a playtime-weighted BPR ranking loss.</p>
+            <p class="tech-block-note">Both decode via dot-product scoring and train on a playtime-weighted BPR ranking loss (0.5 margin) — interactions where a user logged more hours count more during training. The 60/40 GraphSAGE/LightGCN ensemble blend was chosen by grid search over validation Hits@10.</p>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">Data</span>
-            <p class="tech-block-intro">Steam-200k play interactions joined with FronkonGames Steam metadata (log1p-scaled playtime used as an engagement weight) to build a 7-node-type heterogeneous graph — each game node also carries 5 normalized numeric features (price, review volume/ratio, estimated owners, release year).</p>
+            <p class="tech-block-intro">Steam-200k play interactions (log1p-scaled hours used as an engagement weight) joined with FronkonGames Steam metadata by exact title match. Only about 47% of games in the interaction data found a metadata match — the rest lacked genre/developer/publisher info and were excluded. The result is a 7-node-type heterogeneous graph, with each game node also carrying 5 normalized numeric features (price, review volume/ratio, estimated owners, release year).</p>
             <div class="tech-chip-row">
               <span class="pill hi">11,350 users</span>
               <span class="pill hi">3,600 games</span>
               <span class="pill">1,696 matched</span>
               <span class="pill">70K plays</span>
-              <span class="pill">4.4K genre</span>
-              <span class="pill">1.9K developer</span>
-              <span class="pill">1.7K publisher</span>
-              <span class="pill">3.5K category</span>
-              <span class="pill">3.1K platform</span>
+              <span class="pill">4.4K genre edges</span>
+              <span class="pill">1.9K developer edges</span>
+              <span class="pill">1.7K publisher edges</span>
+              <span class="pill">3.5K category edges</span>
+              <span class="pill">3.1K platform edges</span>
             </div>
           </div>
 
@@ -186,11 +186,11 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">GNNExplainer</span>
-                <p class="tech-item-desc">Learns a soft importance mask over a compact 2-hop subgraph (user → played/recommended games → genre/developer) by gradient-optimizing a frozen 2-layer GCN, surfacing which edges most shaped the embedding.</p>
+                <p class="tech-item-desc">Answers "what did the model actually rely on?" It learns a soft importance score for every edge in a compact ~56-node subgraph around the user (their played games plus the games being explained, out to genre/developer) by gradient-optimizing a frozen 2-layer GCN — surfacing which edges most shaped the prediction, even if a person wouldn't describe them in words.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">Relational Paths</span>
-                <p class="tech-item-desc">Independently searches the full 17K-node knowledge graph for user → game paths (≤4 hops), ranks them by overlap with GNNExplainer's flagged nodes, and deduplicates by bridge entity to surface 3 diverse, human-readable justifications per recommendation.</p>
+                <p class="tech-item-desc">Answers "can a person actually read the reason?" It searches the full ~17K-node knowledge graph for readable user → game paths (up to 4 hops, e.g. a shared genre or developer), ranks them by how many GNNExplainer-flagged nodes they pass through, and deduplicates by bridge entity so the 3 surfaced paths are genuinely different reasons rather than restatements of one.</p>
               </div>
             </div>
           </div>
@@ -200,18 +200,18 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-a">
                 <span class="tech-item-name">ROC-AUC</span>
-                <p class="tech-item-desc">Ranks positive vs. sampled-negative user-game pairs — robust to the interaction data's class imbalance.</p>
+                <p class="tech-item-desc">How reliably the model scores a real user-game pair above a random negative pair — 0.5 is a coin flip, 1.0 is perfect separation. A solid sanity check, though less aligned to the top-K use case than Hits@10.</p>
               </div>
               <div class="tech-item tech-item-b">
                 <span class="tech-item-name">Average Precision</span>
-                <p class="tech-item-desc">Summarizes the precision-recall tradeoff — most informative when true positives are sparse relative to all possible pairs.</p>
+                <p class="tech-item-desc">Summarizes the precision-recall tradeoff across every threshold — more sensitive than AUC to getting the top of the ranking right, which matters more in practice than getting the bottom right.</p>
               </div>
               <div class="tech-item tech-item-e">
                 <span class="tech-item-name">Hits@10</span>
-                <p class="tech-item-desc">Full-ranking check: does each held-out game land in a user's top 10 out of all 3,600 games? The metric closest to real-world recommendation quality.</p>
+                <p class="tech-item-desc">The metric that matters most in practice: for each test user, rank every one of the 3,600 games they haven't played and check whether the one they actually played next lands in the top 10. 35% is a strong result given how sparse a typical Steam-200k user's history is.</p>
               </div>
             </div>
-            <p class="tech-block-note">Scores shown in Live Results below.</p>
+            <p class="tech-block-note">Also tracked: BPR loss on train/validation, used for early stopping (patience of 20 epochs). Scores shown in Live Results below.</p>
           </div>
         </div>
         <div class="project-tags">
@@ -228,88 +228,82 @@
         <div>
           <div class="panel-section-label">Architecture</div>
           <div class="arch-svg-wrap">
-            <svg viewBox="0 0 280 384" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram: Steam data and metadata build a heterogeneous graph, modeled by a GraphSAGE and LightGCN ensemble, then explained via both GNNExplainer subgraph attribution and rule-based relational path search, producing a recommendation with justification">
+            <svg viewBox="0 0 280 440" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram in three stages. Stage one: Steam play data and game metadata are combined into a knowledge graph, where games, genres, developers, publishers and users all become connected nodes. Stage two: GraphSAGE and LightGCN each learn a taste vector per user and game from that graph, and are blended 60/40 into one ranked list. Stage three: GNNExplainer flags which nearby connections mattered most, relational path search turns those into a plain-English reason, and the two combine into a recommendation paired with its explanation.">
               <defs>
                 <marker id="arrow-gnn" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                   <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
                 </marker>
               </defs>
 
-              <rect x="10" y="6" width="260" height="32" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="26" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Steam-200k + Metadata</text>
+              <text x="140" y="14" text-anchor="middle" class="arch-stage-label">1 · Turn Data Into a Graph</text>
 
-              <line x1="140" y1="38" x2="140" y2="52" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <rect x="10" y="20" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="34" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Steam Play Data + Metadata</text>
+              <text x="140" y="46" text-anchor="middle" class="arch-node-desc">70K play records + each game's genre,</text>
+              <text x="140" y="57" text-anchor="middle" class="arch-node-desc">developer, publisher &amp; platform info</text>
 
-              <rect x="10" y="54" width="260" height="66" rx="4" fill="var(--ink)" stroke="var(--rule)" stroke-width="1"/>
-              <text x="140" y="72" text-anchor="middle" class="arch-node-title" fill="var(--t3)">Heterogeneous Graph</text>
-              <text x="140" y="88" text-anchor="middle" class="arch-node-sub">user ── plays ──► game</text>
-              <text x="140" y="101" text-anchor="middle" class="arch-node-sub">game ── has ──► genre</text>
-              <text x="140" y="114" text-anchor="middle" class="arch-node-sub">game ── by ──► developer</text>
+              <line x1="140" y1="66" x2="140" y2="78" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <line x1="140" y1="120" x2="140" y2="130" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="130" x2="214" y2="130" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="130" x2="72" y2="138" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-              <line x1="214" y1="130" x2="214" y2="138" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <rect x="10" y="78" width="260" height="62" rx="4" fill="var(--ink)" stroke="var(--rule)" stroke-width="1"/>
+              <text x="140" y="92" text-anchor="middle" class="arch-node-title" fill="var(--t3)">Knowledge Graph</text>
+              <text x="140" y="104" text-anchor="middle" class="arch-node-desc">Genres, developers, publishers become nodes too</text>
+              <text x="140" y="116" text-anchor="middle" class="arch-node-sub">user ── plays ──► game</text>
+              <text x="140" y="128" text-anchor="middle" class="arch-node-sub">game ── has ──► genre / developer / publisher</text>
 
-              <rect x="10" y="140" width="124" height="46" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="160" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
-              <text x="72" y="175" text-anchor="middle" class="arch-node-sub">inductive</text>
+              <line x1="140" y1="140" x2="140" y2="148" stroke="var(--ghost)" stroke-width="1.2"/>
+              <text x="140" y="153" text-anchor="middle" class="arch-stage-label">2 · Learn &amp; Rank Each Player's Taste</text>
+              <line x1="140" y1="158" x2="140" y2="166" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="166" x2="208" y2="166" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="166" x2="72" y2="174" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="208" y1="166" x2="208" y2="174" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="146" y="140" width="124" height="46" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="160" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
-              <text x="208" y="175" text-anchor="middle" class="arch-node-sub">layer-mean emb</text>
+              <rect x="10" y="174" width="124" height="50" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="188" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
+              <text x="72" y="199" text-anchor="middle" class="arch-node-desc">Pools neighbor games/users</text>
+              <text x="72" y="210" text-anchor="middle" class="arch-node-desc">to build a taste vector</text>
 
-              <line x1="72" y1="186" x2="72" y2="196" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="186" x2="208" y2="196" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="196" x2="208" y2="196" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="196" x2="140" y2="204" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <rect x="146" y="174" width="124" height="50" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="188" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
+              <text x="208" y="199" text-anchor="middle" class="arch-node-desc">Pure graph propagation —</text>
+              <text x="208" y="210" text-anchor="middle" class="arch-node-desc">no extra machinery</text>
 
-              <rect x="10" y="206" width="260" height="40" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="224" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble (avg)</text>
-              <text x="140" y="238" text-anchor="middle" class="arch-node-sub">dot-product scoring</text>
+              <line x1="72" y1="224" x2="72" y2="232" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="224" x2="208" y2="232" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="232" x2="208" y2="232" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="232" x2="140" y2="240" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <line x1="140" y1="246" x2="140" y2="256" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="256" x2="214" y2="256" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="256" x2="72" y2="264" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-              <line x1="214" y1="256" x2="214" y2="264" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <rect x="10" y="240" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="254" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Blend</text>
+              <text x="140" y="265" text-anchor="middle" class="arch-node-desc">Combines both models' scores (60/40)</text>
+              <text x="140" y="276" text-anchor="middle" class="arch-node-desc">into one ranked list per user</text>
 
-              <rect x="10" y="264" width="124" height="56" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="282" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer</text>
-              <text x="72" y="296" text-anchor="middle" class="arch-node-sub">gradient edge mask</text>
-              <text x="72" y="309" text-anchor="middle" class="arch-node-sub">2-hop subgraph</text>
+              <line x1="140" y1="286" x2="140" y2="294" stroke="var(--ghost)" stroke-width="1.2"/>
+              <text x="140" y="299" text-anchor="middle" class="arch-stage-label">3 · Explain The Pick</text>
+              <line x1="140" y1="304" x2="140" y2="312" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="312" x2="208" y2="312" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="312" x2="72" y2="320" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="208" y1="312" x2="208" y2="320" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="146" y="264" width="124" height="56" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="282" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
-              <text x="208" y="296" text-anchor="middle" class="arch-node-sub">KG path search</text>
-              <text x="208" y="309" text-anchor="middle" class="arch-node-sub">≤4-hop, readable</text>
+              <rect x="10" y="320" width="124" height="50" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="334" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer</text>
+              <text x="72" y="345" text-anchor="middle" class="arch-node-desc">Flags which nearby edges</text>
+              <text x="72" y="356" text-anchor="middle" class="arch-node-desc">mattered to the model</text>
 
-              <line x1="72" y1="320" x2="72" y2="328" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="320" x2="208" y2="328" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="328" x2="208" y2="328" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="328" x2="140" y2="336" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <rect x="146" y="320" width="124" height="50" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="334" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
+              <text x="208" y="345" text-anchor="middle" class="arch-node-desc">Turns edges into a</text>
+              <text x="208" y="356" text-anchor="middle" class="arch-node-desc">plain-English reason</text>
 
-              <rect x="10" y="338" width="260" height="40" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="356" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Recommendation + Why</text>
-              <text x="140" y="370" text-anchor="middle" class="arch-node-sub">ranked list + justification</text>
+              <line x1="72" y1="370" x2="72" y2="378" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="370" x2="208" y2="378" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="378" x2="208" y2="378" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="378" x2="140" y2="386" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="386" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="400" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Recommendation + Why</text>
+              <text x="140" y="411" text-anchor="middle" class="arch-node-desc">A ranked game list, each pick</text>
+              <text x="140" y="422" text-anchor="middle" class="arch-node-desc">paired with a human-readable reason</text>
             </svg>
-          </div>
-        </div>
-        <div class="stat-grid">
-          <div class="stat-block">
-            <span class="stat-val">200K+</span>
-            <span class="stat-label">Steam Interactions</span>
-          </div>
-          <div class="stat-block">
-            <span class="stat-val">0.92</span>
-            <span class="stat-label">Test ROC-AUC</span>
-          </div>
-          <div class="stat-block">
-            <span class="stat-val">2</span>
-            <span class="stat-label">GNN Models Ensembled</span>
-          </div>
-          <div class="stat-block">
-            <span class="stat-val">0.35</span>
-            <span class="stat-label">Hits@10 (Full-Ranking)</span>
           </div>
         </div>
       </div>
