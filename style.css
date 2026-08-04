@@ -429,6 +429,52 @@ nav {
 }
 .detail-val { color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.88rem; }
 
+/* expanded technical spec blocks — for content too long for a single detail-row */
+.tech-blocks {
+  display: flex; flex-direction: column; gap: 1.5rem;
+  margin-bottom: 1.6rem;
+}
+.tech-block-label {
+  display: block;
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; font-family: 'Inter', sans-serif;
+  margin-bottom: 0.7rem; padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+.tech-block-intro {
+  color: var(--soft); font-size: 0.86rem; line-height: 1.7;
+  font-family: 'Inter', sans-serif; font-weight: 300;
+  margin-bottom: 0.8rem;
+}
+.tech-block-items { display: flex; flex-direction: column; gap: 0.9rem; }
+.tech-item {
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--rule);
+  transition: border-color 0.2s;
+}
+.tech-item-name {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.3rem;
+}
+.tech-item-desc {
+  color: var(--soft); font-size: 0.85rem; line-height: 1.7;
+  font-family: 'Inter', sans-serif; font-weight: 300;
+}
+.tech-item-a { border-left-color: rgba(15,244,198,0.4); } .tech-item-a .tech-item-name { color: var(--t0); }
+.tech-item-b { border-left-color: rgba(34,212,232,0.4); } .tech-item-b .tech-item-name { color: var(--t1); }
+.tech-item-c { border-left-color: rgba(124,111,247,0.4); } .tech-item-c .tech-item-name { color: var(--t3); }
+.tech-item-d { border-left-color: rgba(160,124,248,0.4); } .tech-item-d .tech-item-name { color: var(--t4); }
+.tech-item-e { border-left-color: rgba(199,125,255,0.4); } .tech-item-e .tech-item-name { color: var(--t5); }
+.tech-block-note {
+  margin-top: 0.7rem;
+  color: var(--muted); font-size: 0.8rem; font-style: italic;
+  font-family: 'Inter', sans-serif;
+}
+.tech-chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.6rem; }
 .ptag {
   font-size: 0.72rem; padding: 0.25rem 0.65rem;
