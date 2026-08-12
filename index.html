@@ -95,7 +95,6 @@
         <span class="pill hi">PyTorch Geometric</span>
         <span class="pill hi">HuggingFace</span>
         <span class="pill hi">PEFT / LoRA</span>
-        <span class="pill">TensorFlow</span>
         <span class="pill">scikit-learn</span>
         <span class="pill">OpenCV</span>
         <span class="pill">NumPy</span>
@@ -105,9 +104,10 @@
         <span class="pill">LightGCN</span>
         <span class="pill">GNNExplainer</span>
         <span class="pill">RoBERTa</span>
-        <span class="pill">ViT-B-16</span>
+        <span class="pill">ResNet18</span>
+        <span class="pill">DeiT-Tiny</span>
+        <span class="pill">CRNN / CTC</span>
         <span class="pill">NetworkX</span>
-        <span class="pill">SymSpell</span>
       </div>
     </div>
     <div class="skill-group">
@@ -155,30 +155,18 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">GraphSAGE</span>
-                <p class="tech-item-desc">Builds a user's embedding by pooling from the games they've played, and a game's embedding by pooling from its genre, developer, and publisher neighbors — a 3-layer encoder with ReLU and dropout. A learnable per-relation scale lets the model decide, on its own, that "shares a developer" should count differently than "shares a genre." Each game node also folds in 5 numeric features (price, review volume/ratio, estimated owners, release year) directly into its embedding.</p>
+                <p class="tech-item-desc">GraphSAGE builds a user's embedding by aggregating neighbors (games they played), and a game's embedding by aggregating its neighbors (genres, developer, and publisher) while folding in its attributes (price, review volume/ratio, estimated owners, release year). This model is a 3-layer encoder with ReLU and dropout that learns per-relation scales, letting the model decide on relationship weights ("shares a developer" ≠ "shares a genre").</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">LightGCN</span>
-                <p class="tech-item-desc">A deliberately stripped-down counterpart: no weight matrices, no activation functions — just 3 rounds of pure graph propagation with a learnable scalar per edge type, and the final embedding averaged across all 3 layers. Removing GraphSAGE's extra machinery isolates how much signal comes from graph connectivity alone versus content features, and doubles as a strong collaborative-filtering baseline.</p>
+                <p class="tech-item-desc">LightGCN is a far quicker and stabler counterpart to GraphSAGE. It performs 3 rounds of graph propagation with a learnable scalar per edge type, and the final embedding averaged across all 3 layers. This model isolates how much signal comes from graph connectivity alone versus content features. In the ensemble, it serves as a strong collaborative-filtering baseline while graphSAGE provides a more nuanced relational understanding.</p>
               </div>
             </div>
-            <p class="tech-block-note">Both decode via dot-product scoring and train on a playtime-weighted BPR ranking loss (0.5 margin) — interactions where a user logged more hours count more during training. The 60/40 GraphSAGE/LightGCN ensemble blend was chosen by grid search over validation Hits@10.</p>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">Data</span>
-            <p class="tech-block-intro">Steam-200k play interactions (log1p-scaled hours used as an engagement weight) joined with FronkonGames Steam metadata by exact title match. Only about 47% of games in the interaction data found a metadata match — the rest lacked genre/developer/publisher info and were excluded. The result is a 7-node-type heterogeneous graph, with each game node also carrying 5 normalized numeric features (price, review volume/ratio, estimated owners, release year).</p>
-            <div class="tech-chip-row">
-              <span class="pill hi">11,350 users</span>
-              <span class="pill hi">3,600 games</span>
-              <span class="pill">1,696 matched</span>
-              <span class="pill">70K plays</span>
-              <span class="pill">4.4K genre edges</span>
-              <span class="pill">1.9K developer edges</span>
-              <span class="pill">1.7K publisher edges</span>
-              <span class="pill">3.5K category edges</span>
-              <span class="pill">3.1K platform edges</span>
-            </div>
+            <p class="tech-block-intro">We joined the Steam-200k play interactions (we used log1p-scaled hours played on a game to measure edge weight) with FronkonGames Steam metadata by exact title match. We used this resulting dataset to create a 7-node-type heterogeneous graph (User, Game, Genre, Developer, Publisher, Category, Platform), with customized relation/edge types, and each game node carrying 5 normalized numeric features from the metadata dataset (price, review volume, pos/neg review ratio, estimated owners, release year).</p>
           </div>
 
           <div class="tech-block">
@@ -186,11 +174,11 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">GNNExplainer</span>
-                <p class="tech-item-desc">Answers "what did the model actually rely on?" It learns a soft importance score for every edge in a compact ~56-node subgraph around the user (their played games plus the games being explained, out to genre/developer) by gradient-optimizing a frozen 2-layer GCN — surfacing which edges most shaped the prediction, even if a person wouldn't describe them in words.</p>
+                <p class="tech-item-desc"> This model learns a soft importance score for every edge in a compact subgraph around the user (their played games plus the games being explained, out to genre/developer) by gradient-optimizing a frozen 2-layer GCN, surfacing which edges most shaped the prediction, even if a person wouldn't describe them in words.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">Relational Paths</span>
-                <p class="tech-item-desc">Answers "can a person actually read the reason?" It searches the full ~17K-node knowledge graph for readable user → game paths (up to 4 hops, e.g. a shared genre or developer), ranks them by how many GNNExplainer-flagged nodes they pass through, and deduplicates by bridge entity so the 3 surfaced paths are genuinely different reasons rather than restatements of one.</p>
+                <p class="tech-item-desc">We used rule-based relational paths to search the full knowledge graph for readable user → game paths (up to 4 hops, e.g. a shared genre or developer). We then rank them by how many GNNExplainer-flagged nodes they pass through, and deduplicates by bridge entity so the 3 surfaced paths are genuinely different reasons rather than restatements of one.</p>
               </div>
             </div>
           </div>
@@ -200,15 +188,15 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-a">
                 <span class="tech-item-name">ROC-AUC</span>
-                <p class="tech-item-desc">How reliably the model scores a real user-game pair above a random negative pair — 0.5 is a coin flip, 1.0 is perfect separation. A solid sanity check, though less aligned to the top-K use case than Hits@10.</p>
+                <p class="tech-item-desc"> Measures how reliably the model scores a real user-game pair above a random negative pair. Although less aligned to the top-K use case than Hits@10, it acts well as a measure of overall performance.</p>
               </div>
               <div class="tech-item tech-item-b">
                 <span class="tech-item-name">Average Precision</span>
-                <p class="tech-item-desc">Summarizes the precision-recall tradeoff across every threshold — more sensitive than AUC to getting the top of the ranking right, which matters more in practice than getting the bottom right.</p>
+                <p class="tech-item-desc">Summarizes the precision-recall tradeoff across every threshold. This metric is more sensitive than AUC to getting the top of the ranking right, which matters more in practice than getting the bottom rankings right.</p>
               </div>
               <div class="tech-item tech-item-e">
                 <span class="tech-item-name">Hits@10</span>
-                <p class="tech-item-desc">The metric that matters most in practice: for each test user, rank every one of the 3,600 games they haven't played and check whether the one they actually played next lands in the top 10. 35% is a strong result given how sparse a typical Steam-200k user's history is.</p>
+                <p class="tech-item-desc">Ranks every one of the 3,600 games they haven't played and check whether the one they actually played next lands in the top 10. This is the most important metric for evaluating recommendation quality, as it measures directly the model's ability to place relevant items at the top of the ranking. The ensemble's 37% is a strong result given how sparse a typical Steam-200k user's history is.</p>
               </div>
             </div>
             <p class="tech-block-note">Also tracked: BPR loss on train/validation, used for early stopping (patience of 20 epochs). Scores shown in Live Results below.</p>
@@ -228,82 +216,156 @@
         <div>
           <div class="panel-section-label">Architecture</div>
           <div class="arch-svg-wrap">
-            <svg viewBox="0 0 280 440" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram in three stages. Stage one: Steam play data and game metadata are combined into a knowledge graph, where games, genres, developers, publishers and users all become connected nodes. Stage two: GraphSAGE and LightGCN each learn a taste vector per user and game from that graph, and are blended 60/40 into one ranked list. Stage three: GNNExplainer flags which nearby connections mattered most, relational path search turns those into a plain-English reason, and the two combine into a recommendation paired with its explanation.">
+            <svg viewBox="0 0 280 1050" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram in four stages. Stage one: Steam play data and game metadata are combined into a knowledge graph, where games, genres, developers, publishers and users all become connected nodes. Stage two: GraphSAGE and LightGCN each learn a taste vector per user and game from that graph, and are blended 90/10 into one ranked list. Stage three: GNNExplainer flags which nearby connections mattered most, relational path search turns those into a plain-English reason, and the two combine into a recommendation paired with its explanation. Stage four: the ensemble is measured against both individual models on ROC-AUC, average precision, and Hits at 10, matching or beating both on every metric.">
               <defs>
                 <marker id="arrow-gnn" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                   <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
                 </marker>
               </defs>
 
-              <text x="140" y="14" text-anchor="middle" class="arch-stage-label">1 · Turn Data Into a Graph</text>
+              <text x="140" y="24.5" text-anchor="middle" class="arch-stage-label">1 · Turn Data Into a Graph</text>
 
-              <rect x="10" y="20" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="34" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Steam Play Data + Metadata</text>
-              <text x="140" y="46" text-anchor="middle" class="arch-node-desc">70K play records + each game's genre,</text>
-              <text x="140" y="57" text-anchor="middle" class="arch-node-desc">developer, publisher &amp; platform info</text>
+              <rect x="10" y="35" width="260" height="80.5" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="59.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Steam Play Data + Metadata</text>
+              <text x="140" y="80.5" text-anchor="middle" class="arch-node-desc">70K play records + each game's genre,</text>
+              <text x="140" y="99.75" text-anchor="middle" class="arch-node-desc">developer, publisher &amp; platform info</text>
 
-              <line x1="140" y1="66" x2="140" y2="78" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="140" y1="115.5" x2="140" y2="136.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="10" y="78" width="260" height="62" rx="4" fill="var(--ink)" stroke="var(--rule)" stroke-width="1"/>
-              <text x="140" y="92" text-anchor="middle" class="arch-node-title" fill="var(--t3)">Knowledge Graph</text>
-              <text x="140" y="104" text-anchor="middle" class="arch-node-desc">Genres, developers, publishers become nodes too</text>
-              <text x="140" y="116" text-anchor="middle" class="arch-node-sub">user ── plays ──► game</text>
-              <text x="140" y="128" text-anchor="middle" class="arch-node-sub">game ── has ──► genre / developer / publisher</text>
+              <rect x="10" y="136.5" width="260" height="108.5" rx="4" fill="var(--ink)" stroke="var(--rule)" stroke-width="1"/>
+              <text x="140" y="161" text-anchor="middle" class="arch-node-title" fill="var(--t3)">Knowledge Graph</text>
+              <text x="140" y="182" text-anchor="middle" class="arch-node-desc">Genres, developers, publishers become nodes too</text>
+              <text x="140" y="203" text-anchor="middle" class="arch-node-sub">user ── plays ──► game</text>
+              <text x="140" y="224" text-anchor="middle" class="arch-node-sub">game ── has ──► genre / developer / publisher</text>
 
-              <line x1="140" y1="140" x2="140" y2="148" stroke="var(--ghost)" stroke-width="1.2"/>
-              <text x="140" y="153" text-anchor="middle" class="arch-stage-label">2 · Learn &amp; Rank Each Player's Taste</text>
-              <line x1="140" y1="158" x2="140" y2="166" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="166" x2="208" y2="166" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="166" x2="72" y2="174" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-              <line x1="208" y1="166" x2="208" y2="174" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="140" y1="245" x2="140" y2="259" stroke="var(--ghost)" stroke-width="1.2"/>
+              <text x="140" y="267.75" text-anchor="middle" class="arch-stage-label">2 · Learn &amp; Rank Each Player's Taste</text>
+              <line x1="140" y1="276.5" x2="140" y2="290.5" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="290.5" x2="208" y2="290.5" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="290.5" x2="72" y2="304.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="208" y1="290.5" x2="208" y2="304.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="10" y="174" width="124" height="50" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="188" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
-              <text x="72" y="199" text-anchor="middle" class="arch-node-desc">Pools neighbor games/users</text>
-              <text x="72" y="210" text-anchor="middle" class="arch-node-desc">to build a taste vector</text>
+              <rect x="10" y="304.5" width="124" height="87.5" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="329" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
+              <text x="72" y="348.25" text-anchor="middle" class="arch-node-desc">Pools neighbor games/users</text>
+              <text x="72" y="367.5" text-anchor="middle" class="arch-node-desc">to build a taste vector</text>
 
-              <rect x="146" y="174" width="124" height="50" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="188" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
-              <text x="208" y="199" text-anchor="middle" class="arch-node-desc">Pure graph propagation —</text>
-              <text x="208" y="210" text-anchor="middle" class="arch-node-desc">no extra machinery</text>
+              <rect x="146" y="304.5" width="124" height="87.5" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="329" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
+              <text x="208" y="348.25" text-anchor="middle" class="arch-node-desc">Pure graph propagation —</text>
+              <text x="208" y="367.5" text-anchor="middle" class="arch-node-desc">no extra machinery</text>
 
-              <line x1="72" y1="224" x2="72" y2="232" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="224" x2="208" y2="232" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="232" x2="208" y2="232" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="232" x2="140" y2="240" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="72" y1="392" x2="72" y2="406" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="392" x2="208" y2="406" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="406" x2="208" y2="406" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="406" x2="140" y2="420" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="10" y="240" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="254" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Blend</text>
-              <text x="140" y="265" text-anchor="middle" class="arch-node-desc">Combines both models' scores (60/40)</text>
-              <text x="140" y="276" text-anchor="middle" class="arch-node-desc">into one ranked list per user</text>
+              <rect x="10" y="420" width="260" height="80.5" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="444.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Blend</text>
+              <text x="140" y="463.75" text-anchor="middle" class="arch-node-desc">Combines both models' scores (90/10)</text>
+              <text x="140" y="483" text-anchor="middle" class="arch-node-desc">into one ranked list per user</text>
 
-              <line x1="140" y1="286" x2="140" y2="294" stroke="var(--ghost)" stroke-width="1.2"/>
-              <text x="140" y="299" text-anchor="middle" class="arch-stage-label">3 · Explain The Pick</text>
-              <line x1="140" y1="304" x2="140" y2="312" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="312" x2="208" y2="312" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="312" x2="72" y2="320" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-              <line x1="208" y1="312" x2="208" y2="320" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="140" y1="500.5" x2="140" y2="514.5" stroke="var(--ghost)" stroke-width="1.2"/>
+              <text x="140" y="523.25" text-anchor="middle" class="arch-stage-label">3 · Explain The Pick</text>
+              <line x1="140" y1="532" x2="140" y2="546" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="546" x2="208" y2="546" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="546" x2="72" y2="560" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="208" y1="546" x2="208" y2="560" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="10" y="320" width="124" height="50" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="334" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer</text>
-              <text x="72" y="345" text-anchor="middle" class="arch-node-desc">Flags which nearby edges</text>
-              <text x="72" y="356" text-anchor="middle" class="arch-node-desc">mattered to the model</text>
+              <rect x="10" y="560" width="124" height="87.5" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="584.5" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer</text>
+              <text x="72" y="603.75" text-anchor="middle" class="arch-node-desc">Flags which nearby edges</text>
+              <text x="72" y="623" text-anchor="middle" class="arch-node-desc">mattered to the model</text>
 
-              <rect x="146" y="320" width="124" height="50" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="334" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
-              <text x="208" y="345" text-anchor="middle" class="arch-node-desc">Turns edges into a</text>
-              <text x="208" y="356" text-anchor="middle" class="arch-node-desc">plain-English reason</text>
+              <rect x="146" y="560" width="124" height="87.5" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="584.5" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
+              <text x="208" y="603.75" text-anchor="middle" class="arch-node-desc">Turns edges into a</text>
+              <text x="208" y="623" text-anchor="middle" class="arch-node-desc">plain-English reason</text>
 
-              <line x1="72" y1="370" x2="72" y2="378" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="370" x2="208" y2="378" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="378" x2="208" y2="378" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="378" x2="140" y2="386" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="72" y1="647.5" x2="72" y2="661.5" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="647.5" x2="208" y2="661.5" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="661.5" x2="208" y2="661.5" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="661.5" x2="140" y2="675.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 
-              <rect x="10" y="386" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="400" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Recommendation + Why</text>
-              <text x="140" y="411" text-anchor="middle" class="arch-node-desc">A ranked game list, each pick</text>
-              <text x="140" y="422" text-anchor="middle" class="arch-node-desc">paired with a human-readable reason</text>
+              <rect x="10" y="675.5" width="260" height="80.5" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="700" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Recommendation + Why</text>
+              <text x="140" y="719.25" text-anchor="middle" class="arch-node-desc">A ranked game list, each pick</text>
+              <text x="140" y="738.5" text-anchor="middle" class="arch-node-desc">paired with a human-readable reason</text>
+
+              <line x1="140" y1="756" x2="140" y2="770" stroke="var(--ghost)" stroke-width="1.2"/>
+              <text x="140" y="789.25" text-anchor="middle" class="arch-stage-label">4 · Measure Against Each Model</text>
+              <line x1="140" y1="798" x2="140" y2="812" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="51" y1="812" x2="228" y2="812" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="51" y1="812" x2="51" y2="826" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="139" y1="812" x2="139" y2="826" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+              <line x1="228" y1="812" x2="228" y2="826" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="826" width="82" height="98" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="51" y="850.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">ROC-AUC</text>
+              <text x="51" y="871.5" text-anchor="middle" class="arch-node-desc">Ensemble 0.94</text>
+              <text x="51" y="890.75" text-anchor="middle" class="arch-node-desc">vs 0.95 / 0.88</text>
+              <text x="51" y="910" text-anchor="middle" class="arch-node-sub">SAGE / LightGCN</text>
+
+              <rect x="98" y="826" width="82" height="98" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+              <text x="139" y="850.5" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Avg Precision</text>
+              <text x="139" y="871.5" text-anchor="middle" class="arch-node-desc">Ensemble 0.94</text>
+              <text x="139" y="890.75" text-anchor="middle" class="arch-node-desc">vs 0.94 / 0.88</text>
+              <text x="139" y="910" text-anchor="middle" class="arch-node-sub">SAGE / LightGCN</text>
+
+              <rect x="186" y="826" width="84" height="98" rx="4" fill="rgba(199,125,255,0.06)" stroke="var(--t5)" stroke-width="1"/>
+              <text x="228" y="850.5" text-anchor="middle" class="arch-node-title" fill="var(--t5)">Hits@10</text>
+              <text x="228" y="871.5" text-anchor="middle" class="arch-node-desc">Ensemble 0.37</text>
+              <text x="228" y="890.75" text-anchor="middle" class="arch-node-desc">vs 0.35 / 0.29</text>
+              <text x="228" y="910" text-anchor="middle" class="arch-node-sub">SAGE / LightGCN</text>
+
+              <line x1="51" y1="924" x2="51" y2="938" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="139" y1="924" x2="139" y2="938" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="228" y1="924" x2="228" y2="938" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="51" y1="938" x2="228" y2="938" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="139" y1="938" x2="139" y2="952" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+
+              <rect x="10" y="952" width="260" height="84" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="978.25" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Wins</text>
+              <text x="140" y="999.25" text-anchor="middle" class="arch-node-desc">Matches or beats both single models</text>
+              <text x="140" y="1018.5" text-anchor="middle" class="arch-node-desc">on every test-set metric</text>
             </svg>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-section-label">Performance</div>
+          <div class="demo-chart-box">
+            <div class="demo-section-title">Test-Set Performance</div>
+            <svg viewBox="0 0 360 315" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
+              <line x1="20" y1="270" x2="340" y2="270" stroke="var(--rule)" stroke-width="1"/>
+              <rect x="40.0" y="47.4" width="16" height="222.6" fill="var(--t1)" rx="2"/>
+              <rect x="61.0" y="63.8" width="16" height="206.2" fill="var(--t3)" rx="2"/>
+              <rect x="82.0" y="50.4" width="16" height="219.6" fill="var(--t0)" rx="2"/>
+              <text x="69.0" y="302.4" text-anchor="middle" class="gnn-bar-label">ROC-AUC</text>
+              <rect x="138.0" y="48.7" width="16" height="221.3" fill="var(--t1)" rx="2"/>
+              <rect x="159.0" y="63.2" width="16" height="206.8" fill="var(--t3)" rx="2"/>
+              <rect x="180.0" y="49.7" width="16" height="220.3" fill="var(--t0)" rx="2"/>
+              <text x="167.0" y="302.4" text-anchor="middle" class="gnn-bar-label">Avg Precision</text>
+              <rect x="236.0" y="186.98" width="16" height="83.02" fill="var(--t1)" rx="2"/>
+              <rect x="257.0" y="201.51" width="16" height="68.49" fill="var(--t3)" rx="2"/>
+              <rect x="278.0" y="183.65" width="16" height="86.35" fill="var(--t0)" rx="2"/>
+              <text x="265.0" y="302.4" text-anchor="middle" class="gnn-bar-label">Hits@10</text>
+            </svg>
+            <table class="demo-metrics-table">
+              <thead>
+                <tr><th></th><th>GraphSAGE</th><th>LightGCN</th><th>Ensemble</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>ROC-AUC</td><td>0.95</td><td>0.88</td><td>0.94</td></tr>
+                <tr><td>Avg Precision</td><td>0.94</td><td>0.88</td><td>0.94</td></tr>
+                <tr><td>Hits@10</td><td>0.35</td><td>0.29</td><td>0.37</td></tr>
+              </tbody>
+            </table>
+            <div class="demo-chart-legend">
+              <span><i style="background: var(--t1);"></i>GraphSAGE</span>
+              <span><i style="background: var(--t3);"></i>LightGCN</span>
+              <span><i style="background: var(--t0);"></i>Ensemble</span>
+            </div>
           </div>
         </div>
       </div>
@@ -317,80 +379,105 @@
             <img src="assets/gnn/training_curves.png" alt="GraphSAGE and LightGCN training loss, validation AUC, and validation Hits@10 over training epochs">
             <div class="demo-media-caption">Training/validation loss, AUC, and Hits@10 for both models across training epochs</div>
           </div>
+        </div>
+
+        <div class="demo-media demo-media-lg">
           <div class="demo-media-box">
             <div class="demo-section-title">Explanation Subgraph</div>
-            <img src="assets/gnn/explanation_subgraph.png" alt="GNNExplainer subgraph attribution visualization showing the knowledge graph paths behind a recommendation">
-            <div class="demo-media-caption">GNNExplainer subgraph attribution for the top-3 recommendations to a sample user</div>
+            <img src="assets/gnn/explanation_subgraph.png" alt="GNNExplainer subgraph attribution visualization showing the knowledge graph paths behind all 10 recommendations">
+            <div class="demo-media-caption">GNNExplainer subgraph attribution for all 10 recommendations to a sample user</div>
           </div>
         </div>
 
-        <div class="demo-grid">
-          <div class="demo-chart-box">
-            <div class="demo-section-title">Test-Set Performance</div>
-            <svg viewBox="0 0 360 175" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
-              <line x1="20" y1="150" x2="340" y2="150" stroke="var(--rule)" stroke-width="1"/>
-              <rect x="40.0" y="29.4" width="16" height="120.6" fill="var(--t1)" rx="2"/>
-              <rect x="61.0" y="36.0" width="16" height="114.0" fill="var(--t3)" rx="2"/>
-              <rect x="82.0" y="30.0" width="16" height="120.0" fill="var(--t0)" rx="2"/>
-              <text x="69.0" y="168" text-anchor="middle" class="gnn-bar-label">ROC-AUC</text>
-              <rect x="138.0" y="31.1" width="16" height="118.9" fill="var(--t1)" rx="2"/>
-              <rect x="159.0" y="35.4" width="16" height="114.6" fill="var(--t3)" rx="2"/>
-              <rect x="180.0" y="30.2" width="16" height="119.8" fill="var(--t0)" rx="2"/>
-              <text x="167.0" y="168" text-anchor="middle" class="gnn-bar-label">Avg Precision</text>
-              <rect x="236.0" y="104.4" width="16" height="45.6" fill="var(--t1)" rx="2"/>
-              <rect x="257.0" y="113.0" width="16" height="37.0" fill="var(--t3)" rx="2"/>
-              <rect x="278.0" y="104.9" width="16" height="45.1" fill="var(--t0)" rx="2"/>
-              <text x="265.0" y="168" text-anchor="middle" class="gnn-bar-label">Hits@10</text>
-            </svg>
-            <table class="demo-metrics-table">
-              <thead>
-                <tr><th></th><th>GraphSAGE</th><th>LightGCN</th><th>Ensemble</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>ROC-AUC</td><td>0.93</td><td>0.88</td><td>0.92</td></tr>
-                <tr><td>Avg Precision</td><td>0.91</td><td>0.88</td><td>0.92</td></tr>
-                <tr><td>Hits@10</td><td>0.35</td><td>0.28</td><td>0.35</td></tr>
-              </tbody>
-            </table>
-            <div class="demo-chart-legend">
-              <span><i style="background: var(--t1);"></i>GraphSAGE</span>
-              <span><i style="background: var(--t3);"></i>LightGCN</span>
-              <span><i style="background: var(--t0);"></i>Ensemble</span>
+        <div class="gnn-recs-panel">
+          <div class="demo-section-title">All Recommendations &amp; Explanation Paths</div>
+          <div class="gnn-example-user">User <span class="hi-mono">#151603712</span></div>
+          <div class="gnn-recs-grid">
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">1. <span class="hi-mono">Unturned</span> <span class="gnn-example-score">(score 34.9637)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Unturned</span></li>
+                <li><span class="path-chip">Path of Exile</span><span class="path-arrow">→</span><span class="path-chip path-mid">Free To Play</span><span class="path-arrow">→</span><span class="path-chip path-target">Unturned</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Single-player</span><span class="path-arrow">→</span><span class="path-chip path-target">Unturned</span></li>
+              </ul>
             </div>
-          </div>
-          <div class="demo-example-box">
-            <div class="demo-section-title">Example Recommendation</div>
-            <div class="gnn-example-user">User <span class="hi-mono">#151603712</span></div>
-            <div class="gnn-example-rec">Top pick: <span class="hi-mono">Unturned</span> <span class="gnn-example-score">(score 233.05)</span></div>
-            <div class="gnn-example-why">Why, via rule-based path extraction:</div>
-            <ul class="gnn-example-paths">
-              <li>
-                <span class="path-chip">Left 4 Dead 2</span>
-                <span class="path-arrow">→</span>
-                <span class="path-chip path-mid">Action</span>
-                <span class="path-arrow">→</span>
-                <span class="path-chip path-target">Unturned</span>
-              </li>
-              <li>
-                <span class="path-chip">Path of Exile</span>
-                <span class="path-arrow">→</span>
-                <span class="path-chip path-mid">Adventure</span>
-                <span class="path-arrow">→</span>
-                <span class="path-chip path-target">Unturned</span>
-              </li>
-              <li>
-                <span class="path-chip">Path of Exile</span>
-                <span class="path-arrow">→</span>
-                <span class="path-chip path-mid">Free To Play</span>
-                <span class="path-arrow">→</span>
-                <span class="path-chip path-target">Unturned</span>
-              </li>
-            </ul>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">2. <span class="hi-mono">Terraria</span> <span class="gnn-example-score">(score 31.6924)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">RPG</span><span class="path-arrow">→</span><span class="path-chip path-target">Terraria</span></li>
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Terraria</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Single-player</span><span class="path-arrow">→</span><span class="path-chip path-target">Terraria</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">3. <span class="hi-mono">Rust</span> <span class="gnn-example-score">(score 27.7309)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">RPG</span><span class="path-arrow">→</span><span class="path-chip path-target">Rust</span></li>
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Rust</span></li>
+                <li><span class="path-chip">Path of Exile</span><span class="path-arrow">→</span><span class="path-chip path-mid">Massively Multiplayer</span><span class="path-arrow">→</span><span class="path-chip path-target">Rust</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">4. <span class="hi-mono">PAYDAY 2</span> <span class="gnn-example-score">(score 25.6295)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">RPG</span><span class="path-arrow">→</span><span class="path-chip path-target">PAYDAY 2</span></li>
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">PAYDAY 2</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Single-player</span><span class="path-arrow">→</span><span class="path-chip path-target">PAYDAY 2</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">5. <span class="hi-mono">The Forest</span> <span class="gnn-example-score">(score 21.2938)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">The Forest</span></li>
+                <li><span class="path-chip">HuniePop</span><span class="path-arrow">→</span><span class="path-chip path-mid">Simulation</span><span class="path-arrow">→</span><span class="path-chip path-target">The Forest</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Single-player</span><span class="path-arrow">→</span><span class="path-chip path-target">The Forest</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">6. <span class="hi-mono">Counter-Strike</span> <span class="gnn-example-score">(score 15.1283)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Counter-Strike</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Windows</span><span class="path-arrow">→</span><span class="path-chip path-target">Counter-Strike</span></li>
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Valve</span><span class="path-arrow">→</span><span class="path-chip path-target">Counter-Strike</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">7. <span class="hi-mono">Warframe</span> <span class="gnn-example-score">(score 15.1089)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">RPG</span><span class="path-arrow">→</span><span class="path-chip path-target">Warframe</span></li>
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Warframe</span></li>
+                <li><span class="path-chip">Path of Exile</span><span class="path-arrow">→</span><span class="path-chip path-mid">Free To Play</span><span class="path-arrow">→</span><span class="path-chip path-target">Warframe</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">8. <span class="hi-mono">Half-Life 2</span> <span class="gnn-example-score">(score 14.9826)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Half-Life 2</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Single-player</span><span class="path-arrow">→</span><span class="path-chip path-target">Half-Life 2</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Full controller support</span><span class="path-arrow">→</span><span class="path-chip path-target">Half-Life 2</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">9. <span class="hi-mono">War Thunder</span> <span class="gnn-example-score">(score 14.4731)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">War Thunder</span></li>
+                <li><span class="path-chip">HuniePop</span><span class="path-arrow">→</span><span class="path-chip path-mid">Simulation</span><span class="path-arrow">→</span><span class="path-chip path-target">War Thunder</span></li>
+                <li><span class="path-chip">Path of Exile</span><span class="path-arrow">→</span><span class="path-chip path-mid">Massively Multiplayer</span><span class="path-arrow">→</span><span class="path-chip path-target">War Thunder</span></li>
+              </ul>
+            </div>
+            <div class="gnn-rec-card">
+              <div class="gnn-example-rec">10. <span class="hi-mono">Half-Life</span> <span class="gnn-example-score">(score 14.4358)</span></div>
+              <ul class="gnn-example-paths">
+                <li><span class="path-chip">Left 4 Dead 2</span><span class="path-arrow">→</span><span class="path-chip path-mid">Action</span><span class="path-arrow">→</span><span class="path-chip path-target">Half-Life</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Single-player</span><span class="path-arrow">→</span><span class="path-chip path-target">Half-Life</span></li>
+                <li><span class="path-chip">Fallout 4</span><span class="path-arrow">→</span><span class="path-chip path-mid">Full controller support</span><span class="path-arrow">→</span><span class="path-chip path-target">Half-Life</span></li>
+              </ul>
+            </div>
           </div>
         </div>
 
         <div class="demo-footer">
-          <a href="https://github.com/Warnerd03/YOUR-REPO-NAME/blob/main/AML_Game_Recommendation_Project.ipynb" target="_blank" class="demo-view-btn">View Full Notebook on GitHub</a>
+          <a href="https://github.com/Warnerd03/gnn-game-recommendation-system" target="_blank" class="demo-view-btn">View Source on GitHub</a>
         </div>
       </div>
     </div>
@@ -407,9 +494,11 @@
         <h2 class="project-title">Formality Bias in LLMs</h2>
         <p class="project-tagline">Identifying and addressing formality bias in large language model outputs</p>
         <p class="project-desc">
-          A research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. 
-          Constructed two metrics to measure formality in LLM outputs: a lexicon-based Formality Rate (FR) that measures the formality of text through the rate of formal words in the corpus and a RoBERTa-based binary classifier.
-          Compared 25 LLMs against three human conversational baselines using two complementary metrics. The finding: formality is model-agnostic — it's driven by conversational topic, not model architecture. Then we fixed it with LoRA.
+          A research project detecting, measuring, and attempting to mitigate a systematic formality bias in large language model outputs. 
+          Constructed two metrics to measure formality in LLM outputs: a lexicon-based Formality Rate (FR) that measures the formality of text through the rate of formal words in the corpus and a RoBERTa-based binary classifier fine-tuned to 89.2% test accuracy.
+          Compared 25 LLMs against three human conversational baselines using two complementary metrics — LLM outputs scored significantly more formal than every human baseline (Mann-Whitney U, p &lt; 0.001). 
+          The finding: formality is largely model-agnostic — model families cluster within a narrow band of each other and conversation topic (task vs. casual) explains more of the spread than model lineage does.
+          We then tried to mitigate it with LoRA fine-tuning on Qwen2.5-3B-Instruct: Formality Rate fell 16.5% on held-out prompts, but with only 24 evaluation samples the drop did not reach statistical significance (paired t-test, p = 0.65) — a good example of a promising-looking effect that a proper significance test doesn't support yet.
         </p>
         <div class="project-details">
           <div class="detail-row">
@@ -422,15 +511,15 @@
           </div>
           <div class="detail-row">
             <span class="detail-key">Classifier</span>
-            <span class="detail-val">s-nlp/roberta-base-formality-ranker fine-tuned on Pavlick formality scores (GYAFC corpus)</span>
+            <span class="detail-val">s-nlp/roberta-base-formality-ranker fine-tuned on Pavlick formality scores (GYAFC corpus) — 89.2% test accuracy</span>
           </div>
           <div class="detail-row">
             <span class="detail-key">Finding</span>
-            <span class="detail-val">Formality bias is model-agnostic — driven primarily by conversational topic, not model family</span>
+            <span class="detail-val">Formality bias is largely model-agnostic — model families sit within a narrow band above the human baseline; conversation topic explains more of the spread than model family</span>
           </div>
           <div class="detail-row">
             <span class="detail-key">Mitigation</span>
-            <span class="detail-val">LoRA fine-tuning on Qwen2.5-3B-Instruct on low-formality data; evaluated with paired statistical tests</span>
+            <span class="detail-val">LoRA fine-tuning on Qwen2.5-3B-Instruct on low-formality data — FR dropped 16.5%, but paired t-test on the 24-prompt held-out set was not significant (p = 0.65)</span>
           </div>
         </div>
         <div class="project-tags">
@@ -484,12 +573,12 @@
             <span class="stat-label">Human Baselines</span>
           </div>
           <div class="stat-block">
-            <span class="stat-val">2</span>
-            <span class="stat-label">Formality Metrics</span>
+            <span class="stat-val">89.2%</span>
+            <span class="stat-label">Classifier Accuracy</span>
           </div>
           <div class="stat-block">
-            <span class="stat-val">LoRA</span>
-            <span class="stat-label">Bias Mitigation</span>
+            <span class="stat-val">-16.5%</span>
+            <span class="stat-label">FR After LoRA (n.s.)</span>
           </div>
         </div>
       </div>
@@ -497,30 +586,68 @@
       <div class="project-demo">
         <div class="panel-section-label">Live Results</div>
 
-        <div class="demo-media">
-          <div class="demo-media-box demo-placeholder">
-            <div class="demo-section-title">Formality Rate by Model</div>
-            <div class="demo-placeholder-body">Visuals coming soon</div>
-          </div>
-          <div class="demo-media-box demo-placeholder">
-            <div class="demo-section-title">Before / After LoRA Mitigation</div>
-            <div class="demo-placeholder-body">Visuals coming soon</div>
+        <div class="demo-media demo-media-lg">
+          <div class="demo-media-box">
+            <div class="demo-section-title">Corpus-Level Formality Analysis</div>
+            <img src="assets/nlu/corpus_analysis.png" alt="Four-panel formality analysis: BERT formality score distribution by source, FR vs BERT scatter, mean BERT formality by model, and formality violin plot across human baselines">
+            <div class="demo-media-caption">BERT-formality distributions, FR vs. BERT correlation, per-model means, and the spread across the three human baselines themselves</div>
           </div>
         </div>
 
         <div class="demo-grid">
-          <div class="demo-chart-box demo-placeholder">
-            <div class="demo-section-title">Formality Metrics</div>
-            <div class="demo-placeholder-body">Chart coming soon</div>
+          <div class="demo-media-box">
+            <div class="demo-section-title">Formality Rate by Corpus &amp; Model</div>
+            <img src="assets/nlu/formality_rate_by_corpus.png" alt="Bar chart of mean formality rate by corpus, and per-model formality rate for the 10 most frequent LMSYS models">
+            <div class="demo-media-caption">LMSYS-Chat is far more formal on average than any human baseline; llama-2-13b-chat and fastchat-t5-3b run hottest</div>
           </div>
-          <div class="demo-example-box demo-placeholder">
-            <div class="demo-section-title">Example Output</div>
-            <div class="demo-placeholder-body">Example coming soon</div>
+          <div class="demo-media-box">
+            <div class="demo-section-title">Formality by Model Family</div>
+            <img src="assets/nlu/formality_by_family.png" alt="Bar chart of mean BERT formality score by model family, all sitting above the human ELI5 baseline">
+            <div class="demo-media-caption">Every model family clusters within a narrow band (0.82–0.89), all above the human baseline — formality isn't concentrated in one lineage</div>
+          </div>
+        </div>
+
+        <div class="demo-media demo-media-lg">
+          <div class="demo-media-box">
+            <div class="demo-section-title">LoRA Mitigation: Before vs. After</div>
+            <img src="assets/nlu/mitigation_results.png" alt="Box plots of formality rate and BERT formality score before and after LoRA fine-tuning, plus a per-sample scatter of base vs fine-tuned formality rate">
+            <div class="demo-media-caption">Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795, but the paired t-test on the 24 held-out prompts was not significant (t = 0.46, p = 0.65)</div>
+          </div>
+        </div>
+
+        <div class="demo-grid">
+          <div class="demo-example-box">
+            <div class="demo-section-title">RoBERTa Classifier — Test Report</div>
+            <table class="demo-metrics-table">
+              <thead>
+                <tr><th></th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Informal</td><td>0.912</td><td>0.869</td><td>0.890</td></tr>
+                <tr><td>Formal</td><td>0.874</td><td>0.916</td><td>0.894</td></tr>
+                <tr><td>Accuracy</td><td colspan="3">0.892 (n=500)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="demo-example-box">
+            <div class="demo-section-title">Top Formal Words: LLM vs. Human</div>
+            <div class="gnn-example-why">LMSYS-Chat (LLM)</div>
+            <ul class="gnn-example-paths">
+              <li><span class="path-chip">such as</span><span class="path-chip path-mid">6,251</span></li>
+              <li><span class="path-chip">provide</span><span class="path-chip path-mid">4,353</span></li>
+              <li><span class="path-chip">it is important to</span><span class="path-chip path-mid">1,444</span></li>
+            </ul>
+            <div class="gnn-example-why" style="margin-top:0.9rem;">Human (ELI5)</div>
+            <ul class="gnn-example-paths">
+              <li><span class="path-chip">such as</span><span class="path-chip path-mid">278</span></li>
+              <li><span class="path-chip">thus</span><span class="path-chip path-mid">192</span></li>
+              <li><span class="path-chip">therefore</span><span class="path-chip path-mid">159</span></li>
+            </ul>
           </div>
         </div>
 
         <div class="demo-footer">
-          <span class="demo-view-btn demo-view-btn-disabled">Live Results Coming Soon</span>
+          <a href="https://github.com/Warnerd03/nlu-formality-bias" target="_blank" class="demo-view-btn">View Source on GitHub</a>
         </div>
       </div>
     </div>
@@ -535,44 +662,46 @@
           <span class="project-type">Computer Vision · Deep Learning · OCR</span>
         </div>
         <h2 class="project-title">Handwritten<br>OCR System</h2>
-        <p class="project-tagline">From raw ink to corrected text, end-to-end</p>
+        <p class="project-tagline">Two parallel approaches to reading handwriting: per-letter classification and segmentation-free word recognition</p>
         <p class="project-desc">
-          A full handwriting-to-text pipeline: an OpenCV segmentation stage extracts individual characters from full-word images, routes them through a ViT + CNN ensemble classifier, and post-processes the reconstructed output with SymSpell for spelling correction. Both models were trained and fine-tuned on a 400K-image handwritten character dataset published on Kaggle.
+          A handwriting recognition system built as two complementary approaches trained and evaluated on Kaggle-published datasets.
+          For character-level recognition, a ResNet18 CNN and a DeiT-Tiny vision transformer are each fine-tuned on individually segmented letter crops, then blended into a weighted ensemble tuned on the validation split.
+          For full words, a segmentation-free CRNN — a convolutional feature extractor feeding a bidirectional LSTM — reads a word image left to right and is trained with Connectionist Temporal Classification (CTC) loss, learning the image-to-character alignment directly without ever isolating individual letters.
         </p>
         <div class="project-details">
           <div class="detail-row">
-            <span class="detail-key">Segmentation</span>
-            <span class="detail-val">OpenCV: Gaussian blur → adaptive thresholding → contour detection + dilation → bounding-box sort</span>
+            <span class="detail-key">Character models</span>
+            <span class="detail-val">ResNet18 + DeiT-Tiny (both partial layer freeze, OneCycleLR, early stopping) — blended 0.60 / 0.40 by validation sweep</span>
           </div>
           <div class="detail-row">
-            <span class="detail-key">Models</span>
-            <span class="detail-val">ViT-B-16 (partial layer freeze, OneCycleLR) + 5-block CNN (CosineDecayRestarts, label smoothing 0.1)</span>
+            <span class="detail-key">Word model</span>
+            <span class="detail-val">CRNN: CNN feature extractor → 2-layer BiLSTM → CTC loss — segmentation-free, no per-character contour step</span>
           </div>
           <div class="detail-row">
-            <span class="detail-key">Training tricks</span>
-            <span class="detail-val">Class weighting (balanced), early stopping, custom classification heads, OneCycle + Cosine LR schedules</span>
+            <span class="detail-key">Character results</span>
+            <span class="detail-val">96.13% ensemble test accuracy (vs. 94.59% DeiT-Tiny alone) across 26 letter classes, 2,015 test images</span>
           </div>
           <div class="detail-row">
-            <span class="detail-key">Post-processing</span>
-            <span class="detail-val">SymSpell dictionary-based spell correction on reconstructed word output</span>
+            <span class="detail-key">Word results</span>
+            <span class="detail-val">85.21% exact word accuracy, 0.040 mean character error rate (CER) on held-out test words</span>
           </div>
           <div class="detail-row">
             <span class="detail-key">Dataset</span>
-            <span class="detail-val">400K-image handwritten character set (Kaggle: warrenxnguyen/handwritten-letters)</span>
+            <span class="detail-val">Kaggle: warrenxnguyen/handwritten-letters (character crops) + warrenxnguyen/handwritten-words (full word images)</span>
           </div>
         </div>
         <div class="project-tags">
-          <span class="ptag ptag-d">ViT-B-16</span>
+          <span class="ptag ptag-d">ResNet18</span>
+          <span class="ptag ptag-d">DeiT-Tiny</span>
           <span class="ptag ptag-c">PyTorch</span>
-          <span class="ptag ptag-b">TensorFlow</span>
-          <span class="ptag ptag-a">OpenCV</span>
-          <span class="ptag ptag-e">CNN</span>
-          <span class="ptag ptag-a">SymSpell</span>
+          <span class="ptag ptag-e">CRNN / BiLSTM</span>
+          <span class="ptag ptag-a">CTC Loss</span>
           <span class="ptag ptag-b">Kaggle</span>
         </div>
         <div class="project-links">
-          <a href="https://github.com/Warnerd03" target="_blank" class="plink">⎇ GitHub</a>
-          <a href="https://www.kaggle.com/datasets/warrenxnguyen/handwritten-letters" target="_blank" class="plink">📦 Dataset</a>
+          <a href="https://github.com/Warnerd03/PenDoc-handwriting-ocr" target="_blank" class="plink">⎇ GitHub</a>
+          <a href="https://www.kaggle.com/datasets/warrenxnguyen/handwritten-letters" target="_blank" class="plink">📦 Letters Dataset</a>
+          <a href="https://www.kaggle.com/datasets/warrenxnguyen/handwritten-words" target="_blank" class="plink">📦 Words Dataset</a>
         </div>
       </div>
 
@@ -580,74 +709,91 @@
         <div>
           <div class="panel-section-label">Processing Pipeline</div>
           <div class="arch-svg-wrap">
-            <svg viewBox="0 0 280 358" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Processing pipeline diagram: word image input goes through OpenCV segmentation, then a ViT and CNN ensemble, then SymSpell post-processing, to produce text output">
+            <svg viewBox="0 0 280 490" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two parallel pipelines. First: a letter image goes through ResNet18 and DeiT-Tiny classifiers, blended into a weighted ensemble, producing a predicted letter. Second: a full word image goes through a CRNN combining a convolutional feature extractor and a bidirectional LSTM, decoded greedily via CTC, producing a predicted word without any character segmentation step.">
               <defs>
                 <marker id="arrow-ocr" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                   <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
                 </marker>
               </defs>
 
-              <rect x="10" y="6" width="260" height="30" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="25" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Word Image Input</text>
+              <text x="140" y="14" text-anchor="middle" class="arch-stage-label">1 · Character Classification</text>
 
-              <line x1="140" y1="36" x2="140" y2="50" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <rect x="10" y="22" width="260" height="28" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="40.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Segmented Letter Image</text>
 
-              <rect x="10" y="50" width="260" height="90" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
-              <text x="140" y="68" text-anchor="middle" class="arch-node-title" fill="var(--t1)">OpenCV Segmentation</text>
-              <text x="140" y="83" text-anchor="middle" class="arch-node-sub">Gaussian blur</text>
-              <text x="140" y="96" text-anchor="middle" class="arch-node-sub">Adaptive threshold</text>
-              <text x="140" y="109" text-anchor="middle" class="arch-node-sub">Contour detect + dilate</text>
-              <text x="140" y="122" text-anchor="middle" class="arch-node-sub">Bounding box → sort chars</text>
+              <line x1="140" y1="50" x2="140" y2="60" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="60" x2="208" y2="60" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="60" x2="72" y2="68" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <line x1="208" y1="60" x2="208" y2="68" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 
-              <line x1="140" y1="140" x2="140" y2="150" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="150" x2="214" y2="150" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="150" x2="72" y2="158" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-              <line x1="214" y1="150" x2="214" y2="158" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <rect x="10" y="68" width="124" height="54" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+              <text x="72" y="90" text-anchor="middle" class="arch-node-title" fill="var(--t3)">ResNet18</text>
+              <text x="72" y="105" text-anchor="middle" class="arch-node-sub">Stem + layer1 frozen</text>
+              <text x="72" y="117" text-anchor="middle" class="arch-node-sub">OneCycleLR</text>
 
-              <rect x="10" y="160" width="124" height="46" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="180" text-anchor="middle" class="arch-node-title" fill="var(--t3)">ViT-B-16</text>
-              <text x="72" y="195" text-anchor="middle" class="arch-node-sub">PyTorch</text>
+              <rect x="146" y="68" width="124" height="54" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="208" y="90" text-anchor="middle" class="arch-node-title" fill="var(--t4)">DeiT-Tiny</text>
+              <text x="208" y="105" text-anchor="middle" class="arch-node-sub">Early blocks frozen</text>
+              <text x="208" y="117" text-anchor="middle" class="arch-node-sub">Patch self-attention</text>
 
-              <rect x="146" y="160" width="124" height="46" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="180" text-anchor="middle" class="arch-node-title" fill="var(--t4)">CNN (5-block)</text>
-              <text x="208" y="195" text-anchor="middle" class="arch-node-sub">TensorFlow</text>
+              <line x1="72" y1="122" x2="72" y2="132" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="208" y1="122" x2="208" y2="132" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="72" y1="132" x2="208" y2="132" stroke="var(--ghost)" stroke-width="1.2"/>
+              <line x1="140" y1="132" x2="140" y2="142" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 
-              <line x1="72" y1="206" x2="72" y2="216" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="206" x2="208" y2="216" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="216" x2="208" y2="216" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="216" x2="140" y2="224" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <rect x="10" y="142" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="162" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Weighted Ensemble</text>
+              <text x="140" y="178" text-anchor="middle" class="arch-node-desc">0.60 ResNet18 / 0.40 DeiT-Tiny (tuned on val)</text>
 
-              <rect x="10" y="226" width="260" height="34" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="248" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble</text>
+              <line x1="140" y1="188" x2="140" y2="200" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 
-              <line x1="140" y1="260" x2="140" y2="274" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <rect x="10" y="200" width="260" height="34" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+              <text x="140" y="218.5" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Predicted Letter</text>
+              <text x="140" y="229.5" text-anchor="middle" class="arch-node-sub" font-size="7.5">96.13% test accuracy</text>
 
-              <rect x="10" y="276" width="260" height="34" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
-              <text x="140" y="298" text-anchor="middle" class="arch-node-title" fill="var(--t1)">SymSpell Post-process</text>
+              <line x1="140" y1="234" x2="140" y2="246" stroke="var(--ghost)" stroke-width="1.2"/>
+              <text x="140" y="262" text-anchor="middle" class="arch-stage-label">2 · Word Recognition — Segmentation-Free</text>
 
-              <line x1="140" y1="310" x2="140" y2="322" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+              <rect x="10" y="270" width="260" height="28" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="288.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Full Word Image</text>
 
-              <rect x="10" y="322" width="260" height="30" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="341" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Text Output</text>
+              <line x1="140" y1="298" x2="140" y2="310" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="310" width="260" height="76" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+              <text x="140" y="330" text-anchor="middle" class="arch-node-title" fill="var(--t4)">CRNN</text>
+              <text x="140" y="346" text-anchor="middle" class="arch-node-sub">CNN feature extractor (height ↓8×)</text>
+              <text x="140" y="359" text-anchor="middle" class="arch-node-sub">2-layer BiLSTM reads left → right</text>
+              <text x="140" y="372" text-anchor="middle" class="arch-node-sub">Trained end-to-end with CTC loss</text>
+
+              <line x1="140" y1="386" x2="140" y2="398" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="398" width="260" height="30" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+              <text x="140" y="417.5" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Greedy CTC Decode</text>
+
+              <line x1="140" y1="428" x2="140" y2="440" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+
+              <rect x="10" y="440" width="260" height="42" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+              <text x="140" y="459.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Predicted Word</text>
+              <text x="140" y="472.5" text-anchor="middle" class="arch-node-desc">85.21% word accuracy · 0.040 CER</text>
             </svg>
           </div>
         </div>
         <div class="stat-grid">
           <div class="stat-block">
-            <span class="stat-val">400K</span>
-            <span class="stat-label">Training Images</span>
+            <span class="stat-val">96.13%</span>
+            <span class="stat-label">Letter Ensemble Accuracy</span>
           </div>
           <div class="stat-block">
-            <span class="stat-val">ViT+CNN</span>
-            <span class="stat-label">Ensemble Classifier</span>
+            <span class="stat-val">85.21%</span>
+            <span class="stat-label">Word Accuracy (CRNN)</span>
           </div>
           <div class="stat-block">
-            <span class="stat-val">E2E</span>
-            <span class="stat-label">Full Pipeline</span>
+            <span class="stat-val">0.040</span>
+            <span class="stat-label">Character Error Rate</span>
           </div>
           <div class="stat-block">
             <span class="stat-val">Kaggle</span>
-            <span class="stat-label">Dataset Published</span>
+            <span class="stat-label">Datasets Published</span>
           </div>
         </div>
       </div>
@@ -655,30 +801,176 @@
       <div class="project-demo">
         <div class="panel-section-label">Live Results</div>
 
-        <div class="demo-media">
-          <div class="demo-media-box demo-placeholder">
-            <div class="demo-section-title">Segmentation Output</div>
-            <div class="demo-placeholder-body">Visuals coming soon</div>
+        <div class="demo-grid">
+          <div class="demo-media-box">
+            <div class="demo-section-title">DeiT-Tiny Training Curves</div>
+            <img src="assets/pendoc/deit_training_curves.png" alt="DeiT-Tiny training and validation loss and accuracy curves over 16 epochs">
+            <div class="demo-media-caption">Validation accuracy plateaus around 95% while train accuracy keeps climbing — mild overfitting typical of a fully fine-tuned ViT</div>
           </div>
-          <div class="demo-media-box demo-placeholder">
-            <div class="demo-section-title">Reconstructed Word Output</div>
-            <div class="demo-placeholder-body">Visuals coming soon</div>
+          <div class="demo-media-box">
+            <div class="demo-section-title">CRNN Training Curves</div>
+            <img src="assets/pendoc/crnn_training_curves.png" alt="CRNN training and validation loss and accuracy curves over 14 epochs">
+            <div class="demo-media-caption">CTC loss converges within a few epochs; validation accuracy (1 − CER) settles around 0.85</div>
+          </div>
+        </div>
+
+        <div class="demo-media demo-media-lg">
+          <div class="demo-media-box">
+            <div class="demo-section-title">Ensemble Confusion Matrix (26 Letter Classes)</div>
+            <img src="assets/pendoc/ensemble_confusion_matrix.png" alt="Confusion matrix for the ResNet18 and DeiT-Tiny ensemble across all 26 letter classes on the test set">
+            <div class="demo-media-caption">Most confusion sits between visually similar letters (I/J, L/I) — the ensemble corrects several of DeiT-Tiny's solo mistakes on I and L</div>
           </div>
         </div>
 
         <div class="demo-grid">
-          <div class="demo-chart-box demo-placeholder">
-            <div class="demo-section-title">Classifier Accuracy</div>
-            <div class="demo-placeholder-body">Chart coming soon</div>
+          <div class="demo-example-box">
+            <div class="demo-section-title">Character Classifier Results</div>
+            <table class="demo-metrics-table">
+              <thead>
+                <tr><th></th><th>Test Accuracy</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>DeiT-Tiny (solo)</td><td>94.59%</td></tr>
+                <tr><td>Ensemble (0.60 / 0.40)</td><td>96.13%</td></tr>
+              </tbody>
+            </table>
           </div>
-          <div class="demo-example-box demo-placeholder">
-            <div class="demo-section-title">Example Output</div>
-            <div class="demo-placeholder-body">Example coming soon</div>
+          <div class="demo-example-box">
+            <div class="demo-section-title">CRNN Word Recognition</div>
+            <table class="demo-metrics-table">
+              <thead>
+                <tr><th></th><th>Test Set</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Exact word accuracy</td><td>85.21%</td></tr>
+                <tr><td>Mean CER</td><td>0.040</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
         <div class="demo-footer">
-          <span class="demo-view-btn demo-view-btn-disabled">Live Results Coming Soon</span>
+          <a href="https://github.com/Warnerd03/PenDoc-handwriting-ocr" target="_blank" class="demo-view-btn">View Source on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── PROJECT 4: Sengoku Jidai ── -->
+  <article class="project-card pc-d reveal">
+    <div class="project-inner">
+      <div class="project-main">
+        <div class="project-kicker">
+          <span class="project-num">04</span>
+          <span class="project-type">Game Development · Godot Engine · Systems &amp; AI Design</span>
+        </div>
+        <h2 class="project-title">Sengoku Jidai:<br>Real-Time Hex Strategy</h2>
+        <p class="project-tagline">The Age of Warring States — a real-time territory-conquest game built in Godot</p>
+        <p class="project-desc">
+          A real-time territory-conquest strategy game set in Sengoku-era Japan, built in Godot 4.6 with GDScript.
+          Cities and roads are modeled as a graph loaded from custom LevelData resources; each city earns gold and army
+          strength over time and can be upgraded across three tiers of production, gold income, and defense, with
+          upgrade costs that scale exponentially per tier. Units march along roads in real time and battles resolve
+          against a defending city's army and defense multiplier, all driven by a pausable, speed-adjustable cycle clock.
+          Also built a scripted AI opponent that maps its own frontier with breadth-first search to funnel reinforcements
+          toward contested cities, intercept incoming attacks, and prioritize upgrades on threatened borders — plus a
+          custom in-editor level design tool for placing cities directly on the hex grid.
+        </p>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-key">Engine</span>
+            <span class="detail-val">Godot 4.6 (Forward+), GDScript, Jolt Physics</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Architecture</span>
+            <span class="detail-val">Signal-driven autoload singletons — CycleClock, FactionState, LevelSelection, scene transition &amp; audio managers</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">AI Opponent</span>
+            <span class="detail-val">BFS frontier-distance mapping for reinforcement routing, siege interception, and threat-aware upgrade priority</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Tooling</span>
+            <span class="detail-val">Custom HexLevelEditor EditorPlugin — click hex tiles in the 2D viewport to place/remove cities in LevelData resources</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Scope</span>
+            <span class="detail-val">Full campaign structure with tutorial, mission popups, and multiple playable levels</span>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="ptag ptag-c">Godot 4.6</span>
+          <span class="ptag ptag-b">GDScript</span>
+          <span class="ptag ptag-d">Game AI</span>
+          <span class="ptag ptag-a">EditorPlugin</span>
+          <span class="ptag ptag-e">Real-Time Strategy</span>
+          <span class="ptag ptag-c">Jolt Physics</span>
+        </div>
+      </div>
+
+      <div class="project-panel">
+        <div>
+          <div class="panel-section-label">Core Systems</div>
+          <div class="pipeline">
+            <div class="pipe-step">
+              <div class="pipe-icon">1</div>
+              <div class="pipe-text"><strong>Hex graph map</strong> — cities &amp; roads loaded from LevelData resources into a navigable graph</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">2</div>
+              <div class="pipe-text"><strong>City economy</strong> — per-cycle gold/production income, 3-tier upgrades with exponential cost scaling</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">3</div>
+              <div class="pipe-text"><strong>Units &amp; battles</strong> — units march along roads and fight against a city's defense multiplier</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">4</div>
+              <div class="pipe-text"><strong>AI opponent</strong> — BFS frontier mapping funnels reinforcements and drives attack decisions</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">5</div>
+              <div class="pipe-text"><strong>Custom level editor</strong> — in-viewport EditorPlugin for hex-tile city placement</div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-icon">6</div>
+              <div class="pipe-text"><strong>Real-time clock</strong> — pausable, speed-adjustable (0.5×–4×) cycle drives every system</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <span class="stat-val">5.2K</span>
+            <span class="stat-label">Lines of GDScript</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">3</span>
+            <span class="stat-label">Playable Levels</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">3</span>
+            <span class="stat-label">City Upgrade Tiers</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-val">Custom</span>
+            <span class="stat-label">In-Editor Level Tool</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-demo">
+        <div class="panel-section-label">Gameplay Demo</div>
+
+        <div class="demo-media demo-media-lg">
+          <div class="demo-media-box">
+            <div class="demo-section-title">Full Gameplay Walkthrough</div>
+            <video src="assets/sengoku/demo.mp4" controls playsinline></video>
+            <div class="demo-media-caption">City management, real-time combat, and the AI opponent in action</div>
+          </div>
+        </div>
+
+        <div class="demo-footer">
+          <a href="https://github.com/OliverKris/CSCI6562-Project" target="_blank" class="demo-view-btn">View Source on GitHub</a>
         </div>
       </div>
     </div>
