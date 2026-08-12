@@ -201,6 +201,7 @@ nav {
 .dt-2 { top: 12%; right: -14%; transform: rotate(4deg);  color: var(--t2); }
 .dt-3 { bottom: 14%; left: -16%; transform: rotate(3deg);  color: var(--t3); }
 .dt-4 { bottom: 2%;  right: -6%; transform: rotate(-4deg); color: var(--t4); }
+.dt-5 { top: -9%; left: 50%; transform: translateX(-50%) rotate(-2deg); color: var(--t5); }
 @media (max-width: 960px) {
   .hero-right { min-height: 280px; margin-top: 1rem; }
   .headshot-frame { width: 180px; height: 180px; }
@@ -209,6 +210,7 @@ nav {
   .dt-2 { right: 0; }
   .dt-3 { left: 0; }
   .dt-4 { right: 0; }
+  .dt-5 { top: -6%; left: 50%; transform: translateX(-50%); }
 }
 
 .hero-bio {
