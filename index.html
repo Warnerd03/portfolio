@@ -144,18 +144,23 @@
 <section class="projects-section" id="projects">
   <div class="section-header reveal">
     <span class="section-title">Projects</span>
+    <button class="expand-all-btn" type="button" id="expandAllBtn">Expand All</button>
   </div>
 
   <!-- ── PROJECT 1: GNN Recommender ── -->
-  <article class="project-card pc-a reveal">
-    <div class="project-inner">
-      <div class="project-main">
-        <div class="project-kicker">
-          <span class="project-num">01</span>
-          <span class="project-type">Machine Learning · Graph Neural Networks · User-Friendly Explainable AI · </span>
-        </div>
+  <article class="project-card pc-a reveal" id="project-1">
+    <button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-1-panel">
+      <span class="project-toggle-num">01</span>
+      <span class="project-toggle-titles">
         <h2 class="project-title">GNN Explainable Game<br>Recommendation System</h2>
         <p class="project-tagline">Explainable Relational User Recommendations</p>
+      </span>
+      <span class="project-toggle-type">Machine Learning · Graph Neural Networks · User-Friendly Explainable AI · </span>
+      <span class="accordion-icon" aria-hidden="true"></span>
+    </button>
+    <div class="project-collapse" id="project-1-panel">
+    <div class="project-inner">
+      <div class="project-main">
         <p class="project-desc">
           Constructed a heterogeneous knowledge graph recommender from Steam game meta data and interaction data.
           Trained GraphSAGE and LightGCN in an ensemble on the knowledge graph to predict which games a user is likely to play next.
@@ -411,18 +416,23 @@
         </div>
       </div>
     </div>
+    </div>
   </article>
 
   <!-- ── PROJECT 2: Formality Bias ── -->
-  <article class="project-card pc-b reveal">
-    <div class="project-inner">
-      <div class="project-main">
-        <div class="project-kicker">
-          <span class="project-num">02</span>
-          <span class="project-type">NLP Research · LLM Analysis · Fine-Tuning</span>
-        </div>
+  <article class="project-card pc-b reveal" id="project-2">
+    <button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-2-panel">
+      <span class="project-toggle-num">02</span>
+      <span class="project-toggle-titles">
         <h2 class="project-title">Formality Bias in LLMs</h2>
         <p class="project-tagline">Identifying and addressing formality bias in large language model outputs</p>
+      </span>
+      <span class="project-toggle-type">NLP Research · LLM Analysis · Fine-Tuning</span>
+      <span class="accordion-icon" aria-hidden="true"></span>
+    </button>
+    <div class="project-collapse" id="project-2-panel">
+    <div class="project-inner">
+      <div class="project-main">
         <p class="project-desc">
           A research project detecting, measuring, and attempting to mitigate a systematic formality bias in large language model outputs.
           LLM assistants tend to default to a more formal, polished register than humans use in comparable conversational contexts — elevated vocabulary ("delve," "utilize," "furthermore") and structured phrasing even in casual exchanges. This project measures that gap empirically and tests whether targeted fine-tuning can close it without degrading response quality.
@@ -550,18 +560,23 @@
         </div>
       </div>
     </div>
+    </div>
   </article>
 
   <!-- ── PROJECT 3: OCR ── -->
-  <article class="project-card pc-c reveal">
-    <div class="project-inner">
-      <div class="project-main">
-        <div class="project-kicker">
-          <span class="project-num">03</span>
-          <span class="project-type">Computer Vision · Deep Learning · OCR</span>
-        </div>
+  <article class="project-card pc-c reveal" id="project-3">
+    <button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-3-panel">
+      <span class="project-toggle-num">03</span>
+      <span class="project-toggle-titles">
         <h2 class="project-title">Handwritten<br>OCR System</h2>
         <p class="project-tagline">Two parallel approaches to reading handwriting: per-letter classification and segmentation-free word recognition</p>
+      </span>
+      <span class="project-toggle-type">Computer Vision · Deep Learning · OCR</span>
+      <span class="accordion-icon" aria-hidden="true"></span>
+    </button>
+    <div class="project-collapse" id="project-3-panel">
+    <div class="project-inner">
+      <div class="project-main">
         <p class="project-desc">
           A handwriting recognition system built as two complementary approaches, trained and evaluated on two Kaggle datasets published alongside the project — one of individually segmented letter crops, one of full handwritten word images.
           For character-level recognition, a ResNet18 CNN and a DeiT-Tiny vision transformer are each fine-tuned on the letter crops and blended into a weighted ensemble, testing whether a convolutional inductive bias and a self-attention architecture make genuinely different mistakes worth combining.
@@ -738,18 +753,23 @@
         </div>
       </div>
     </div>
+    </div>
   </article>
 
   <!-- ── PROJECT 4: Sengoku Jidai ── -->
-  <article class="project-card pc-d reveal">
-    <div class="project-inner">
-      <div class="project-main">
-        <div class="project-kicker">
-          <span class="project-num">04</span>
-          <span class="project-type">Game Development · Godot Engine · Systems &amp; AI Design</span>
-        </div>
+  <article class="project-card pc-d reveal" id="project-4">
+    <button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-4-panel">
+      <span class="project-toggle-num">04</span>
+      <span class="project-toggle-titles">
         <h2 class="project-title">Sengoku Jidai:<br>Real-Time Hex Strategy</h2>
         <p class="project-tagline">The Age of Warring States — a real-time territory-conquest game built in Godot</p>
+      </span>
+      <span class="project-toggle-type">Game Development · Godot Engine · Systems &amp; AI Design</span>
+      <span class="accordion-icon" aria-hidden="true"></span>
+    </button>
+    <div class="project-collapse" id="project-4-panel">
+    <div class="project-inner">
+      <div class="project-main">
         <p class="project-desc">
           A real-time territory-conquest strategy game set in Sengoku-era Japan, built in Godot 4.6 with GDScript.
           Cities and roads are modeled as a graph loaded from custom LevelData resources; each city earns gold and army
@@ -857,6 +877,7 @@
         </div>
       </div>
     </div>
+    </div>
   </article>
 </section>
 
@@ -951,6 +972,55 @@ document.querySelectorAll('.project-card').forEach(card => {
     card.style.setProperty('--my', `${e.clientY - r.top}px`);
   });
 });
+
+// project accordion — click a project's header to expand/collapse it
+const projectCards = document.querySelectorAll('.project-card');
+const expandAllBtn = document.getElementById('expandAllBtn');
+
+function setCardOpen(card, open) {
+  card.classList.toggle('is-open', open);
+  const btn = card.querySelector('.project-toggle');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function syncExpandAllLabel() {
+  if (!expandAllBtn) return;
+  const allOpen = Array.from(projectCards).every(c => c.classList.contains('is-open'));
+  expandAllBtn.textContent = allOpen ? 'Collapse All' : 'Expand All';
+}
+
+projectCards.forEach(card => {
+  const btn = card.querySelector('.project-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    setCardOpen(card, !card.classList.contains('is-open'));
+    syncExpandAllLabel();
+  });
+});
+
+expandAllBtn?.addEventListener('click', () => {
+  const allOpen = Array.from(projectCards).every(c => c.classList.contains('is-open'));
+  projectCards.forEach(card => setCardOpen(card, !allOpen));
+  syncExpandAllLabel();
+});
+
+syncExpandAllLabel();
+
+// if arriving via a #project-N link (or a hash to any element inside a project card),
+// open that project and scroll to it
+function openProjectFromHash() {
+  if (!location.hash) return;
+  const target = document.querySelector(location.hash);
+  if (!target) return;
+  const card = target.closest('.project-card');
+  if (card) {
+    setCardOpen(card, true);
+    syncExpandAllLabel();
+    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+}
+window.addEventListener('hashchange', openProjectFromHash);
+openProjectFromHash();
 </script>
 </body>
 </html>
