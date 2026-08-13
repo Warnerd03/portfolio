@@ -210,82 +210,58 @@
         <div>
           <div class="panel-section-label">Architecture</div>
           <div class="arch-svg-wrap">
-            <svg viewBox="0 0 280 800" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram in four stages. Stage one: Steam play data and game metadata are combined into a knowledge graph, where games, genres, developers, publishers and users all become connected nodes. Stage two: GraphSAGE and LightGCN each learn a taste vector per user and game from that graph, and are blended 90/10 into one ranked list. Stage three: GNNExplainer flags which nearby connections mattered most, relational path search turns those into a plain-English reason, and the two combine into a recommendation paired with its explanation. Stage four: the ensemble is measured against both individual models on ROC-AUC, average precision, and Hits at 10, matching or beating both on every metric.">
-              <defs>
-                <marker id="arrow-gnn" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
-                </marker>
-              </defs>
-
-              <text x="140" y="24.5" text-anchor="middle" class="arch-stage-label">Generate a Knowledge Graph From Dataset</text>
-
-              <rect x="10" y="35" width="260" height="80.5" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="59.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">User Interactions &amp; Steam Game Metadata</text>
-              <text x="140" y="80.5" text-anchor="middle" class="arch-node-desc">200k-Steam User Play Records</text>
-              <text x="140" y="99.75" text-anchor="middle" class="arch-node-desc">Game Node Attributes: Developer, Publisher, &amp; Platform Info</text>
-
-              <line x1="140" y1="115.5" x2="140" y2="136.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-
-              <rect x="10" y="136.5" width="260" height="108.5" rx="4" fill="var(--ink)" stroke="var(--rule)" stroke-width="1"/>
-              <text x="140" y="161" text-anchor="middle" class="arch-node-title" fill="var(--t3)">Knowledge Graph</text>
-              <text x="140" y="182" text-anchor="middle" class="arch-node-desc">Nodes: Users, Games, Genres, Developers, &amp; Publishers</text>
-              <text x="140" y="203" text-anchor="middle" class="arch-node-sub">User ──► plays ──► Game</text>
-              <text x="140" y="224" text-anchor="middle" class="arch-node-sub">Game ──► has ──► Genre/Developer/Publisher</text>
-
-              <line x1="140" y1="245" x2="140" y2="259" stroke="var(--ghost)" stroke-width="1.2"/>
-              <text x="140" y="267.75" text-anchor="middle" class="arch-stage-label">Train Ensemble Model to Learn Relational Patterns</text>
-              <line x1="140" y1="276.5" x2="140" y2="290.5" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="290.5" x2="208" y2="290.5" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="290.5" x2="72" y2="304.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-              <line x1="208" y1="290.5" x2="208" y2="304.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-
-              <rect x="10" y="304.5" width="124" height="87.5" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="329" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
-              <text x="72" y="348.25" text-anchor="middle" class="arch-node-desc">Aggregates neighbor nodes</text>
-              <text x="72" y="367.5" text-anchor="middle" class="arch-node-desc">Builds an interest vector</text>
-
-              <rect x="146" y="304.5" width="124" height="87.5" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="329" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
-              <text x="208" y="348.25" text-anchor="middle" class="arch-node-desc">Pure graph propagation</text>
-              <text x="208" y="367.5" text-anchor="middle" class="arch-node-desc">Stability Contribution</text>
-
-              <line x1="72" y1="392" x2="72" y2="406" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="392" x2="208" y2="406" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="406" x2="208" y2="406" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="406" x2="140" y2="420" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-
-              <rect x="10" y="420" width="260" height="80.5" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="444.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Blend</text>
-              <text x="140" y="463.75" text-anchor="middle" class="arch-node-desc">Combines GraphSAGE and LightGCNscores (90/10)</text>
-              <text x="140" y="483" text-anchor="middle" class="arch-node-desc">Performs Better for Hits@10</text>
-
-              <line x1="140" y1="500.5" x2="140" y2="514.5" stroke="var(--ghost)" stroke-width="1.2"/>
-              <text x="140" y="523.25" text-anchor="middle" class="arch-stage-label">Explainability Layer</text>
-              <line x1="140" y1="532" x2="140" y2="546" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="546" x2="208" y2="546" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="546" x2="72" y2="560" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-              <line x1="208" y1="546" x2="208" y2="560" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-
-              <rect x="10" y="560" width="124" height="87.5" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="584.5" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer</text>
-              <text x="72" y="603.75" text-anchor="middle" class="arch-node-desc">Flags which nearby edges</text>
-              <text x="72" y="623" text-anchor="middle" class="arch-node-desc">mattered to the model</text>
-
-              <rect x="146" y="560" width="124" height="87.5" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="584.5" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
-              <text x="208" y="603.75" text-anchor="middle" class="arch-node-desc">Uses edge information from</text>
-              <text x="208" y="623" text-anchor="middle" class="arch-node-desc">GNNExplainer to make paths</text>
-
-              <line x1="72" y1="647.5" x2="72" y2="661.5" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="647.5" x2="208" y2="661.5" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="661.5" x2="208" y2="661.5" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="661.5" x2="140" y2="675.5" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
-
-              <rect x="10" y="675.5" width="260" height="80.5" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="700" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Recommendations and Contributing Paths</text>
-              <text x="140" y="719.25" text-anchor="middle" class="arch-node-desc">Generate a ranked game list, each pick paired with</text>
-              <text x="140" y="738.5" text-anchor="middle" class="arch-node-desc">a list of human-readable paths from user games</text>
-            </svg>
+            <svg viewBox="0 0 1174 205" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal architecture flow. Steam play data and game metadata form a knowledge graph. GraphSAGE and LightGCN each learn from that graph in parallel and are blended into one ensemble. GNNExplainer and relational path search then explain the result in parallel, producing a final recommendation paired with a plain-English reason. The ensemble matches or beats both individual models on ROC-AUC, average precision, and Hits at 10.">
+<defs><marker id="arrow-gnn" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/></marker></defs>
+<text x="115.0" y="14" text-anchor="middle" class="arch-stage-label">Graph Build</text>
+<text x="469.0" y="14" text-anchor="middle" class="arch-stage-label">Dual Encoders</text>
+<text x="587.0" y="14" text-anchor="middle" class="arch-stage-label">Ensemble</text>
+<text x="941.0" y="14" text-anchor="middle" class="arch-stage-label">Explainability</text>
+<text x="1059.0" y="14" text-anchor="middle" class="arch-stage-label">Output</text>
+<rect x="20" y="73.0" width="190" height="78.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+<text x="115.0" y="96" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Knowledge Graph</text>
+<text x="115.0" y="114" text-anchor="middle" class="arch-node-desc">200K Steam play records +</text>
+<text x="115.0" y="128" text-anchor="middle" class="arch-node-desc">game/dev/publisher metadata</text>
+<line x1="210" y1="112" x2="233.0" y2="112" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="233.0" y1="74.0" x2="233.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="233.0" y1="74.0" x2="256" y2="74.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+<line x1="233.0" y1="150.0" x2="256" y2="150.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+<rect x="256" y="45.0" width="190" height="58.0" rx="5" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+<text x="351.0" y="67.0" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
+<text x="351.0" y="83.0" text-anchor="middle" class="arch-node-desc">Aggregates neighbor nodes</text>
+<text x="351.0" y="95.0" text-anchor="middle" class="arch-node-desc">into an interest vector</text>
+<rect x="256" y="121.0" width="190" height="58.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+<text x="351.0" y="143.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
+<text x="351.0" y="159.0" text-anchor="middle" class="arch-node-desc">Pure graph propagation —</text>
+<text x="351.0" y="171.0" text-anchor="middle" class="arch-node-desc">stability contribution</text>
+<line x1="446" y1="74.0" x2="469.0" y2="74.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="446" y1="150.0" x2="469.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="469.0" y1="74.0" x2="469.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="469.0" y1="112" x2="492" y2="112" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+<rect x="492" y="73.0" width="190" height="78.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+<text x="587.0" y="96" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Blend</text>
+<text x="587.0" y="114" text-anchor="middle" class="arch-node-desc">90/10 GraphSAGE / LightGCN</text>
+<text x="587.0" y="128" text-anchor="middle" class="arch-node-desc">best Hits@10 of the three</text>
+<line x1="682" y1="112" x2="705.0" y2="112" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="705.0" y1="74.0" x2="705.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="705.0" y1="74.0" x2="728" y2="74.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+<line x1="705.0" y1="150.0" x2="728" y2="150.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+<rect x="728" y="45.0" width="190" height="58.0" rx="5" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+<text x="823.0" y="67.0" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GNNExplainer</text>
+<text x="823.0" y="83.0" text-anchor="middle" class="arch-node-desc">Flags which nearby edges</text>
+<text x="823.0" y="95.0" text-anchor="middle" class="arch-node-desc">mattered to the model</text>
+<rect x="728" y="121.0" width="190" height="58.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+<text x="823.0" y="143.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
+<text x="823.0" y="159.0" text-anchor="middle" class="arch-node-desc">Turns flagged edges into</text>
+<text x="823.0" y="171.0" text-anchor="middle" class="arch-node-desc">plain-English reasons</text>
+<line x1="918" y1="74.0" x2="941.0" y2="74.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="918" y1="150.0" x2="941.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="941.0" y1="74.0" x2="941.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="941.0" y1="112" x2="964" y2="112" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
+<rect x="964" y="73.0" width="190" height="78.0" rx="5" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+<text x="1059.0" y="96" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Recommendations</text>
+<text x="1059.0" y="114" text-anchor="middle" class="arch-node-desc">Ranked game list, each pick</text>
+<text x="1059.0" y="128" text-anchor="middle" class="arch-node-desc">paired with a readable path</text>
+</svg>
           </div>
         </div>
       </div>
@@ -301,10 +277,10 @@
           </div>
         </div>
 
-        <div class="demo-media">
+        <div class="demo-grid-7030">
           <div class="demo-chart-box">
             <div class="demo-section-title">Test-Set Performance</div>
-            <svg viewBox="0 0 360 300" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
+            <svg viewBox="0 0 360 318" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
               <line x1="20" y1="270" x2="340" y2="270" stroke="var(--rule)" stroke-width="1"/>
               <rect x="40.0" y="47.4" width="16" height="222.6" fill="var(--t1)" rx="2"/>
               <rect x="61.0" y="63.8" width="16" height="206.2" fill="var(--t3)" rx="2"/>
@@ -335,9 +311,7 @@
               <span><i style="background: var(--t0);"></i>Ensemble</span>
             </div>
           </div>
-        </div>
 
-        <div class="demo-media demo-media-lg">
           <div class="demo-media-box">
             <div class="demo-section-title">Explanation Subgraph</div>
             <img src="assets/gnn/explanation_subgraph.png" alt="GNNExplainer subgraph attribution visualization showing the knowledge graph paths behind all 10 recommendations">
@@ -641,73 +615,48 @@
         <div>
           <div class="panel-section-label">Processing Pipeline</div>
           <div class="arch-svg-wrap">
-            <svg viewBox="0 0 280 490" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two parallel pipelines. First: a letter image goes through ResNet18 and DeiT-Tiny classifiers, blended into a weighted ensemble, producing a predicted letter. Second: a full word image goes through a CRNN combining a convolutional feature extractor and a bidirectional LSTM, decoded greedily via CTC, producing a predicted word without any character segmentation step.">
-              <defs>
-                <marker id="arrow-ocr" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/>
-                </marker>
-              </defs>
-
-              <text x="140" y="14" text-anchor="middle" class="arch-stage-label">1 · Character Classification</text>
-
-              <rect x="10" y="22" width="260" height="28" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="40.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Segmented Letter Image</text>
-
-              <line x1="140" y1="50" x2="140" y2="60" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="60" x2="208" y2="60" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="60" x2="72" y2="68" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-              <line x1="208" y1="60" x2="208" y2="68" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-
-              <rect x="10" y="68" width="124" height="54" rx="4" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
-              <text x="72" y="90" text-anchor="middle" class="arch-node-title" fill="var(--t3)">ResNet18</text>
-              <text x="72" y="105" text-anchor="middle" class="arch-node-sub">Stem + layer1 frozen</text>
-              <text x="72" y="117" text-anchor="middle" class="arch-node-sub">OneCycleLR</text>
-
-              <rect x="146" y="68" width="124" height="54" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="208" y="90" text-anchor="middle" class="arch-node-title" fill="var(--t4)">DeiT-Tiny</text>
-              <text x="208" y="105" text-anchor="middle" class="arch-node-sub">Early blocks frozen</text>
-              <text x="208" y="117" text-anchor="middle" class="arch-node-sub">Patch self-attention</text>
-
-              <line x1="72" y1="122" x2="72" y2="132" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="208" y1="122" x2="208" y2="132" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="72" y1="132" x2="208" y2="132" stroke="var(--ghost)" stroke-width="1.2"/>
-              <line x1="140" y1="132" x2="140" y2="142" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-
-              <rect x="10" y="142" width="260" height="46" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="162" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Weighted Ensemble</text>
-              <text x="140" y="178" text-anchor="middle" class="arch-node-desc">0.60 ResNet18 / 0.40 DeiT-Tiny (tuned on val)</text>
-
-              <line x1="140" y1="188" x2="140" y2="200" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-
-              <rect x="10" y="200" width="260" height="34" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
-              <text x="140" y="218.5" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Predicted Letter</text>
-              <text x="140" y="229.5" text-anchor="middle" class="arch-node-sub" font-size="7.5">96.13% test accuracy</text>
-
-              <line x1="140" y1="234" x2="140" y2="246" stroke="var(--ghost)" stroke-width="1.2"/>
-              <text x="140" y="262" text-anchor="middle" class="arch-stage-label">2 · Word Recognition — Segmentation-Free</text>
-
-              <rect x="10" y="270" width="260" height="28" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="288.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Full Word Image</text>
-
-              <line x1="140" y1="298" x2="140" y2="310" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-
-              <rect x="10" y="310" width="260" height="76" rx="4" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
-              <text x="140" y="330" text-anchor="middle" class="arch-node-title" fill="var(--t4)">CRNN</text>
-              <text x="140" y="346" text-anchor="middle" class="arch-node-sub">CNN feature extractor (height ↓8×)</text>
-              <text x="140" y="359" text-anchor="middle" class="arch-node-sub">2-layer BiLSTM reads left → right</text>
-              <text x="140" y="372" text-anchor="middle" class="arch-node-sub">Trained end-to-end with CTC loss</text>
-
-              <line x1="140" y1="386" x2="140" y2="398" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-
-              <rect x="10" y="398" width="260" height="30" rx="4" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
-              <text x="140" y="417.5" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Greedy CTC Decode</text>
-
-              <line x1="140" y1="428" x2="140" y2="440" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
-
-              <rect x="10" y="440" width="260" height="42" rx="4" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
-              <text x="140" y="459.5" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Predicted Word</text>
-              <text x="140" y="472.5" text-anchor="middle" class="arch-node-desc">85.21% word accuracy · 0.040 CER</text>
-            </svg>
+            <svg viewBox="0 0 920 245" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two parallel horizontal pipelines. Top: a letter image goes through ResNet18 and DeiT-Tiny classifiers in parallel, blended into a weighted ensemble, producing a predicted letter at 96.13 percent test accuracy. Bottom: a full word image goes through a CRNN combining a convolutional feature extractor and a bidirectional LSTM, decoded greedily via CTC, producing a predicted word at 85.21 percent word accuracy and 0.040 character error rate, without any character segmentation step.">
+<defs><marker id="arrow-ocr" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/></marker></defs>
+<text x="20" y="14" class="arch-stage-label">1 · Character Classification</text>
+<rect x="20" y="30.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+<text x="115.0" y="65.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Segmented Letter</text>
+<line x1="210" y1="61.0" x2="230.0" y2="61.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="230.0" y1="32.0" x2="230.0" y2="90.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="230.0" y1="32.0" x2="250" y2="32.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<line x1="230.0" y1="90.0" x2="250" y2="90.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<rect x="250" y="9.0" width="190" height="46.0" rx="5" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
+<text x="345.0" y="28.0" text-anchor="middle" class="arch-node-title" fill="var(--t3)">ResNet18</text>
+<text x="345.0" y="43.0" text-anchor="middle" class="arch-node-sub">Stem + layer1 frozen · OneCycleLR</text>
+<rect x="250" y="67.0" width="190" height="46.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+<text x="345.0" y="86.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">DeiT-Tiny</text>
+<text x="345.0" y="101.0" text-anchor="middle" class="arch-node-sub">Early blocks frozen · attention</text>
+<line x1="440" y1="32.0" x2="460.0" y2="32.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="440" y1="90.0" x2="460.0" y2="90.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="460.0" y1="32.0" x2="460.0" y2="90.0" stroke="var(--ghost)" stroke-width="1.2"/>
+<line x1="460.0" y1="61.0" x2="480" y2="61.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<rect x="480" y="30.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+<text x="575.0" y="57.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Weighted Ensemble</text>
+<text x="575.0" y="71.0" text-anchor="middle" class="arch-node-desc">0.60 / 0.40 (tuned on val)</text>
+<line x1="670" y1="61.0" x2="710" y2="61.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<rect x="710" y="30.0" width="190" height="62.0" rx="5" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+<text x="805.0" y="57.0" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Predicted Letter</text>
+<text x="805.0" y="71.0" text-anchor="middle" class="arch-node-sub">96.13% test accuracy</text>
+<text x="20" y="147.0" class="arch-stage-label">2 · Word Recognition — Segmentation-Free</text>
+<rect x="20" y="163.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+<text x="115.0" y="198.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Full Word Image</text>
+<line x1="210" y1="194.0" x2="250" y2="194.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<rect x="250" y="163.0" width="190" height="62.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
+<text x="345.0" y="188.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">CRNN</text>
+<text x="345.0" y="202.0" text-anchor="middle" class="arch-node-sub">CNN + 2-layer BiLSTM</text>
+<text x="345.0" y="213.0" text-anchor="middle" class="arch-node-sub">trained end-to-end w/ CTC</text>
+<line x1="440" y1="194.0" x2="480" y2="194.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<rect x="480" y="163.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
+<text x="575.0" y="198.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Greedy CTC Decode</text>
+<line x1="670" y1="194.0" x2="710" y2="194.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
+<rect x="710" y="163.0" width="190" height="62.0" rx="5" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
+<text x="805.0" y="190.0" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Predicted Word</text>
+<text x="805.0" y="204.0" text-anchor="middle" class="arch-node-sub">85.21% acc · 0.040 CER</text>
+</svg>
           </div>
         </div>
       </div>
