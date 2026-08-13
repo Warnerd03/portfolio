@@ -155,7 +155,7 @@
         <h2 class="project-title">GNN Explainable Game<br>Recommendation System</h2>
         <p class="project-tagline">Explainable Relational User Recommendations</p>
       </span>
-      <span class="project-toggle-type">Machine Learning · Graph Neural Networks · User-Friendly Explainable AI · </span>
+      <span class="project-toggle-type">Machine Learning · Graph Neural Networks · User-Friendly Explainable AI</span>
       <span class="accordion-icon" aria-hidden="true"></span>
     </button>
     <div class="project-collapse" id="project-1-panel">
@@ -218,34 +218,34 @@
             <svg viewBox="0 0 1174 205" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal architecture flow. Steam play data and game metadata form a knowledge graph. GraphSAGE and LightGCN each learn from that graph in parallel and are blended into one ensemble. GNNExplainer and relational path search then explain the result in parallel, producing a final recommendation paired with a plain-English reason. The ensemble matches or beats both individual models on ROC-AUC, average precision, and Hits at 10.">
 <defs><marker id="arrow-gnn" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/></marker></defs>
 <text x="115.0" y="14" text-anchor="middle" class="arch-stage-label">Graph Build</text>
-<text x="469.0" y="14" text-anchor="middle" class="arch-stage-label">Dual Encoders</text>
+<text x="352.0" y="14" text-anchor="middle" class="arch-stage-label">Graph Neural Networks</text>
 <text x="587.0" y="14" text-anchor="middle" class="arch-stage-label">Ensemble</text>
-<text x="941.0" y="14" text-anchor="middle" class="arch-stage-label">Explainability</text>
+<text x="822.0" y="14" text-anchor="middle" class="arch-stage-label">Explainability</text>
 <text x="1059.0" y="14" text-anchor="middle" class="arch-stage-label">Output</text>
 <rect x="20" y="73.0" width="190" height="78.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
 <text x="115.0" y="96" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Knowledge Graph</text>
-<text x="115.0" y="114" text-anchor="middle" class="arch-node-desc">200K Steam play records +</text>
-<text x="115.0" y="128" text-anchor="middle" class="arch-node-desc">game/dev/publisher metadata</text>
+<text x="115.0" y="114" text-anchor="middle" class="arch-node-desc">200K-Steam user play records</text>
+<text x="115.0" y="128" text-anchor="middle" class="arch-node-desc">Game Metadata: Node Attributes</text>
 <line x1="210" y1="112" x2="233.0" y2="112" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="233.0" y1="74.0" x2="233.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="233.0" y1="74.0" x2="256" y2="74.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 <line x1="233.0" y1="150.0" x2="256" y2="150.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 <rect x="256" y="45.0" width="190" height="58.0" rx="5" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
 <text x="351.0" y="67.0" text-anchor="middle" class="arch-node-title" fill="var(--t3)">GraphSAGE</text>
-<text x="351.0" y="83.0" text-anchor="middle" class="arch-node-desc">Aggregates neighbor nodes</text>
-<text x="351.0" y="95.0" text-anchor="middle" class="arch-node-desc">into an interest vector</text>
+<text x="351.0" y="83.0" text-anchor="middle" class="arch-node-desc">Generates node vectors from neighbors</text>
+<text x="351.0" y="95.0" text-anchor="middle" class="arch-node-desc">Game node vectors include atttributes</text>
 <rect x="256" y="121.0" width="190" height="58.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
 <text x="351.0" y="143.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">LightGCN</text>
-<text x="351.0" y="159.0" text-anchor="middle" class="arch-node-desc">Pure graph propagation —</text>
-<text x="351.0" y="171.0" text-anchor="middle" class="arch-node-desc">stability contribution</text>
+<text x="351.0" y="159.0" text-anchor="middle" class="arch-node-desc">Pure graph propagation alternative</text>
+<text x="351.0" y="171.0" text-anchor="middle" class="arch-node-desc">Contributes stability across metrics</text>
 <line x1="446" y1="74.0" x2="469.0" y2="74.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="446" y1="150.0" x2="469.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="469.0" y1="74.0" x2="469.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="469.0" y1="112" x2="492" y2="112" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 <rect x="492" y="73.0" width="190" height="78.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
 <text x="587.0" y="96" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Ensemble Blend</text>
-<text x="587.0" y="114" text-anchor="middle" class="arch-node-desc">90/10 GraphSAGE / LightGCN</text>
-<text x="587.0" y="128" text-anchor="middle" class="arch-node-desc">best Hits@10 of the three</text>
+<text x="587.0" y="114" text-anchor="middle" class="arch-node-desc">90/10 GraphSAGE/LightGCN Split</text>
+<text x="587.0" y="128" text-anchor="middle" class="arch-node-desc">Best Hits@10 Performance</text>
 <line x1="682" y1="112" x2="705.0" y2="112" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="705.0" y1="74.0" x2="705.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="705.0" y1="74.0" x2="728" y2="74.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
@@ -256,16 +256,16 @@
 <text x="823.0" y="95.0" text-anchor="middle" class="arch-node-desc">mattered to the model</text>
 <rect x="728" y="121.0" width="190" height="58.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
 <text x="823.0" y="143.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">Relational Paths</text>
-<text x="823.0" y="159.0" text-anchor="middle" class="arch-node-desc">Turns flagged edges into</text>
-<text x="823.0" y="171.0" text-anchor="middle" class="arch-node-desc">plain-English reasons</text>
+<text x="823.0" y="159.0" text-anchor="middle" class="arch-node-desc">Uses flagged edges to generate</text>
+<text x="823.0" y="171.0" text-anchor="middle" class="arch-node-desc">pathways to game recommendations</text>
 <line x1="918" y1="74.0" x2="941.0" y2="74.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="918" y1="150.0" x2="941.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="941.0" y1="74.0" x2="941.0" y2="150.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="941.0" y1="112" x2="964" y2="112" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-gnn)"/>
 <rect x="964" y="73.0" width="190" height="78.0" rx="5" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
 <text x="1059.0" y="96" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Recommendations</text>
-<text x="1059.0" y="114" text-anchor="middle" class="arch-node-desc">Ranked game list, each pick</text>
-<text x="1059.0" y="128" text-anchor="middle" class="arch-node-desc">paired with a readable path</text>
+<text x="1059.0" y="114" text-anchor="middle" class="arch-node-desc">Ranked game recommendations, each game</text>
+<text x="1059.0" y="128" text-anchor="middle" class="arch-node-desc">paired with most contributing paths</text>
 </svg>
           </div>
         </div>
@@ -285,20 +285,20 @@
         <div class="demo-grid-7030">
           <div class="demo-chart-box">
             <div class="demo-section-title">Test-Set Performance</div>
-            <svg viewBox="0 0 360 318" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
-              <line x1="20" y1="270" x2="340" y2="270" stroke="var(--rule)" stroke-width="1"/>
-              <rect x="40.0" y="47.4" width="16" height="222.6" fill="var(--t1)" rx="2"/>
-              <rect x="61.0" y="63.8" width="16" height="206.2" fill="var(--t3)" rx="2"/>
-              <rect x="82.0" y="50.4" width="16" height="219.6" fill="var(--t0)" rx="2"/>
-              <text x="69.0" y="302.4" text-anchor="middle" class="gnn-bar-label">ROC-AUC</text>
-              <rect x="138.0" y="48.7" width="16" height="221.3" fill="var(--t1)" rx="2"/>
-              <rect x="159.0" y="63.2" width="16" height="206.8" fill="var(--t3)" rx="2"/>
-              <rect x="180.0" y="49.7" width="16" height="220.3" fill="var(--t0)" rx="2"/>
-              <text x="167.0" y="302.4" text-anchor="middle" class="gnn-bar-label">Avg Precision</text>
-              <rect x="236.0" y="186.98" width="16" height="83.02" fill="var(--t1)" rx="2"/>
-              <rect x="257.0" y="201.51" width="16" height="68.49" fill="var(--t3)" rx="2"/>
-              <rect x="278.0" y="183.65" width="16" height="86.35" fill="var(--t0)" rx="2"/>
-              <text x="265.0" y="302.4" text-anchor="middle" class="gnn-bar-label">Hits@10</text>
+            <svg viewBox="0 0 360 140" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
+              <line x1="20" y1="118" x2="340" y2="118" stroke="var(--rule)" stroke-width="1"/>
+              <rect x="40.0" y="8.2" width="16" height="109.8" fill="var(--t1)" rx="2"/>
+              <rect x="61.0" y="16.3" width="16" height="101.7" fill="var(--t3)" rx="2"/>
+              <rect x="82.0" y="9.7" width="16" height="108.3" fill="var(--t0)" rx="2"/>
+              <text x="69.0" y="134.0" text-anchor="middle" class="gnn-bar-label">ROC-AUC</text>
+              <rect x="138.0" y="8.8" width="16" height="109.2" fill="var(--t1)" rx="2"/>
+              <rect x="159.0" y="16.0" width="16" height="102.0" fill="var(--t3)" rx="2"/>
+              <rect x="180.0" y="9.3" width="16" height="108.7" fill="var(--t0)" rx="2"/>
+              <text x="167.0" y="134.0" text-anchor="middle" class="gnn-bar-label">Avg Precision</text>
+              <rect x="236.0" y="77.0" width="16" height="41.0" fill="var(--t1)" rx="2"/>
+              <rect x="257.0" y="84.2" width="16" height="33.8" fill="var(--t3)" rx="2"/>
+              <rect x="278.0" y="75.4" width="16" height="42.6" fill="var(--t0)" rx="2"/>
+              <text x="265.0" y="134.0" text-anchor="middle" class="gnn-bar-label">Hits@10</text>
             </svg>
             <table class="demo-metrics-table">
               <thead>
@@ -477,7 +477,7 @@
           <div class="tech-block">
             <span class="tech-block-label">LoRA Mitigation</span>
             <p class="tech-block-intro">Fine-tuned Qwen2.5-3B-Instruct with PEFT/LoRA on the lowest-formality subset of the human corpora, aiming to shift generations toward a more conversational register. Base vs. fine-tuned outputs on held-out prompts are compared with FR delta, BERT-score delta, and ROUGE-L, plus a paired t-test for statistical significance — checking for a formality decrease without a quality decrease, not just eyeballing the average.</p>
-            <p class="tech-block-note">Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795, but on the 24-prompt held-out set the paired t-test came back not significant (t = 0.46, p = 0.65).</p>
+            <p class="tech-block-note">Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795 (-7.34%).</p>
           </div>
         </div>
         <div class="project-tags">
@@ -497,27 +497,23 @@
           <div class="pipeline">
             <div class="pipe-step">
               <div class="pipe-icon">1</div>
-              <div class="pipe-text"><strong>Lexicon construction</strong> — 2-tier formal word list with informal substitutes</div>
+              <div class="pipe-text"><strong>Data Loading</strong>: LMSYS-Chat-1M (25 LLM Corpora) &amp; BlendedSkillTalk, Reddit, and ELI5 (Human Baselines)</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">2</div>
-              <div class="pipe-text"><strong>Data loading</strong> — LMSYS-Chat-1M + 3 human baselines</div>
+              <div class="pipe-text"><strong>Formality Rate Construction</strong>: A lexicon-based metric built from a two-tier vocabulary of formal-register terms, measured in hits per 1,000 tokens</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">3</div>
-              <div class="pipe-text"><strong>FR metric</strong> — lexicon hits per 1K tokens (interpretable baseline)</div>
+              <div class="pipe-text"><strong>RoBERTa Classifier</strong>: Pretrained on Grammarly's Yahoo Answers Formality Corpus (GYAFC) &amp; Fine-tuned on Pavlick Formality Scores for formality classification</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">4</div>
-              <div class="pipe-text"><strong>RoBERTa classifier</strong> — fine-tuned binary formality scorer</div>
+              <div class="pipe-text"><strong>Bias Source Analysis</strong>: Apply metrics on human baselines and model outputs to identify sources of formality bias</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">5</div>
-              <div class="pipe-text"><strong>Bias source analysis</strong> — conversation type × model family breakdown</div>
-            </div>
-            <div class="pipe-step">
-              <div class="pipe-icon">6</div>
-              <div class="pipe-text"><strong>LoRA mitigation</strong> + paired statistical validation</div>
+              <div class="pipe-text"><strong>LoRa Mitigation</strong>: Apply LoRA fine-tuning to reduce formality bias in the model outputs, testing if the training data source of bias can be mitigated</div>
             </div>
           </div>
         </div>
@@ -530,7 +526,7 @@
           <div class="demo-media-box">
             <div class="demo-section-title">Corpus-Level Formality Analysis</div>
             <img src="assets/nlu/corpus_analysis.png" alt="Four-panel formality analysis: BERT formality score distribution by source, FR vs BERT scatter, mean BERT formality by model, and formality violin plot across human baselines">
-            <div class="demo-media-caption">BERT-formality distributions, FR vs. BERT correlation, per-model means, and the spread across the three human baselines themselves</div>
+            <div class="demo-media-caption">Formality Rate and RoBERTa distribution across human baselines and model families</div>
           </div>
         </div>
 
@@ -538,12 +534,12 @@
           <div class="demo-media-box">
             <div class="demo-section-title">Formality Rate by Corpus &amp; Model</div>
             <img src="assets/nlu/formality_rate_by_corpus.png" alt="Bar chart of mean formality rate by corpus, and per-model formality rate for the 10 most frequent LMSYS models">
-            <div class="demo-media-caption">LMSYS-Chat is far more formal on average than any human baseline; llama-2-13b-chat and fastchat-t5-3b run hottest</div>
+            <div class="demo-media-caption">LMSYS-Chat is far more formal on average than any human baseline, displaying distinct statistical patterns</div>
           </div>
           <div class="demo-media-box">
             <div class="demo-section-title">Formality by Model Family</div>
             <img src="assets/nlu/formality_by_family.png" alt="Bar chart of mean BERT formality score by model family, all sitting above the human ELI5 baseline">
-            <div class="demo-media-caption">Every model family clusters within a narrow band (0.82–0.89), all above the human baseline — formality isn't concentrated in one lineage</div>
+            <div class="demo-media-caption">RoBERTa scores across model families, indicating model-agnostic formality patterns</div>
           </div>
         </div>
 
@@ -551,7 +547,7 @@
           <div class="demo-media-box">
             <div class="demo-section-title">LoRA Mitigation: Before vs. After</div>
             <img src="assets/nlu/mitigation_results.png" alt="Box plots of formality rate and BERT formality score before and after LoRA fine-tuning, plus a per-sample scatter of base vs fine-tuned formality rate">
-            <div class="demo-media-caption">Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795, but the paired t-test on the 24 held-out prompts was not significant (t = 0.46, p = 0.65)</div>
+            <div class="demo-media-caption">Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795 (-7.34%)</div>
           </div>
         </div>
 
@@ -568,8 +564,8 @@
     <button class="project-toggle" type="button" aria-expanded="false" aria-controls="project-3-panel">
       <span class="project-toggle-num">03</span>
       <span class="project-toggle-titles">
-        <h2 class="project-title">Handwritten<br>OCR System</h2>
-        <p class="project-tagline">Two parallel approaches to reading handwriting: per-letter classification and segmentation-free word recognition</p>
+        <h2 class="project-title">Handwritten OCR System</h2>
+        <p class="project-tagline">Individual handwritten letter classification and full-word, segmentation-free word recognition</p>
       </span>
       <span class="project-toggle-type">Computer Vision · Deep Learning · OCR</span>
       <span class="accordion-icon" aria-hidden="true"></span>
@@ -632,7 +628,7 @@
           <div class="arch-svg-wrap">
             <svg viewBox="0 0 920 245" class="arch-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two parallel horizontal pipelines. Top: a letter image goes through ResNet18 and DeiT-Tiny classifiers in parallel, blended into a weighted ensemble, producing a predicted letter at 96.13 percent test accuracy. Bottom: a full word image goes through a CRNN combining a convolutional feature extractor and a bidirectional LSTM, decoded greedily via CTC, producing a predicted word at 85.21 percent word accuracy and 0.040 character error rate, without any character segmentation step.">
 <defs><marker id="arrow-ocr" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 Z" fill="var(--ghost)"/></marker></defs>
-<text x="20" y="14" class="arch-stage-label">1 · Character Classification</text>
+<text x="20" y="14" class="arch-stage-label">Character Classification</text>
 <rect x="20" y="30.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
 <text x="115.0" y="65.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Segmented Letter</text>
 <line x1="210" y1="61.0" x2="230.0" y2="61.0" stroke="var(--ghost)" stroke-width="1.2"/>
@@ -641,36 +637,36 @@
 <line x1="230.0" y1="90.0" x2="250" y2="90.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 <rect x="250" y="9.0" width="190" height="46.0" rx="5" fill="rgba(124,111,247,0.06)" stroke="var(--t3)" stroke-width="1"/>
 <text x="345.0" y="28.0" text-anchor="middle" class="arch-node-title" fill="var(--t3)">ResNet18</text>
-<text x="345.0" y="43.0" text-anchor="middle" class="arch-node-sub">Stem + layer1 frozen · OneCycleLR</text>
+<text x="345.0" y="43.0" text-anchor="middle" class="arch-node-sub">Convolutional Neural Network</text>
 <rect x="250" y="67.0" width="190" height="46.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
 <text x="345.0" y="86.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">DeiT-Tiny</text>
-<text x="345.0" y="101.0" text-anchor="middle" class="arch-node-sub">Early blocks frozen · attention</text>
+<text x="345.0" y="101.0" text-anchor="middle" class="arch-node-sub">Visual Transformer</text>
 <line x1="440" y1="32.0" x2="460.0" y2="32.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="440" y1="90.0" x2="460.0" y2="90.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="460.0" y1="32.0" x2="460.0" y2="90.0" stroke="var(--ghost)" stroke-width="1.2"/>
 <line x1="460.0" y1="61.0" x2="480" y2="61.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 <rect x="480" y="30.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
 <text x="575.0" y="57.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Weighted Ensemble</text>
-<text x="575.0" y="71.0" text-anchor="middle" class="arch-node-desc">0.60 / 0.40 (tuned on val)</text>
+<text x="575.0" y="71.0" text-anchor="middle" class="arch-node-desc">0.60/0.40 ResNet18/DeiT-Tiny Split</text>
 <line x1="670" y1="61.0" x2="710" y2="61.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 <rect x="710" y="30.0" width="190" height="62.0" rx="5" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
 <text x="805.0" y="57.0" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Predicted Letter</text>
 <text x="805.0" y="71.0" text-anchor="middle" class="arch-node-sub">96.13% test accuracy</text>
-<text x="20" y="147.0" class="arch-stage-label">2 · Word Recognition — Segmentation-Free</text>
+<text x="20" y="147.0" class="arch-stage-label">Segmentation-Free Word Recognition</text>
 <rect x="20" y="163.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
 <text x="115.0" y="198.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Full Word Image</text>
 <line x1="210" y1="194.0" x2="250" y2="194.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 <rect x="250" y="163.0" width="190" height="62.0" rx="5" fill="rgba(160,124,248,0.06)" stroke="var(--t4)" stroke-width="1"/>
 <text x="345.0" y="188.0" text-anchor="middle" class="arch-node-title" fill="var(--t4)">CRNN</text>
-<text x="345.0" y="202.0" text-anchor="middle" class="arch-node-sub">CNN + 2-layer BiLSTM</text>
-<text x="345.0" y="213.0" text-anchor="middle" class="arch-node-sub">trained end-to-end w/ CTC</text>
+<text x="345.0" y="202.0" text-anchor="middle" class="arch-node-sub">CNN &amp; 2-layer BiLSTM</text>
+<text x="345.0" y="213.0" text-anchor="middle" class="arch-node-sub">Trained with CTC Loss</text>
 <line x1="440" y1="194.0" x2="480" y2="194.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 <rect x="480" y="163.0" width="190" height="62.0" rx="5" fill="rgba(15,244,198,0.06)" stroke="var(--t0)" stroke-width="1"/>
 <text x="575.0" y="198.0" text-anchor="middle" class="arch-node-title" fill="var(--t0)">Greedy CTC Decode</text>
 <line x1="670" y1="194.0" x2="710" y2="194.0" stroke="var(--ghost)" stroke-width="1.2" marker-end="url(#arrow-ocr)"/>
 <rect x="710" y="163.0" width="190" height="62.0" rx="5" fill="rgba(34,212,232,0.06)" stroke="var(--t1)" stroke-width="1"/>
 <text x="805.0" y="190.0" text-anchor="middle" class="arch-node-title" fill="var(--t1)">Predicted Word</text>
-<text x="805.0" y="204.0" text-anchor="middle" class="arch-node-sub">85.21% acc · 0.040 CER</text>
+<text x="805.0" y="204.0" text-anchor="middle" class="arch-node-sub">85.21% acc &amp; 0.040 CER</text>
 </svg>
           </div>
         </div>
@@ -683,17 +679,14 @@
           <div class="demo-media-box">
             <div class="demo-section-title">ResNet18 Training Curves</div>
             <img src="assets/pendoc/resnet_training_curves.png" alt="ResNet18 training and validation loss and accuracy curves over 12 epochs">
-            <div class="demo-media-caption">Validation accuracy plateaus around 95% by epoch 2; early stopping halts training at epoch 12</div>
           </div>
           <div class="demo-media-box">
             <div class="demo-section-title">DeiT-Tiny Training Curves</div>
             <img src="assets/pendoc/deit_training_curves.png" alt="DeiT-Tiny training and validation loss and accuracy curves over 16 epochs">
-            <div class="demo-media-caption">Validation accuracy plateaus around 95% while train accuracy keeps climbing — mild overfitting typical of a fully fine-tuned ViT</div>
           </div>
           <div class="demo-media-box">
             <div class="demo-section-title">CRNN Training Curves</div>
             <img src="assets/pendoc/crnn_training_curves.png" alt="CRNN training and validation loss and accuracy curves over 14 epochs">
-            <div class="demo-media-caption">CTC loss converges within a few epochs; validation accuracy (1 − CER) settles around 0.85</div>
           </div>
         </div>
 
@@ -701,17 +694,14 @@
           <div class="demo-media-box">
             <div class="demo-section-title">ResNet18 Confusion Matrix (26 Letter Classes)</div>
             <img src="assets/pendoc/resnet_confusion_matrix.png" alt="Confusion matrix for ResNet18 across all 26 letter classes on the test set">
-            <div class="demo-media-caption">Confusion concentrates on visually similar pairs — I/L and G/Q</div>
           </div>
           <div class="demo-media-box">
             <div class="demo-section-title">DeiT-Tiny Confusion Matrix (26 Letter Classes)</div>
             <img src="assets/pendoc/deit_confusion_matrix.png" alt="Confusion matrix for DeiT-Tiny across all 26 letter classes on the test set">
-            <div class="demo-media-caption">Same I/L and G/Q ambiguity trips up the transformer as well</div>
           </div>
           <div class="demo-media-box">
             <div class="demo-section-title">Ensemble Confusion Matrix (26 Letter Classes)</div>
             <img src="assets/pendoc/ensemble_confusion_matrix.png" alt="Confusion matrix for the ResNet18 and DeiT-Tiny ensemble across all 26 letter classes on the test set">
-            <div class="demo-media-caption">Most confusion sits on visually similar pairs — I/L and G/Q — that trip up both models for the same underlying ambiguity</div>
           </div>
         </div>
 
@@ -732,7 +722,6 @@
           <div class="demo-media-box">
             <div class="demo-section-title">CRNN Training Curves</div>
             <img src="assets/pendoc/crnn_training_curves.png" alt="CRNN training and validation loss and accuracy curves over 14 epochs">
-            <div class="demo-media-caption">CTC loss converges within a few epochs; validation accuracy (1 − CER) settles around 0.85</div>
           </div>
           <div class="demo-example-box">
             <div class="demo-section-title">CRNN Performance</div>
@@ -741,8 +730,8 @@
                 <tr><th></th><th>Test Set</th></tr>
               </thead>
               <tbody>
-                <tr><td>Mean CER</td><td>0.040</td></tr>
-                <tr><td>Exact word accuracy</td><td>85.21%</td></tr>
+                <tr><td>Mean Character Error Rate (CER)</td><td>0.040</td></tr>
+                <tr><td>Full word accuracy</td><td>85.21%</td></tr>
               </tbody>
             </table>
           </div>
@@ -762,7 +751,7 @@
       <span class="project-toggle-num">04</span>
       <span class="project-toggle-titles">
         <h2 class="project-title">Sengoku Jidai:<br>Real-Time Hex Strategy</h2>
-        <p class="project-tagline">The Age of Warring States — a real-time territory-conquest game built in Godot</p>
+        <p class="project-tagline">Real-time historical territory-conquest game built in Godot</p>
       </span>
       <span class="project-toggle-type">Game Development · Godot Engine · Systems &amp; AI Design</span>
       <span class="accordion-icon" aria-hidden="true"></span>
@@ -835,27 +824,27 @@
           <div class="pipeline">
             <div class="pipe-step">
               <div class="pipe-icon">1</div>
-              <div class="pipe-text"><strong>Hex graph map</strong> — cities &amp; roads loaded from LevelData resources into a navigable graph</div>
+              <div class="pipe-text"><strong>Hex Graph Map</strong>: Cities &amp; Roads Loaded from LevelData Resources into a Navigable Graph</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">2</div>
-              <div class="pipe-text"><strong>City economy</strong> — per-cycle gold/production income, 3-tier upgrades with exponential cost scaling</div>
+              <div class="pipe-text"><strong>City Economy</strong>: Per-Cycle Gold/Production Systems, 3-Tier Upgrades with Exponential Cost Scaling</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">3</div>
-              <div class="pipe-text"><strong>Units &amp; battles</strong> — units march along roads and fight against a city's defense multiplier</div>
+              <div class="pipe-text"><strong>Units &amp; Combat</strong>: Units March Along Roads, Intercept Enemy Armies, and Fight Against a City's Garrison Defenses</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">4</div>
-              <div class="pipe-text"><strong>AI opponent</strong> — BFS frontier mapping funnels reinforcements and drives attack decisions</div>
+              <div class="pipe-text"><strong>AI opponent</strong>: BFS Frontier Mapping Funnels Defensive Reinforcement Movements and Drives Attack Decisions</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">5</div>
-              <div class="pipe-text"><strong>Custom level editor</strong> — in-viewport EditorPlugin for hex-tile city placement</div>
+              <div class="pipe-text"><strong>Custom Level Editor</strong>: In-viewport EditorPlugin for Hex-Tile City &amp; Road Placement</div>
             </div>
             <div class="pipe-step">
               <div class="pipe-icon">6</div>
-              <div class="pipe-text"><strong>Real-time clock</strong> — pausable, speed-adjustable (0.5×–4×) cycle drives every system</div>
+              <div class="pipe-text"><strong>Real-Time Cycle Clock</strong>: Pausable &amp; Speed-Adjustable Time Cycle Drives Combat, Economy, and Movement</div>
             </div>
           </div>
         </div>
@@ -868,7 +857,6 @@
           <div class="demo-media-box">
             <div class="demo-section-title">Full Gameplay Walkthrough</div>
             <video src="assets/sengoku/demo.mp4" controls playsinline></video>
-            <div class="demo-media-caption">City management, real-time combat, and the AI opponent in action</div>
           </div>
         </div>
 
@@ -887,7 +875,7 @@
     <span class="section-title">Get in Touch</span>
   </div>
   <p class="hero-bio reveal" style="max-width: 640px; margin-bottom: 2.5rem;">
-    I'm actively looking for full-time opportunities in artificial intelligence and software
+    I'm actively looking for full-time opportunities in artificial intelligence, full-stack development, and software
     engineering. Feel free to reach out through these channels. I'd love to talk about my work or potential roles.
   </p>
   <div class="hero-card reveal reveal-d1" style="max-width: 480px; animation: none; opacity: 1;">
