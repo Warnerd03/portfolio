@@ -384,7 +384,7 @@ nav {
 
 .project-inner {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr;
   gap: 0;
   width: 100%;
 }
@@ -507,11 +507,11 @@ nav {
 }
 .plink-fill:hover { opacity: 0.85; transform: translateY(-1px); border: none; }
 
-/* right panel — visual/stats */
+/* pipeline/architecture panel — now its own full-width row below the description */
 .project-panel {
   background: rgba(8,9,13,0.6);
-  border-left: 1px solid var(--rule);
-  padding: 3rem 2.4rem;
+  border-top: 1px solid var(--rule);
+  padding: 2.4rem 3rem;
   display: flex; flex-direction: column; gap: 1.4rem;
   justify-content: center;
 }
@@ -615,9 +615,7 @@ footer {
   .hero { grid-template-columns: 1fr; padding-top: 5rem; gap: 2rem; min-height: auto; }
   .skills-section, .exp-section { min-height: auto; }
   .hero-card { max-width: 480px; }
-  .project-inner { grid-template-columns: 1fr; }
   .project-card { min-height: auto; }
-  .project-panel { border-left: none; border-top: 1px solid var(--rule); }
 }
 @media (max-width: 680px) {
   nav { padding: 0 1.5rem; }
@@ -723,6 +721,22 @@ footer {
 .demo-grid-7030 { grid-template-columns: 11fr 9fr; }
 @media (max-width: 760px) {
   .demo-grid-7030 { grid-template-columns: 1fr; }
+}
+
+/* Three-across row (e.g. training curves, confusion matrices) */
+.demo-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 0.9rem;
+  width: 100%;
+  max-width: 1100px;
+}
+@media (max-width: 900px) {
+  .demo-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .demo-grid-3 { grid-template-columns: 1fr; }
 }
 
 /* Performance chart when reused inside the narrower project-panel column */

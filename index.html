@@ -87,6 +87,7 @@
         <span class="pill">C#</span>
         <span class="pill">HTML/CSS</span>
         <span class="pill">GDScript</span>
+        <span class="pill">Bash</span>
       </div>
     </div>
     <div class="skill-group">
@@ -96,11 +97,11 @@
         <span class="pill hi">PyTorch Geometric</span>
         <span class="pill hi">HuggingFace</span>
         <span class="pill hi">PEFT / LoRA</span>
+        <span class="pill">TensorFlow</span>
         <span class="pill">scikit-learn</span>
         <span class="pill">OpenCV</span>
-        <span class="pill">NumPy</span>
-        <span class="pill">pandas</span>
-        <span class="pill">Matplotlib</span>
+        <span class="pill">Apache Airflow</span>
+        <span class="pill">MLflow</span>
         <span class="pill">GraphSAGE</span>
         <span class="pill">LightGCN</span>
         <span class="pill">GNNExplainer</span>
@@ -112,6 +113,15 @@
       </div>
     </div>
     <div class="skill-group">
+      <span class="skill-group-name">Frameworks &amp; Architecture</span>
+      <div class="skill-pills">
+        <span class="pill">Flask</span>
+        <span class="pill">RESTful API</span>
+        <span class="pill">TCP/IP</span>
+        <span class="pill">HTTP</span>
+      </div>
+    </div>
+    <div class="skill-group">
       <span class="skill-group-name">Platforms</span>
       <div class="skill-pills">
         <span class="pill">Android SDK</span>
@@ -119,6 +129,7 @@
         <span class="pill">AWS</span>
         <span class="pill">Linux</span>
         <span class="pill">Git</span>
+        <span class="pill">NoSQL</span>
         <span class="pill">Android Studio</span>
         <span class="pill">Unity</span>
         <span class="pill">Godot</span>
@@ -277,9 +288,20 @@
             </svg>
           </div>
         </div>
+      </div>
 
-        <div>
-          <div class="panel-section-label">Performance</div>
+<div class="project-demo">
+        <div class="panel-section-label">Live Results</div>
+
+        <div class="demo-media">
+          <div class="demo-media-box">
+            <div class="demo-section-title">Training Progress</div>
+            <img src="assets/gnn/training_curves.png" alt="GraphSAGE and LightGCN training loss, validation AUC, and validation Hits@10 over training epochs">
+            <div class="demo-media-caption">Training/validation loss, AUC, and Hits@10 for both models across training epochs</div>
+          </div>
+        </div>
+
+        <div class="demo-media">
           <div class="demo-chart-box">
             <div class="demo-section-title">Test-Set Performance</div>
             <svg viewBox="0 0 360 300" class="gnn-bar-chart" role="img" aria-label="Test set ROC-AUC, Average Precision, and Hits at 10 for GraphSAGE, LightGCN, and the ensemble">
@@ -312,18 +334,6 @@
               <span><i style="background: var(--t3);"></i>LightGCN</span>
               <span><i style="background: var(--t0);"></i>Ensemble</span>
             </div>
-          </div>
-        </div>
-      </div>
-
-<div class="project-demo">
-        <div class="panel-section-label">Live Results</div>
-
-        <div class="demo-media">
-          <div class="demo-media-box">
-            <div class="demo-section-title">Training Progress</div>
-            <img src="assets/gnn/training_curves.png" alt="GraphSAGE and LightGCN training loss, validation AUC, and validation Hits@10 over training epochs">
-            <div class="demo-media-caption">Training/validation loss, AUC, and Hits@10 for both models across training epochs</div>
           </div>
         </div>
 
@@ -625,11 +635,6 @@
           <span class="ptag ptag-a">CTC Loss</span>
           <span class="ptag ptag-b">Kaggle</span>
         </div>
-        <div class="project-links">
-          <a href="https://github.com/Warnerd03/PenDoc-handwriting-ocr" target="_blank" class="plink">⎇ GitHub</a>
-          <a href="https://www.kaggle.com/datasets/warrenxnguyen/handwritten-letters" target="_blank" class="plink">📦 Letters Dataset</a>
-          <a href="https://www.kaggle.com/datasets/warrenxnguyen/handwritten-words" target="_blank" class="plink">📦 Words Dataset</a>
-        </div>
       </div>
 
       <div class="project-panel">
@@ -710,7 +715,7 @@
       <div class="project-demo">
         <div class="panel-section-label">Live Results</div>
 
-        <div class="demo-grid">
+        <div class="demo-grid-3">
           <div class="demo-media-box">
             <div class="demo-section-title">ResNet18 Training Curves</div>
             <img src="assets/pendoc/resnet_training_curves.png" alt="ResNet18 training and validation loss and accuracy curves over 12 epochs">
@@ -721,13 +726,23 @@
             <img src="assets/pendoc/deit_training_curves.png" alt="DeiT-Tiny training and validation loss and accuracy curves over 16 epochs">
             <div class="demo-media-caption">Validation accuracy plateaus around 95% while train accuracy keeps climbing — mild overfitting typical of a fully fine-tuned ViT</div>
           </div>
-        </div>
-
-        <div class="demo-grid">
           <div class="demo-media-box">
             <div class="demo-section-title">CRNN Training Curves</div>
             <img src="assets/pendoc/crnn_training_curves.png" alt="CRNN training and validation loss and accuracy curves over 14 epochs">
             <div class="demo-media-caption">CTC loss converges within a few epochs; validation accuracy (1 − CER) settles around 0.85</div>
+          </div>
+        </div>
+
+        <div class="demo-grid-3">
+          <div class="demo-media-box">
+            <div class="demo-section-title">ResNet18 Confusion Matrix (26 Letter Classes)</div>
+            <img src="assets/pendoc/resnet_confusion_matrix.png" alt="Confusion matrix for ResNet18 across all 26 letter classes on the test set">
+            <div class="demo-media-caption">Confusion concentrates on visually similar pairs — I/L and G/Q</div>
+          </div>
+          <div class="demo-media-box">
+            <div class="demo-section-title">DeiT-Tiny Confusion Matrix (26 Letter Classes)</div>
+            <img src="assets/pendoc/deit_confusion_matrix.png" alt="Confusion matrix for DeiT-Tiny across all 26 letter classes on the test set">
+            <div class="demo-media-caption">Same I/L and G/Q ambiguity trips up the transformer as well</div>
           </div>
           <div class="demo-media-box">
             <div class="demo-section-title">Ensemble Confusion Matrix (26 Letter Classes)</div>
@@ -736,29 +751,34 @@
           </div>
         </div>
 
-        <div class="demo-grid">
+        <div class="demo-grid-3">
           <div class="demo-example-box">
-            <div class="demo-section-title">Character Classifier Results</div>
+            <div class="demo-section-title">Model &amp; Ensemble Performance</div>
             <table class="demo-metrics-table">
               <thead>
-                <tr><th></th><th>Test Accuracy</th></tr>
+                <tr><th></th><th>Accuracy</th><th>Avg F1</th></tr>
               </thead>
               <tbody>
-                <tr><td>ResNet18 (solo)</td><td>94.69%</td></tr>
-                <tr><td>DeiT-Tiny (solo)</td><td>94.59%</td></tr>
-                <tr><td>Ensemble (0.60 / 0.40)</td><td>96.13%</td></tr>
+                <tr><td>ResNet18 (solo)</td><td>94.69%</td><td>0.9323</td></tr>
+                <tr><td>DeiT-Tiny (solo)</td><td>94.59%</td><td>0.9298</td></tr>
+                <tr><td>Ensemble (0.60 / 0.40)</td><td>96.13%</td><td>0.9506</td></tr>
               </tbody>
             </table>
           </div>
+          <div class="demo-media-box">
+            <div class="demo-section-title">CRNN Training Curves</div>
+            <img src="assets/pendoc/crnn_training_curves.png" alt="CRNN training and validation loss and accuracy curves over 14 epochs">
+            <div class="demo-media-caption">CTC loss converges within a few epochs; validation accuracy (1 − CER) settles around 0.85</div>
+          </div>
           <div class="demo-example-box">
-            <div class="demo-section-title">CRNN Word Recognition</div>
+            <div class="demo-section-title">CRNN Performance</div>
             <table class="demo-metrics-table">
               <thead>
                 <tr><th></th><th>Test Set</th></tr>
               </thead>
               <tbody>
-                <tr><td>Exact word accuracy</td><td>85.21%</td></tr>
                 <tr><td>Mean CER</td><td>0.040</td></tr>
+                <tr><td>Exact word accuracy</td><td>85.21%</td></tr>
               </tbody>
             </table>
           </div>
