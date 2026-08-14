@@ -41,6 +41,8 @@ body {
   font-size: 15px;
   line-height: 1.7;
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* mesh background */
@@ -719,9 +721,14 @@ footer {
   .skill-group-name { width: auto; }
 }
 
-/* wide horizontal architecture diagrams: scroll instead of shrinking text to illegibility */
+/* wide horizontal architecture diagrams: scroll instead of shrinking text to illegibility.
+   min-width:0 on every flex/grid item in the chain stops that inner min-width from
+   blowing out the shared single-column track (and forcing sibling text wide too). */
+.project-collapse, .project-inner, .project-main, .project-panel, .project-demo {
+  min-width: 0;
+}
 @media (max-width: 620px) {
-  .arch-svg-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .arch-svg-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; }
   .arch-svg { min-width: 620px; }
 }
 
