@@ -758,14 +758,10 @@
     <div class="project-inner">
       <div class="project-main">
         <p class="project-desc">
-          A real-time territory-conquest strategy game set in Sengoku-era Japan, built in Godot 4.6 with GDScript.
-          Cities and roads are modeled as a graph loaded from custom LevelData resources; each city earns gold and army
-          strength over time and can be upgraded across three tiers of production, gold income, and defense, with
-          upgrade costs that scale exponentially per tier. Units march along roads in real time and battles resolve
-          against a defending city's army and defense multiplier, all driven by a pausable, speed-adjustable cycle clock.
-          Also built a scripted AI opponent that maps its own frontier with breadth-first search to funnel reinforcements
-          toward contested cities, intercept incoming attacks, and prioritize upgrades on threatened borders  plus a
-          custom in-editor level design tool for placing cities directly on the hex grid.
+          This is a real-time, territory conquest and management strategy game set in Sengoku-era Japan, built in Godot 4.6 with GDScript.
+          The game world is comprised of a hex grid of cities connected by roads. Each city produces gold and units every cycle. The player can use gold to
+          upgrade their cities across three tiers of unit production, gold income, and defense. Units march along roads to battle enemy units and cities, concentrate forces, or reinforce defensive positions.
+          The player manages their resources to strategically upgrade cities, reinforce positions, and march units against enemy controlled cities.
         </p>
         <div class="tech-blocks">
           <div class="tech-block">
@@ -773,23 +769,23 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">Hex Graph Map</span>
-                <p class="tech-item-desc">Cities and the roads connecting them are authored as custom LevelData resources and loaded at runtime into a navigable graph  roads carry march time and distance, and every gameplay system (movement, AI pathing, siege routing) queries the same graph rather than maintaining its own copy of the map.</p>
+                <p class="tech-item-desc">Cities and the roads connecting them are authored as custom LevelData resources and loaded at runtime into a navigable graph. Roads carry march time and distance, and every gameplay system involving units (movement, AI pathing, siege routing) queries the same graph rather than maintaining its own copy of the map.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">City Economy</span>
-                <p class="tech-item-desc">Each city accrues gold and army strength every cycle and can be upgraded across three independent tiers  production, gold income, and defense  with per-tier costs that scale exponentially, so late-game upgrades are a deliberate investment rather than a straightforward snowball.</p>
+                <p class="tech-item-desc">Each city accrues gold and army strength every cycle. Cities can be upgraded to produce more units, generate more gold, or increase defensive bonuses against attacking enemies with upgrade costs scaling exponentially. The player is incentivized to spread out their upgrades and to upgrade defenses of frontier cities and production of safe interior holdings.</p>
               </div>
             </div>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">Combat &amp; Simulation</span>
-            <p class="tech-block-intro">Units march along the road graph in real time rather than teleporting between cities, so travel time is a real tactical constraint  reinforcements have to be dispatched ahead of an attack, not after it starts. Battles resolve against the defending city's standing army multiplied by its current defense tier, and the entire simulation runs on a single pausable, speed-adjustable (0.5×–4×) cycle clock that every other system subscribes to, keeping economy ticks, unit movement, and AI decisions all in lockstep.</p>
+            <p class="tech-block-intro">Units march along the road graph in real time, so time management is crucial to the player. Reinforcing the correct settlements or concentrating forces ahead of an attack are key strategical decisions by the player. Battles occur when units of one faction intercept another while on route to a city or when it has arrived against the defending city's garrison.</p>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">AI Opponent</span>
-            <p class="tech-block-intro">The scripted AI doesn't hard-code target priorities  it re-derives its own frontier every decision cycle by running breadth-first search over the hex graph from its owned cities, which naturally surfaces which cities are contested border territory versus safe interior holdings. That frontier map drives three behaviors: funneling reinforcements toward contested cities, intercepting incoming attacks on threatened border cities before they land, and prioritizing upgrades on the cities most exposed to the player, all recomputed as the frontier shifts over the course of a match.</p>
+            <p class="tech-block-intro">The AI re-derives its own frontier every decision cycle by running breadth-first search over the hex graph from its owned cities, which naturally surfaces which cities are contested border territory versus safe interior holdings. That frontier map drives the agent's behaviors: Funneling reinforcements toward frontier cities, Intercepting incoming attacks on threatened border cities, Attacking vulnerable player cities, and prioritizing upgrades on the cities as the player would.</p>
           </div>
 
           <div class="tech-block">
@@ -797,11 +793,11 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-a">
                 <span class="tech-item-name">Signal-Driven Autoloads</span>
-                <p class="tech-item-desc">Cross-system communication runs through a handful of autoload singletons  CycleClock, FactionState, LevelSelection, plus scene transition and audio managers that broadcast Godot signals instead of systems holding direct references to each other, keeping the economy, combat, and AI code decoupled and independently testable.</p>
+                <p class="tech-item-desc">Cross-system communication runs through a handful of autoload singletons. CycleClock, FactionState, LevelSelection, plus scene transition and audio managers that broadcast Godot signals instead of systems holding direct references to each other, keeping the economy, combat, and AI code decoupled and independently testable.</p>
               </div>
               <div class="tech-item tech-item-b">
                 <span class="tech-item-name">Custom Level Editor</span>
-                <p class="tech-item-desc">A hand-built HexLevelEditor EditorPlugin runs inside the Godot editor itself: click a hex tile in the 2D viewport to place or remove a city, and the tool writes directly into the level's LevelData resource no separate export step or hand-edited JSON between designing a level and playing it.</p>
+                <p class="tech-item-desc">A custom-built HexLevelEditor EditorPlugin runs inside the Godot editor itself. The user can click a hex tile in the 2D viewport to place or remove a city or drag between cities to create roads. The tool writes directly into the level's LevelData resource no separate export step or hand-edited JSON between designing a level and playing it.</p>
               </div>
             </div>
           </div>
