@@ -171,7 +171,7 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">GraphSAGE</span>
-                <p class="tech-item-desc">GraphSAGE builds a user's embedding by aggregating neighbors (games they played), and a game's embedding by aggregating its neighbors (genres, developer, and publisher) while folding in its attributes (price, review volume/ratio, estimated owners, release year). This modellearns per-relation scales, letting the model decide on relationship weights.</p>
+                <p class="tech-item-desc">GraphSAGE builds a user's embedding by aggregating neighbors (games they played), and a game's embedding by aggregating its neighbors (genres, developer, and publisher) while folding in its attributes (price, review volume/ratio, estimated owners, release year). This model learns per-relation scales, letting the model decide on relationship weights.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">LightGCN</span>
@@ -182,7 +182,7 @@
 
           <div class="tech-block">
             <span class="tech-block-label">Data</span>
-            <p class="tech-block-intro">We joined the Steam-200k play interactions (we used log1p-scaled hours played on a game to measure edge weight) with FronkonGames Steam metadata by exact title match. We used this resulting dataset to create a 7-node-type heterogeneous graph (User, Game, Genre, Developer, Publisher, Category, Platform), with customized relation/edge types, and each game node carrying 5 normalized numeric features from the metadata dataset (price, review volume, pos/neg review ratio, estimated owners, release year).</p>
+            <p class="tech-block-intro">We joined the Steam-200k play interactions dataset (extracted user -> game edges with log1p-scaled hours played as edge weight) with FronkonGames Steam metadata by exact title match. We used this resulting dataset to create a 7-node-type heterogeneous graph (User, Game, Genre, Developer, Publisher, Category, Platform), with customized relation/edge types, and each game node carrying 5 normalized numeric features from the metadata dataset (price, review volume, positive/negative review ratio, estimated owners, release year).</p>
           </div>
 
           <div class="tech-block">
@@ -433,11 +433,12 @@
     <div class="project-inner">
       <div class="project-main">
         <p class="project-desc">
-          A research project detecting, measuring, and attempting to mitigate a systematic formality bias in large language model outputs.
-          LLM assistants tend to default to a more formal, polished register than humans use in comparable conversational contexts — elevated vocabulary ("delve," "utilize," "furthermore") and structured phrasing even in casual exchanges. This project measures that gap empirically and tests whether targeted fine-tuning can close it without degrading response quality.
-          Sampled assistant turns from LMSYS-Chat-1M (25 models, real user conversations) against three human conversational baselines — BlendedSkillTalk, Reddit (TIFU), and ELI5 — and scored every sample with two independent, corroborating formality metrics.
-          LLM outputs came out significantly more formal than every human baseline (one-sided Mann-Whitney U, p &lt; 0.001), and the follow-up analysis pointed at conversation topic rather than model lineage as the main driver: model families cluster in a narrow band above the human baseline, with task/general exchanges running far more formal than casual ones.
-          Finally, tried a mitigation: LoRA fine-tuning Qwen2.5-3B-Instruct on the lowest-formality slice of the human corpora. Formality Rate fell 16.5% on held-out prompts, but with only 24 evaluation samples the drop did not reach statistical significance (paired t-test, p = 0.65) — a good example of a promising-looking effect that a proper significance test doesn't yet support.
+          This is a research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. The initial research question was inspired by widespread observations of a specific uncanny form of speaking that LLMs tend to.
+          LLM assistants tend to default to an unnaturally formal register in comparison to humans use in comparable conversational contexts. This phenomenon manifests itself in elevated vocabulary ("delve," "utilize," "furthermore") and structured phrasing even in casual exchanges. This project measures that gap empirically and tests whether targeted fine-tuning can close it without degrading response quality.
+          We sampled assistant outputs from LMSYS-Chat-1M (Corpus of 25 LLM model responses to user queries) against three human conversational baselines (BlendedSkillTalk, Reddit (TIFU), and ELI5), and scored every sample with two independent, corroborating formality metrics.
+          LLM outputs came out significantly more formal than every human baseline, and the follow-up analysis shows that every LLM, regardless of model family, displayed far higher levels of formality than any human baseline. Of the human baselines, the ELI5 dataset (explanatory Q&A writing) expectedly was the most formal due to its task-oriented nature, however was far exceeded by all LLMs in formality.
+          Our analysis also showed that among the LLM responses, task/general exchanges showdd far more formal than casual ones. This indicates that the formality bias is not a simple artifact of model family or training data, but rather a systematic tendency to default to a formal register in any context where the model is expected to provide an answer.
+          Finally, we attempted formality mitigation through LoRA fine-tuning Qwen2.5-3B-Instruct on the lowest-formality slice of the human corpora. Our efforts resulted in Formality Rate falling 16.5% and RoBERTa classifier falling by 7.34%. This provided a proof of concept for reducing formality bias in LLM outputs, however it requires further validation.
         </p>
         <div class="tech-blocks">
           <div class="tech-block">
