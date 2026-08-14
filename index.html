@@ -50,7 +50,7 @@
       I am a Software Engineer with a focus on Machine Learning, Neural Networks, Natural Language Understanding, Computer Vision, and Data Science. 
       I have a strong foundation in full-stack development, experienced in building end-to-end systems, from data pipelines to user interfaces. 
       I most enjoy working on problems that will interact directly with people, finding solutions in collaboration with other engineers, 
-      planning ahead and organizing to account for future issues, and building systems that take into account the user experience. 
+      planning ahead and organizing to account for future issues, and designing systems that complement the user experience. 
       I'm looking for roles where I can contribute to building intelligent systems that have a meaningful impact on users and society.
     </p>
 
@@ -161,6 +161,7 @@
     <div class="project-inner">
       <div class="project-main">
         <p class="project-desc">
+          Developed a recommendation system for steam games that predicts the next 10 games which games a user is likely to play next with relevant explanations for each recommendation.
           Constructed a heterogeneous knowledge graph recommender from Steam game meta data and interaction data.
           Trained GraphSAGE and LightGCN in an ensemble on the knowledge graph to predict which games a user is likely to play next.
           Generated human-readable justifications for the recommendations with rule-based relational path extraction to find direct paths to the recommendations and GNNExplainer subgraph attributions to rank weights of the most important relations/edges.
@@ -433,17 +434,15 @@
     <div class="project-inner">
       <div class="project-main">
         <p class="project-desc">
-          This is a research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. The initial research question was inspired by widespread observations of a specific uncanny form of speaking that LLMs tend to.
-          LLM assistants tend to default to an unnaturally formal register in comparison to humans use in comparable conversational contexts. This phenomenon manifests itself in elevated vocabulary ("delve," "utilize," "furthermore") and structured phrasing even in casual exchanges. This project measures that gap empirically and tests whether targeted fine-tuning can close it without degrading response quality.
-          We sampled assistant outputs from LMSYS-Chat-1M (Corpus of 25 LLM model responses to user queries) against three human conversational baselines (BlendedSkillTalk, Reddit (TIFU), and ELI5), and scored every sample with two independent, corroborating formality metrics.
-          LLM outputs came out significantly more formal than every human baseline, and the follow-up analysis shows that every LLM, regardless of model family, displayed far higher levels of formality than any human baseline. Of the human baselines, the ELI5 dataset (explanatory Q&A writing) expectedly was the most formal due to its task-oriented nature, however was far exceeded by all LLMs in formality.
-          Our analysis also showed that among the LLM responses, task/general exchanges showdd far more formal than casual ones. This indicates that the formality bias is not a simple artifact of model family or training data, but rather a systematic tendency to default to a formal register in any context where the model is expected to provide an answer.
-          Finally, we attempted formality mitigation through LoRA fine-tuning Qwen2.5-3B-Instruct on the lowest-formality slice of the human corpora. Our efforts resulted in Formality Rate falling 16.5% and RoBERTa classifier falling by 7.34%. This provided a proof of concept for reducing formality bias in LLM outputs, however it requires further validation.
+          This is a research project detecting, measuring, and mitigating a systematic formality bias in large language model outputs. The initial research question was inspired by widespread observations of a specific uncanny form of speaking that LLMs tend towards.
+          LLM assistants default to an unnaturally formal register in comparison to humans use in comparable conversational contexts. 
+          This phenomenon manifests itself in elevated vocabulary ("delve," "utilize," "furthermore") and structured phrasing even in casual exchanges. 
+          This project measures that gap empirically and tests whether targeted fine-tuning can close it without degrading response quality.
         </p>
         <div class="tech-blocks">
           <div class="tech-block">
             <span class="tech-block-label">Data</span>
-            <p class="tech-block-intro">Assistant turns are sampled from LMSYS-Chat-1M (25 models, real user conversations, requires an HF token to access) and three human conversational baselines — BlendedSkillTalk (scripted dialogue), Reddit TIFU (online forum posts), and ELI5 (explanatory Q&amp;A writing). All text is filtered to a 15–600 word range and tagged human vs. LLM before scoring.</p>
+            <p class="tech-block-intro">We sampled assistant outputs from LMSYS-Chat-1M (Corpus of 25 LLM model responses to user queries) against three human conversational baselines (BlendedSkillTalk, Reddit (TIFU), and ELI5), and scored every sample with two independent, corroborating formality metrics. BlendedSkillTalk is a set of scripted dialogue, Reddit TIFU is sourced from online forum posts, and ELI5 is a corpora of explanatory Q&amp;A writing.</p>
           </div>
 
           <div class="tech-block">
@@ -451,11 +450,11 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">Formality Rate (FR)</span>
-                <p class="tech-item-desc">A lexicon-based metric built from a two-tier vocabulary of formal-register terms, measured in hits per 1,000 tokens. It's fast, fully interpretable, and lets you point at the exact words driving a high score, but it can only catch formality it has a word for.</p>
+                <p class="tech-item-desc">A formal-register lexicon based metric that tracks the frequency of formal language measured in hits per 1,000 tokens, using a two-tier vocabulary built from LLM-characteristic terms. This metric essentially directly measures the frequency of formal vocabulary usage.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">RoBERTa Classifier</span>
-                <p class="tech-item-desc">Fine-tuned <code>s-nlp/roberta-base-formality-ranker</code> — itself pre-trained on the GYAFC corpus — on the Pavlick formality dataset to produce a continuous, ML-based formality score (bert_formal_p) as a second measurement that catches stylistic formality the lexicon can't. Reaches 89.2% accuracy on a held-out test split of 500 samples.</p>
+                <p class="tech-item-desc">Fine-tuned s-nlp/roberta-base-formality-ranker, a RoBERTa model pre-trained on the GYAFC corpus, on the Pavlick formality dataset to produce a continuous, ML-based formality score (bert_formal_p) as a second, corroborating measurement for formality.</p>
               </div>
             </div>
           </div>
@@ -465,19 +464,18 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-a">
                 <span class="tech-item-name">Statistical Testing</span>
-                <p class="tech-item-desc">A one-sided Mann-Whitney U test confirms LLM formality is significantly higher than every human baseline on both metrics (p &lt; 0.001). A Kruskal-Wallis test across the three human baselines themselves also comes back significant — even "human conversational text" isn't a single register, which matters when picking a baseline.</p>
+                <p class="tech-item-desc">A one-sided Mann-Whitney U and a Kruskal-Wallistest confirms LLM formality is significantly higher than every human baseline on both metrics. Follow-up analysis shows that every LLM, regardless of model family, displayed far higher levels of formality than any human baseline. Of the human baselines, the ELI5 dataset (explanatory Q&A writing) expectedly was the most formal due to its task-oriented nature, however was far exceeded by all LLMs in formality.</p>
               </div>
               <div class="tech-item tech-item-b">
                 <span class="tech-item-name">Model Family &amp; Topic</span>
-                <p class="tech-item-desc">Breaking formality down by conversation type (task vs. casual vs. general) and by model family tests whether instruction-tuned models are inherently more formal than base models. Model families land within a narrow 0.82–0.89 band, all above the human ELI5 baseline — topic explains more of the spread than model lineage does.</p>
+                <p class="tech-item-desc">Breaking formality down by conversation type (task vs. casual vs. general) and by model family showed that there is a significant difference in formality depending on context within the same model responses. Some model families land within a narrow 0.82–0.89 band, still above the human ELI5 baseline, however within a negligible margin. This indicates that among the LLM responses, task/general exchanges showed far more formal than casual ones and that the formality bias is not a simple artifact of model family or training data, but rather a systematic tendency to default to a formal register in any context where the model is expected to provide an answer.</p>
               </div>
             </div>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">LoRA Mitigation</span>
-            <p class="tech-block-intro">Fine-tuned Qwen2.5-3B-Instruct with PEFT/LoRA on the lowest-formality subset of the human corpora, aiming to shift generations toward a more conversational register. Base vs. fine-tuned outputs on held-out prompts are compared with FR delta, BERT-score delta, and ROUGE-L, plus a paired t-test for statistical significance — checking for a formality decrease without a quality decrease, not just eyeballing the average.</p>
-            <p class="tech-block-note">Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795 (-7.34%).</p>
+            <p class="tech-block-intro">Fine-tuned Qwen2.5-3B-Instruct with PEFT/LoRA on the lowest-formality subset of the human corpora, aiming to shift generations toward a more conversational register. Base vs. fine-tuned outputs on held-out prompts are compared with FR delta, BERT-score delta, and ROUGE-L, plus a paired t-test for statistical significance. Mean FR fell from 6.56 to 5.48 (-16.5%) and mean BERT P(formal) fell from 0.858 to 0.795 (-7.34%). This provides a proof of concept for reducing formality bias in LLM outputs, however it requires further validation.</p>
           </div>
         </div>
         <div class="project-tags">
