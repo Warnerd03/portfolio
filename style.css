@@ -825,6 +825,7 @@ footer {
   margin-top: 0.9rem;
   width: 100%;
   max-width: 900px;
+  min-width: 0;
 }
 .demo-chart-box {
   background: var(--ink);
@@ -856,6 +857,7 @@ footer {
 .demo-chart-legend span { display: flex; align-items: center; gap: 0.4rem; }
 .demo-chart-legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 .demo-example-box {
+  min-width: 0;
   background: var(--ink);
   border: 1px solid var(--rule);
   padding: 1rem 1.2rem;
@@ -897,7 +899,11 @@ footer {
   .path-arrow { font-size: 0.66rem; }
 }
 
-@media (max-width: 760px) {
+/* raised from 760 so landscape phones (~700-900px wide) also get the full
+   card width instead of a half-width 2-column split — that's what was
+   squeezing a path chip row from one line down to two on mobile landscape
+   even though it fits fine on desktop */
+@media (max-width: 900px) {
   .demo-grid { grid-template-columns: 1fr; }
 }
 
@@ -954,6 +960,7 @@ footer {
   max-width: 900px;
 }
 .demo-media-box {
+  min-width: 0;
   background: var(--ink);
   border: 1px solid var(--rule);
   padding: 0.75rem;
@@ -1002,6 +1009,7 @@ footer {
 
 /* GNN: full list of recommendations + explanation paths */
 .gnn-recs-panel {
+  min-width: 0;
   background: var(--ink);
   border: 1px solid var(--rule);
   padding: 1.2rem 1.4rem 1.4rem;
@@ -1017,15 +1025,16 @@ footer {
   gap: 1.5rem 2.2rem;
   margin-top: 1rem;
 }
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .gnn-recs-grid { grid-template-columns: 1fr; }
 }
 .gnn-rec-card {
+  min-width: 0;
   padding-bottom: 1.1rem;
   border-bottom: 1px solid var(--rule);
 }
 .gnn-recs-grid .gnn-rec-card:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 0; }
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .gnn-recs-grid .gnn-rec-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--rule); padding-bottom: 1.1rem; }
   .gnn-recs-grid .gnn-rec-card:last-child { border-bottom: none; padding-bottom: 0; }
 }
