@@ -572,9 +572,9 @@
     <div class="project-inner">
       <div class="project-main">
         <p class="project-desc">
-          A handwriting recognition system built as two complementary approaches, trained and evaluated on two Kaggle datasets published alongside the project — one of individually segmented letter crops, one of full handwritten word images.
-          For character-level recognition, a ResNet18 CNN and a DeiT-Tiny vision transformer are each fine-tuned on the letter crops and blended into a weighted ensemble, testing whether a convolutional inductive bias and a self-attention architecture make genuinely different mistakes worth combining.
-          For full words, a segmentation-free CRNN — a convolutional feature extractor feeding a bidirectional LSTM — reads a word image left to right and is trained with Connectionist Temporal Classification (CTC) loss, learning the image-to-character alignment directly from (image, label) pairs without ever isolating individual letters first.
+          Developed a handwriting recognition system built as two complementary approaches, trained and evaluated on two Kaggle datasets published alongside the project. The first approach was trained and evaluated on individually segmented letter crops, while the other was trained on full handwritten word images.
+          For the single-character-level recognition, a ResNet18 CNN and a DeiT-Tiny vision transformer are each fine-tuned on the letter crops and blended into a weighted ensemble, testing whether a convolutional inductive bias and a self-attention transformer architecture can complement each other.
+          For full words, a segmentation-free CRNN model was deployed. This is a convolutional feature extractor (CNN) feeding a bidirectional LSTM (BiLSTM) that reads a word image left to right and is trained with Connectionist Temporal Classification (CTC) loss, learning the image-to-character alignment directly from (image, label) pairs without ever isolating individual letters first.
         </p>
         <div class="tech-blocks">
           <div class="tech-block">
@@ -582,30 +582,30 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">ResNet18</span>
-                <p class="tech-item-desc">ImageNet-pretrained, with the stem and first residual block frozen so early low-level filters (edges, strokes) are kept and only the deeper blocks and a new classification head are fine-tuned. Trained with Adam, a OneCycleLR schedule, and early stopping on validation accuracy. Reaches 94.69% test accuracy on its own.</p>
+                <p class="tech-item-desc">A convolutional neural network pre-trained on ImageNet, fine-tuned for single-letter classification. The stem and first residual block stay frozen, as to not unlearn already captured general low-level edge/texture features. The deeper residual blocks and a newly attached classification head are trained on the letter crops. Trained with Adam, a OneCycleLR schedule, and early stopping on validation accuracy. Reaches 94.69% test accuracy on its own.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">DeiT-Tiny</span>
-                <p class="tech-item-desc">A compact, ImageNet-pretrained vision transformer with its patch embedding and earliest transformer blocks frozen, fine-tuned with the same OneCycleLR + early-stopping recipe as ResNet18. Where the CNN builds up local receptive fields layer by layer, DeiT-Tiny's patch self-attention lets every region of the letter attend to every other region from the first layer. Reaches 94.59% test accuracy solo.</p>
+                <p class="tech-item-desc">A compact, ImageNet-pretrained vision transformer with its patch embedding and earliest transformer blocks frozen, fine-tuned with the same OneCycleLR and early-stopping as ResNet18. DeiT-Tiny's patch self-attention lets every region of the letter attend to every other region from the first layer rather than convolutional layers. The patch embedding and the first half of the transformer blocks are frozen for the same purpose as the ResNet model. Reaches 94.59% test accuracy solo.</p>
               </div>
             </div>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">Weighted Ensemble</span>
-            <p class="tech-block-intro">Predicted class probabilities from both models are blended with a weight swept on the validation split rather than fixed a priori — the search lands on 0.60 ResNet18 / 0.40 DeiT-Tiny. The blend reaches 96.13% test accuracy, beating either model alone, which confirms the two architectures' errors are genuinely complementary rather than redundant. Most of the remaining confusion sits on visually similar pairs — I/L and G/Q — that trip up both models for the same reason: they're ambiguous in handwriting, not just to one architecture.</p>
+            <p class="tech-block-intro">Predicted class probabilities from both models are blended with a validation split weight, resulting in a 0.60 ResNet18 / 0.40 DeiT-Tiny ensemble split. The blend reaches 96.13% test accuracy, beating either model alone, which confirms the two architectures are complementary rather than redundant. Most of the remaining confusion sits on visually similar pairs (I/L and G/Q). These two confused pairs are caused by visual ambiguity in the handwriting data, that is an uppercase I and a lowercase l are virtually the same without references and a G and Q are visually similar in the handwritten dataset.</p>
           </div>
 
           <div class="tech-block">
-            <span class="tech-block-label">Word Recognition — Segmentation-Free</span>
+            <span class="tech-block-label">Word Recognition</span>
             <div class="tech-block-items">
               <div class="tech-item tech-item-a">
                 <span class="tech-item-name">CRNN Architecture</span>
-                <p class="tech-item-desc">A CNN feature extractor collapses the word image's height by 8× while preserving its width, producing a left-to-right sequence of column feature vectors. A 2-layer bidirectional LSTM reads that sequence and a linear layer emits a per-timestep probability distribution over characters — the whole thing trained end-to-end with CTC loss, so the model learns the image-to-character alignment itself instead of needing per-character bounding boxes.</p>
+                <p class="tech-item-desc">A CNN feature extractor collapses the word image's height by 8× while preserving its width, producing a left-to-right sequence of column feature vectors. A 2-layer bidirectional LSTM reads that sequence and a linear layer emits a per-timestep probability distribution over characters. The pipeline is trained end-to-end with CTC loss, so the model learns the image-to-character alignment itself instead of needing per-character bounding boxes.</p>
               </div>
               <div class="tech-item tech-item-b">
                 <span class="tech-item-name">Greedy CTC Decoding</span>
-                <p class="tech-item-desc">At inference, the most likely character is taken at every timestep, consecutive repeats are collapsed, and CTC blank tokens are dropped to produce the final predicted word — no beam search or language model needed to get to 85.21% exact word accuracy and a 0.040 character error rate on the test set.</p>
+                <p class="tech-item-desc">At inference, the most likely character is taken at every timestep, consecutive repeats are collapsed, and CTC blank tokens are dropped to produce the final predicted word. This greedy approach results in an 85.21% exact word accuracy and a 0.040 character error rate on the test set.</p>
               </div>
             </div>
           </div>
@@ -764,7 +764,7 @@
           upgrade costs that scale exponentially per tier. Units march along roads in real time and battles resolve
           against a defending city's army and defense multiplier, all driven by a pausable, speed-adjustable cycle clock.
           Also built a scripted AI opponent that maps its own frontier with breadth-first search to funnel reinforcements
-          toward contested cities, intercept incoming attacks, and prioritize upgrades on threatened borders — plus a
+          toward contested cities, intercept incoming attacks, and prioritize upgrades on threatened borders  plus a
           custom in-editor level design tool for placing cities directly on the hex grid.
         </p>
         <div class="tech-blocks">
@@ -773,23 +773,23 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-c">
                 <span class="tech-item-name">Hex Graph Map</span>
-                <p class="tech-item-desc">Cities and the roads connecting them are authored as custom LevelData resources and loaded at runtime into a navigable graph — roads carry march time and distance, and every gameplay system (movement, AI pathing, siege routing) queries the same graph rather than maintaining its own copy of the map.</p>
+                <p class="tech-item-desc">Cities and the roads connecting them are authored as custom LevelData resources and loaded at runtime into a navigable graph  roads carry march time and distance, and every gameplay system (movement, AI pathing, siege routing) queries the same graph rather than maintaining its own copy of the map.</p>
               </div>
               <div class="tech-item tech-item-d">
                 <span class="tech-item-name">City Economy</span>
-                <p class="tech-item-desc">Each city accrues gold and army strength every cycle and can be upgraded across three independent tiers — production, gold income, and defense — with per-tier costs that scale exponentially, so late-game upgrades are a deliberate investment rather than a straightforward snowball.</p>
+                <p class="tech-item-desc">Each city accrues gold and army strength every cycle and can be upgraded across three independent tiers  production, gold income, and defense  with per-tier costs that scale exponentially, so late-game upgrades are a deliberate investment rather than a straightforward snowball.</p>
               </div>
             </div>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">Combat &amp; Simulation</span>
-            <p class="tech-block-intro">Units march along the road graph in real time rather than teleporting between cities, so travel time is a real tactical constraint — reinforcements have to be dispatched ahead of an attack, not after it starts. Battles resolve against the defending city's standing army multiplied by its current defense tier, and the entire simulation runs on a single pausable, speed-adjustable (0.5×–4×) cycle clock that every other system subscribes to, keeping economy ticks, unit movement, and AI decisions all in lockstep.</p>
+            <p class="tech-block-intro">Units march along the road graph in real time rather than teleporting between cities, so travel time is a real tactical constraint  reinforcements have to be dispatched ahead of an attack, not after it starts. Battles resolve against the defending city's standing army multiplied by its current defense tier, and the entire simulation runs on a single pausable, speed-adjustable (0.5×–4×) cycle clock that every other system subscribes to, keeping economy ticks, unit movement, and AI decisions all in lockstep.</p>
           </div>
 
           <div class="tech-block">
             <span class="tech-block-label">AI Opponent</span>
-            <p class="tech-block-intro">The scripted AI doesn't hard-code target priorities — it re-derives its own frontier every decision cycle by running breadth-first search over the hex graph from its owned cities, which naturally surfaces which cities are contested border territory versus safe interior holdings. That frontier map drives three behaviors: funneling reinforcements toward contested cities, intercepting incoming attacks on threatened border cities before they land, and prioritizing upgrades on the cities most exposed to the player, all recomputed as the frontier shifts over the course of a match.</p>
+            <p class="tech-block-intro">The scripted AI doesn't hard-code target priorities  it re-derives its own frontier every decision cycle by running breadth-first search over the hex graph from its owned cities, which naturally surfaces which cities are contested border territory versus safe interior holdings. That frontier map drives three behaviors: funneling reinforcements toward contested cities, intercepting incoming attacks on threatened border cities before they land, and prioritizing upgrades on the cities most exposed to the player, all recomputed as the frontier shifts over the course of a match.</p>
           </div>
 
           <div class="tech-block">
@@ -797,11 +797,11 @@
             <div class="tech-block-items">
               <div class="tech-item tech-item-a">
                 <span class="tech-item-name">Signal-Driven Autoloads</span>
-                <p class="tech-item-desc">Cross-system communication runs through a handful of autoload singletons — CycleClock, FactionState, LevelSelection, plus scene transition and audio managers — that broadcast Godot signals instead of systems holding direct references to each other, keeping the economy, combat, and AI code decoupled and independently testable.</p>
+                <p class="tech-item-desc">Cross-system communication runs through a handful of autoload singletons  CycleClock, FactionState, LevelSelection, plus scene transition and audio managers that broadcast Godot signals instead of systems holding direct references to each other, keeping the economy, combat, and AI code decoupled and independently testable.</p>
               </div>
               <div class="tech-item tech-item-b">
                 <span class="tech-item-name">Custom Level Editor</span>
-                <p class="tech-item-desc">A hand-built HexLevelEditor EditorPlugin runs inside the Godot editor itself: click a hex tile in the 2D viewport to place or remove a city, and the tool writes directly into the level's LevelData resource — no separate export step or hand-edited JSON between designing a level and playing it.</p>
+                <p class="tech-item-desc">A hand-built HexLevelEditor EditorPlugin runs inside the Godot editor itself: click a hex tile in the 2D viewport to place or remove a city, and the tool writes directly into the level's LevelData resource no separate export step or hand-edited JSON between designing a level and playing it.</p>
               </div>
             </div>
           </div>
@@ -917,7 +917,7 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// descriptor scatter — type each tag once, in sequence, then leave it in place
+// descriptor scatter: type each tag once, in sequence, then leave it in place
 const descriptorTags = document.querySelectorAll('.descriptor-tag');
 function typeScatterTag(el, startDelay) {
   const text = el.dataset.text;
@@ -959,7 +959,7 @@ document.querySelectorAll('.project-card').forEach(card => {
   });
 });
 
-// project accordion — click a project's header to expand/collapse it
+// project accordion: click a project's header to expand/collapse it
 const projectCards = document.querySelectorAll('.project-card');
 const expandAllBtn = document.getElementById('expandAllBtn');
 
